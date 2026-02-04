@@ -59,7 +59,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                     {/* UVP Section */}
                     <section className="uvp-section">
                         <div className="container">
-                            <p className="uvp-text">{state.mainText}</p>
+                            <p className="uvp-text" style={{ fontSize: '4rem', fontWeight: 'bold' }}>claude</p>
                         </div>
                     </section>
 
