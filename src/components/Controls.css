@@ -6,6 +6,7 @@
     margin-bottom: 2rem;
     padding-bottom: 2rem;
     border-bottom: 1px solid #f3f4f6;
+    position: relative;
 }
 
 .control-section:last-child {
@@ -13,10 +14,12 @@
 }
 
 .control-section h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 1rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #6b7280;
+    margin-bottom: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .control-section h4 {
@@ -45,12 +48,22 @@
 .control-section textarea,
 .control-section select {
     width: 100%;
-    padding: 0.625rem 0.875rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 0.625rem;
     font-size: 0.875rem;
     font-family: inherit;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fafafa;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.control-section input[type="text"]:hover,
+.control-section input[type="url"]:hover,
+.control-section input[type="email"]:hover,
+.control-section textarea:hover,
+.control-section select:hover {
+    border-color: #d1d5db;
+    background: #ffffff;
 }
 
 .control-section input[type="text"]:focus,
@@ -60,7 +73,8 @@
 .control-section select:focus {
     outline: none;
     border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
 .control-section textarea {
@@ -78,23 +92,32 @@
 
 .upload-button {
     display: inline-block;
-    padding: 0.625rem 1.25rem;
-    background: #3b82f6;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
     color: white;
-    border-radius: 0.5rem;
+    border-radius: 0.625rem;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 .upload-button:hover {
-    background: #2563eb;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+}
+
+.upload-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
 }
 
 .upload-button.small {
     padding: 0.5rem 1rem;
     font-size: 0.8125rem;
+    border-radius: 0.5rem;
 }
 
 .teammate-count {
@@ -120,14 +143,22 @@
 }
 
 .teammate-control {
-    padding: 1rem;
-    background: #f9fafb;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, #f9fafb, #ffffff);
     border: 1px solid #e5e7eb;
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+}
+
+.teammate-control:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .teammate-control h4 {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.875rem;
+    color: #374151;
 }
 
 .teammate-control input[type="text"] {
@@ -141,7 +172,7 @@
 .color-input-group {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.875rem;
 }
 
 .color-input-group input {
@@ -149,11 +180,18 @@
 }
 
 .color-preview {
-    width: 40px;
-    height: 40px;
-    border-radius: 0.5rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 0.75rem;
     border: 2px solid #e5e7eb;
     flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.color-preview:hover {
+    border-color: #d1d5db;
+    transform: scale(1.05);
 }
 
 @media (max-width: 390px) {

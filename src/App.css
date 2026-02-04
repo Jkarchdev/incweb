@@ -1,51 +1,51 @@
 :root {
-  /* Ocean palette */
-  --ocean-primary: #0ea5e9;
+  /* Ocean palette - Deep blue waters */
+  --ocean-primary: #0284c7;
   --ocean-bg: #f0f9ff;
   --ocean-text: #0c4a6e;
   --ocean-card: #ffffff;
   --ocean-muted: #64748b;
-  --ocean-border: #bae6fd;
+  --ocean-border: #7dd3fc;
 
-  /* Sunset palette */
-  --sunset-primary: #f97316;
+  /* Sunset palette - Warm orange glow */
+  --sunset-primary: #ea580c;
   --sunset-bg: #fff7ed;
   --sunset-text: #7c2d12;
   --sunset-card: #ffffff;
   --sunset-muted: #78716c;
-  --sunset-border: #fed7aa;
+  --sunset-border: #fdba74;
 
-  /* Forest palette */
-  --forest-primary: #10b981;
-  --forest-bg: #f0fdf4;
+  /* Forest palette - Rich emerald green */
+  --forest-primary: #059669;
+  --forest-bg: #ecfdf5;
   --forest-text: #064e3b;
   --forest-card: #ffffff;
   --forest-muted: #6b7280;
-  --forest-border: #a7f3d0;
+  --forest-border: #6ee7b7;
 
-  /* Grape palette */
-  --grape-primary: #a855f7;
+  /* Grape palette - Vibrant purple */
+  --grape-primary: #9333ea;
   --grape-bg: #faf5ff;
   --grape-text: #581c87;
   --grape-card: #ffffff;
   --grape-muted: #71717a;
-  --grape-border: #e9d5ff;
+  --grape-border: #d8b4fe;
 
-  /* Slate palette */
-  --slate-primary: #64748b;
+  /* Slate palette - Modern neutral */
+  --slate-primary: #475569;
   --slate-bg: #f8fafc;
   --slate-text: #1e293b;
   --slate-card: #ffffff;
   --slate-muted: #94a3b8;
   --slate-border: #cbd5e1;
 
-  /* Sand palette */
-  --sand-primary: #d97706;
+  /* Sand palette - Warm amber */
+  --sand-primary: #b45309;
   --sand-bg: #fefce8;
   --sand-text: #78350f;
   --sand-card: #ffffff;
   --sand-muted: #a8a29e;
-  --sand-border: #fde68a;
+  --sand-border: #fcd34d;
 }
 
 * {
