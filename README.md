@@ -1,105 +1,37 @@
-# Incubator Landing Page Customizer
+# Team Website Builder (Business Incubator)
 
-An interactive single-page web app for teams to customize and preview their business incubator landing pages in real-time. Upload images, edit content, test different color palettes and backgrounds, all with full mobile responsiveness.
+## What this project is
+This project is a **web app that lets incubator teams design their own website** using a shared template (colors, fonts, text, sections, images, animations), and then **turn those choices into a real published team website** — without someone manually building 20 separate sites.
 
-## Features
+## End goal ✅
+Create a **repeatable "one template → many team sites" system**:
 
-- **Live Preview**: See changes instantly as you customize
-- **Two-Panel Layout**: Controls on left, live preview on right (desktop)
-- **Mobile Responsive**: Works beautifully on screens as small as 390px
-- **Image Upload**: Upload logo and team headshots with automatic fitting/cropping
-- **6 Color Palettes**: Ocean, Sunset, Forest, Grape, Slate, Sand
-- **6 Background Styles**: Solid, Gradient, Dots, Grid, Waves, Noise
-- **Custom Colors**: Override with your own hex color
-- **Team Management**: Create 3-6 teammate cards with photos, names, and roles
-- **Smart Placeholders**: Beautiful SVG placeholders before you upload images
+- Teams use the builder to customize a site to match their brand
+- Their choices are saved as a **team configuration** (the "source of truth")
+- That configuration can be **exported and/or published**
+- The system can generate and host **a separate website for each team** (e.g., 20+ teams) with minimal manual work
 
-## Tech Stack
+## What the app should enable
+- **Live preview** while teams edit
+- Customization of:
+  - layout/sections (what appears on the page and where)
+  - colors, typography, and styling
+  - text content (headlines, descriptions, CTA buttons, etc.)
+  - images/logos (with auto-fit / crop behavior)
+  - optional animations / effects
+- **Export** of team settings (so a team's site can be reproduced exactly later)
+- A clear path to **publishing** each team's site using the saved/exported configuration
 
-- **Vite** - Fast build tool
-- **React** - UI library with TypeScript
-- **CSS Variables** - Powerful theming system
-- **No Backend** - Runs completely offline/locally
+## Core idea (high-level)
+Everything a team designs becomes a structured config (ex: JSON).
+The public team website is simply the template rendered using that config.
 
-## Getting Started
+This keeps the project flexible: the UI and template can evolve, while the concept stays the same.
 
-### Installation
+## What's intentionally flexible right now 🧪
+Implementation details (exact UI, sections, storage method, backend choice, export format) may change as the builder experience is refined. The README focuses on the outcome and workflow, not locked technical decisions.
 
-```bash
-npm install
-```
-
-### Development
-
-```bash
-npm run dev
-```
-
-Open your browser to the URL shown (usually `http://localhost:5173`)
-
-### Build for Production
-
-```bash
-npm run build
-```
-
-The production-ready files will be in the `dist/` folder.
-
-## Usage Guide
-
-### Controls Panel (Left Side)
-
-**A) Logo/Wordmark**
-- Click "Upload Logo" to select your logo image (PNG, JPG, WebP)
-- Logo displays with `object-fit: contain` (never crops)
-
-**B) Main Text**
-- Edit your value proposition or description in the textarea
-
-**C) Team Cards**
-- Choose 3-6 team members from the dropdown
-- For each teammate:
-  - Upload headshot photo (auto-crops to square 1:1 ratio)
-  - Enter name
-  - Enter role/title
-
-**D) Links**
-- Set Instagram URL
-- Set contact email (creates mailto link)
-
-**E) Style Options**
-- **Background Style**: Choose from 6 subtle patterns
-- **Palette**: Select from 6 pre-designed color schemes
-- **Custom Color**: Enter hex color (#RRGGBB) to override the primary color
-
-### Mobile View
-
-On screens smaller than 768px:
-- Controls collapse into a drawer
-- Click "⚙️ Settings" in the preview header to open controls
-- Click "✕" to close and see the preview
-
-## Image Requirements
-
-- **Logo**: Any size/ratio - displays with `object-fit: contain`
-- **Headshots**: Any size/ratio - auto-crops to 1:1 square with `object-fit: cover`
-- **Formats**: PNG, JPG, WebP supported
-- **No Upload Limit**: But keep files reasonable for performance
-
-## Responsive Breakpoints
-
-- **Desktop (>1024px)**: 3-column team grid
-- **Tablet (768-1024px)**: 2-column team grid
-- **Mobile (<768px)**: 1-column team grid, controls drawer
-- **Small Mobile (390px)**: Optimized spacing and font sizes
-
-## Browser Support
-
-Modern browsers with ES6+ support:
-- Chrome/Edge (latest)
-- Firefox (latest)
-- Safari (latest)
-
-## License
-
-MIT
+## Success looks like
+- Teams can independently build a site they're proud of
+- Their choices can be saved/exported reliably
+- The incubator can launch and maintain many team websites quickly and consistently
