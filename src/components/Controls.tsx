@@ -1,9 +1,63 @@
-import type { AppState, Teammate } from '../App'
+import { useState } from 'react'
+import type { AppState, Teammate, HeroLogoConfig, SocialLinks, SectionVisibility } from '../App'
+import { BACKGROUND_PRESETS } from './backgrounds/backgroundPresets'
+import PresetThumbnail from './backgrounds/PresetThumbnail'
 import './Controls.css'
 
 interface ControlsProps {
     state: AppState
     updateState: (updates: Partial<AppState>) => void
+}
+
+const FONT_OPTIONS = [
+    'Inter',
+    'Playfair Display',
+    'Montserrat',
+    'Roboto',
+    'Poppins',
+    'Lora',
+    'Oswald',
+    'Raleway',
+]
+
+const PALETTE_OPTIONS = [
+    { id: 'ocean', label: 'Ocean', color: '#0284c7' },
+    { id: 'sunset', label: 'Sunset', color: '#ea580c' },
+    { id: 'forest', label: 'Forest', color: '#059669' },
+    { id: 'grape', label: 'Grape', color: '#9333ea' },
+    { id: 'slate', label: 'Slate', color: '#475569' },
+    { id: 'sand', label: 'Sand', color: '#b45309' },
+]
+
+interface CollapsibleSectionProps {
+    title: string
+    defaultOpen?: boolean
+    children: React.ReactNode
+}
+
+const CollapsibleSection = ({ title, defaultOpen = true, children }: CollapsibleSectionProps) => {
+    const [open, setOpen] = useState(defaultOpen)
+    return (
+        <section className="control-section">
+            <button
+                className="section-header-toggle"
+                onClick={() => setOpen(!open)}
+                type="button"
+            >
+                <h3>{title}</h3>
+                <span className={`section-chevron ${open ? 'section-chevron--open' : ''}`}>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                </span>
+            </button>
+            <div className={`section-body ${open ? 'section-body--open' : ''}`}>
+                <div className="section-body-inner">
+                    {children}
+                </div>
+            </div>
+        </section>
+    )
 }
 
 const Controls = ({ state, updateState }: ControlsProps) => {
@@ -58,43 +112,192 @@ const Controls = ({ state, updateState }: ControlsProps) => {
     }
 
     const handleCustomColorChange = (value: string) => {
-        // Validate hex color
         if (/^#[0-9A-Fa-f]{6}$/.test(value) || value === '') {
             updateState({ customColor: value })
         }
     }
 
+    const updateHeroLogo = <K extends keyof HeroLogoConfig>(key: K, value: HeroLogoConfig[K]) => {
+        updateState({
+            heroLogo: {
+                ...state.heroLogo,
+                [key]: value,
+            }
+        })
+    }
+
+    const updateSocialLink = (key: keyof SocialLinks, value: string) => {
+        updateState({
+            socialLinks: { ...state.socialLinks, [key]: value }
+        })
+    }
+
+    const updateSectionVisibility = (key: keyof SectionVisibility, value: boolean) => {
+        updateState({
+            sections: { ...state.sections, [key]: value }
+        })
+    }
+
+    const handlePresetSelect = (presetId: string) => {
+        const preset = BACKGROUND_PRESETS.find(p => p.id === presetId)
+        if (preset) {
+            updateState({
+                background: {
+                    ...state.background,
+                    presetId: preset.id,
+                    type: preset.type,
+                }
+            })
+        }
+    }
+
+    const handleSettingChange = (key: 'intensity' | 'speed' | 'density' | 'blur', value: number) => {
+        updateState({
+            background: {
+                ...state.background,
+                settings: {
+                    ...state.background.settings,
+                    [key]: value,
+                }
+            }
+        })
+    }
+
+    const isAnimated = state.background.type === 'animated'
+
     return (
         <div className="controls-content">
-            <section className="control-section">
-                <h3>A) Logo/Wordmark</h3>
+            {/* Hero Section */}
+            <CollapsibleSection title="Hero">
                 <div className="file-upload">
                     <label htmlFor="logo-upload" className="upload-button">
-                        {state.logoUrl ? '✓ Logo Uploaded' : '📁 Upload Logo'}
+                        {state.logoUrl ? '✓ Logo Uploaded' : 'Upload Logo'}
                     </label>
                     <input
                         id="logo-upload"
                         type="file"
-                        accept="image/png,image/jpeg,image/webp"
+                        accept="image/png,image/jpeg,image/webp,image/svg+xml"
                         onChange={handleLogoUpload}
                     />
                 </div>
-            </section>
 
-            <section className="control-section">
-                <h3>B) Main Text</h3>
+                <div className="option-row">
+                    <div className="option-group">
+                        <label>Size:</label>
+                        <select
+                            value={state.heroLogo.size}
+                            onChange={(e) => updateHeroLogo('size', e.target.value as HeroLogoConfig['size'])}
+                        >
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                            <option value="xlarge">Extra Large</option>
+                        </select>
+                    </div>
+                    <div className="option-group">
+                        <label>Alignment:</label>
+                        <select
+                            value={state.heroLogo.alignment}
+                            onChange={(e) => updateHeroLogo('alignment', e.target.value as HeroLogoConfig['alignment'])}
+                        >
+                            <option value="center">Center</option>
+                            <option value="left">Left</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label>Tagline (below logo):</label>
+                <input
+                    type="text"
+                    value={state.heroLogo.tagline}
+                    onChange={(e) => updateHeroLogo('tagline', e.target.value)}
+                    placeholder="Your company slogan..."
+                />
+
+                {state.heroLogo.alignment === 'left' && (
+                    <>
+                        <label>Side Text (right of logo):</label>
+                        <input
+                            type="text"
+                            value={state.heroLogo.sideText}
+                            onChange={(e) => updateHeroLogo('sideText', e.target.value)}
+                            placeholder="Company name or headline..."
+                        />
+
+                        <div className="option-row">
+                            <div className="option-group">
+                                <label>Font:</label>
+                                <select
+                                    value={state.heroLogo.sideTextFont}
+                                    onChange={(e) => updateHeroLogo('sideTextFont', e.target.value)}
+                                >
+                                    {FONT_OPTIONS.map(f => (
+                                        <option key={f} value={f}>{f}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="option-group">
+                                <label>Text Color:</label>
+                                <input
+                                    type="text"
+                                    value={state.heroLogo.sideTextColor}
+                                    onChange={(e) => updateHeroLogo('sideTextColor', e.target.value)}
+                                    placeholder="#000000"
+                                    maxLength={7}
+                                />
+                            </div>
+                        </div>
+                    </>
+                )}
+            </CollapsibleSection>
+
+            {/* Content Section */}
+            <CollapsibleSection title="Content">
+                <label>Main Text:</label>
                 <textarea
                     value={state.mainText}
                     onChange={(e) => updateState({ mainText: e.target.value })}
-                    rows={5}
+                    rows={4}
                     placeholder="Enter your value proposition..."
                 />
-            </section>
 
-            <section className="control-section">
-                <h3>C) Team Cards</h3>
+                <label>Subtext:</label>
+                <input
+                    type="text"
+                    value={state.heroSubtext}
+                    onChange={(e) => updateState({ heroSubtext: e.target.value })}
+                    placeholder="Building the future, one startup at a time"
+                />
+
+                <label>CTA Button Text:</label>
+                <input
+                    type="text"
+                    value={state.ctaText}
+                    onChange={(e) => updateState({ ctaText: e.target.value })}
+                    placeholder="Get Started"
+                />
+            </CollapsibleSection>
+
+            {/* Team Section */}
+            <CollapsibleSection title="Team">
+                <label>Section Heading:</label>
+                <input
+                    type="text"
+                    value={state.teamHeading}
+                    onChange={(e) => updateState({ teamHeading: e.target.value })}
+                    placeholder="Meet Our Team"
+                />
+
+                <label>Section Subheading:</label>
+                <input
+                    type="text"
+                    value={state.teamSubheading}
+                    onChange={(e) => updateState({ teamSubheading: e.target.value })}
+                    placeholder="The passionate people behind our success"
+                />
+
                 <div className="teammate-count">
-                    <label>Teammate Count:</label>
+                    <label>Members:</label>
                     <select
                         value={state.teammates.length}
                         onChange={(e) => handleTeammateCountChange(Number(e.target.value))}
@@ -112,7 +315,7 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                             <h4>Teammate {teammate.id + 1}</h4>
                             <div className="file-upload">
                                 <label htmlFor={`teammate-${teammate.id}`} className="upload-button small">
-                                    {teammate.imageUrl ? '✓ Image' : '📷 Upload'}
+                                    {teammate.imageUrl ? '✓ Image' : 'Upload'}
                                 </label>
                                 <input
                                     id={`teammate-${teammate.id}`}
@@ -136,16 +339,37 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                         </div>
                     ))}
                 </div>
-            </section>
+            </CollapsibleSection>
 
-            <section className="control-section">
-                <h3>D) Links</h3>
+            {/* Links Section */}
+            <CollapsibleSection title="Links">
                 <label>Instagram URL:</label>
                 <input
                     type="url"
-                    value={state.instagramUrl}
-                    onChange={(e) => updateState({ instagramUrl: e.target.value })}
+                    value={state.socialLinks.instagram}
+                    onChange={(e) => updateSocialLink('instagram', e.target.value)}
                     placeholder="https://instagram.com/yourpage"
+                />
+                <label>Twitter / X URL:</label>
+                <input
+                    type="url"
+                    value={state.socialLinks.twitter}
+                    onChange={(e) => updateSocialLink('twitter', e.target.value)}
+                    placeholder="https://x.com/yourpage"
+                />
+                <label>LinkedIn URL:</label>
+                <input
+                    type="url"
+                    value={state.socialLinks.linkedin}
+                    onChange={(e) => updateSocialLink('linkedin', e.target.value)}
+                    placeholder="https://linkedin.com/company/yourpage"
+                />
+                <label>TikTok URL:</label>
+                <input
+                    type="url"
+                    value={state.socialLinks.tiktok}
+                    onChange={(e) => updateSocialLink('tiktok', e.target.value)}
+                    placeholder="https://tiktok.com/@yourpage"
                 />
                 <label>Contact Email:</label>
                 <input
@@ -154,35 +378,94 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     onChange={(e) => updateState({ contactEmail: e.target.value })}
                     placeholder="hello@incubator.com"
                 />
-            </section>
+            </CollapsibleSection>
 
-            <section className="control-section">
-                <h3>E) Style Options</h3>
-                <label>Background Style:</label>
-                <select
-                    value={state.backgroundStyle}
-                    onChange={(e) => updateState({ backgroundStyle: e.target.value })}
-                >
-                    <option value="solid">Solid</option>
-                    <option value="gradient">Gradient</option>
-                    <option value="dots">Dots</option>
-                    <option value="grid">Grid</option>
-                    <option value="waves">Waves</option>
-                    <option value="noise">Noise</option>
-                </select>
+            {/* Background Section */}
+            <CollapsibleSection title="Background">
+                <div className="preset-grid">
+                    {BACKGROUND_PRESETS.map((preset) => (
+                        <PresetThumbnail
+                            key={preset.id}
+                            presetId={preset.id}
+                            name={preset.name}
+                            selected={state.background.presetId === preset.id}
+                            onClick={() => handlePresetSelect(preset.id)}
+                        />
+                    ))}
+                </div>
 
+                <div className="bg-sliders">
+                    <label className="slider-label">
+                        Intensity
+                        <span className="slider-value">{state.background.settings.intensity}</span>
+                    </label>
+                    <input
+                        type="range"
+                        min={0}
+                        max={100}
+                        value={state.background.settings.intensity}
+                        onChange={(e) => handleSettingChange('intensity', Number(e.target.value))}
+                    />
+
+                    <label className="slider-label">
+                        Blur
+                        <span className="slider-value">{state.background.settings.blur}</span>
+                    </label>
+                    <input
+                        type="range"
+                        min={0}
+                        max={20}
+                        value={state.background.settings.blur}
+                        onChange={(e) => handleSettingChange('blur', Number(e.target.value))}
+                    />
+
+                    {isAnimated && (
+                        <>
+                            <label className="slider-label">
+                                Speed
+                                <span className="slider-value">{state.background.settings.speed}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={0}
+                                max={100}
+                                value={state.background.settings.speed}
+                                onChange={(e) => handleSettingChange('speed', Number(e.target.value))}
+                            />
+
+                            <label className="slider-label">
+                                Density
+                                <span className="slider-value">{state.background.settings.density}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={0}
+                                max={100}
+                                value={state.background.settings.density}
+                                onChange={(e) => handleSettingChange('density', Number(e.target.value))}
+                            />
+                        </>
+                    )}
+                </div>
+            </CollapsibleSection>
+
+            {/* Theme Section */}
+            <CollapsibleSection title="Theme">
                 <label>Palette:</label>
-                <select
-                    value={state.palette}
-                    onChange={(e) => updateState({ palette: e.target.value })}
-                >
-                    <option value="ocean">Ocean</option>
-                    <option value="sunset">Sunset</option>
-                    <option value="forest">Forest</option>
-                    <option value="grape">Grape</option>
-                    <option value="slate">Slate</option>
-                    <option value="sand">Sand</option>
-                </select>
+                <div className="palette-swatches">
+                    {PALETTE_OPTIONS.map(p => (
+                        <button
+                            key={p.id}
+                            className={`palette-swatch ${state.palette === p.id && !state.customColor ? 'palette-swatch--selected' : ''}`}
+                            onClick={() => updateState({ palette: p.id, customColor: '' })}
+                            type="button"
+                            title={p.label}
+                        >
+                            <span className="swatch-circle" style={{ backgroundColor: p.color }} />
+                            <span className="swatch-label">{p.label}</span>
+                        </button>
+                    ))}
+                </div>
 
                 <label>Custom Primary Color (hex):</label>
                 <div className="color-input-group">
@@ -200,7 +483,57 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                         />
                     )}
                 </div>
-            </section>
+            </CollapsibleSection>
+
+            {/* Typography Section */}
+            <CollapsibleSection title="Typography">
+                <div className="option-row">
+                    <div className="option-group">
+                        <label>Heading Font:</label>
+                        <select
+                            value={state.headingFont}
+                            onChange={(e) => updateState({ headingFont: e.target.value })}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="option-group">
+                        <label>Body Font:</label>
+                        <select
+                            value={state.bodyFont}
+                            onChange={(e) => updateState({ bodyFont: e.target.value })}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            </CollapsibleSection>
+
+            {/* Sections Visibility */}
+            <CollapsibleSection title="Sections">
+                <p className="section-hint">Toggle which sections are visible on the page.</p>
+                <div className="visibility-toggles">
+                    {([
+                        ['hero', 'Hero'],
+                        ['uvp', 'Value Prop'],
+                        ['team', 'Team'],
+                        ['footer', 'Footer'],
+                    ] as [keyof SectionVisibility, string][]).map(([key, label]) => (
+                        <label key={key} className="toggle-switch-label">
+                            <span>{label}</span>
+                            <div className={`toggle-switch ${state.sections[key] ? 'toggle-switch--on' : ''}`}
+                                onClick={() => updateSectionVisibility(key, !state.sections[key])}
+                            >
+                                <div className="toggle-switch-thumb" />
+                            </div>
+                        </label>
+                    ))}
+                </div>
+            </CollapsibleSection>
         </div>
     )
 }

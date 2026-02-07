@@ -1,0 +1,38 @@
+.aurora-drift {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.aurora-ribbon {
+  position: absolute;
+  left: -50%;
+  width: 200%;
+  filter: blur(40px);
+  animation: aurora-slide linear infinite, aurora-wave ease-in-out infinite, aurora-pulse ease-in-out infinite;
+}
+
+@keyframes aurora-slide {
+  0% { transform: translateX(-25%) skewY(-2deg); }
+  50% { transform: translateX(25%) skewY(2deg); }
+  100% { transform: translateX(-25%) skewY(-2deg); }
+}
+
+@keyframes aurora-wave {
+  0%, 100% { transform: translateX(0) scale(1); }
+  33% { transform: translateX(5%) scale(1.02); }
+  66% { transform: translateX(-5%) scale(0.98); }
+}
+
+@keyframes aurora-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.65; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-ribbon {
+    animation: none;
+    transform: translateX(0) skewY(0deg);
+    opacity: 0.5;
+  }
+}

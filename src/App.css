@@ -46,6 +46,11 @@
   --sand-card: #ffffff;
   --sand-muted: #a8a29e;
   --sand-border: #fcd34d;
+
+  /* Controls accent */
+  --controls-accent: #6366f1;
+  --controls-accent-light: rgba(99, 102, 241, 0.1);
+  --controls-accent-shadow: rgba(99, 102, 241, 0.3);
 }
 
 * {
@@ -72,6 +77,25 @@ body {
   border-right: 1px solid #e5e7eb;
   overflow-y: auto;
   flex-shrink: 0;
+  position: relative;
+}
+
+/* Custom scrollbar for controls panel */
+.controls-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.controls-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.controls-panel::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.controls-panel::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
 
 .controls-header {
@@ -79,17 +103,53 @@ body {
   top: 0;
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 10;
 }
 
+/* Accent gradient line at top of header */
+.controls-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--controls-accent), #a78bfa, #ec4899);
+}
+
 .controls-header h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
   color: #111827;
+  letter-spacing: -0.02em;
+}
+
+.controls-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reset-button {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  padding: 0.375rem 0.875rem;
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-button:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
 }
 
 .mobile-toggle,
@@ -113,6 +173,7 @@ body {
   flex: 1;
   overflow-y: auto;
   background: #ffffff;
+  scroll-behavior: smooth;
 }
 
 /* Responsive mobile layout */
@@ -159,7 +220,7 @@ body {
   }
 
   .controls-header h1 {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
 
   .preview-header h2 {

@@ -1,0 +1,30 @@
+.flow-lines {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.flow-line-path {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: flow-drift ease-in-out infinite, flow-dash linear infinite;
+}
+
+@keyframes flow-drift {
+  0% { transform: translateY(0) translateX(0); }
+  25% { transform: translateY(-20px) translateX(10px); }
+  50% { transform: translateY(-30px) translateX(-8px); }
+  75% { transform: translateY(-10px) translateX(12px); }
+  100% { transform: translateY(0) translateX(0); }
+}
+
+@keyframes flow-dash {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -200; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-line-path {
+    animation: none;
+  }
+}

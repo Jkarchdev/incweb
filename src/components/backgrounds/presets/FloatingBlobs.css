@@ -1,0 +1,33 @@
+.floating-blobs {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.floating-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  transform: translate(-50%, -50%);
+  animation: blob-drift ease-in-out infinite, blob-breathe ease-in-out infinite;
+}
+
+@keyframes blob-drift {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  25% { transform: translate(-40%, -60%) scale(1.1); }
+  50% { transform: translate(-60%, -50%) scale(0.95); }
+  75% { transform: translate(-50%, -40%) scale(1.05); }
+}
+
+@keyframes blob-breathe {
+  0%, 100% { transform: scale(0.95); }
+  50% { transform: scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-blob {
+    animation: none;
+    transform: translate(-50%, -50%);
+  }
+}
