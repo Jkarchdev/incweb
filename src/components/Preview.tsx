@@ -60,6 +60,8 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                     <section className="uvp-section">
                         <div className="container">
                             <p className="uvp-text">{state.mainText}</p>
+                            <p className="uvp-subtext">Building the future, one startup at a time</p>
+                            <button className="cta-button">Get Started</button>
                         </div>
                     </section>
 
@@ -67,6 +69,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                     <section className="team-section">
                         <div className="container">
                             <h2 className="section-title">Meet Our Team</h2>
+                            <p className="section-subtitle">The passionate people behind our success</p>
                             <div className="team-grid">
                                 {state.teammates.map((teammate) => (
                                     <div key={teammate.id} className="team-card">
