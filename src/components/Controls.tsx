@@ -315,6 +315,83 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                         </div>
                     </div>
                 </div>
+
+                <div className="position-sliders">
+                    <p className="section-hint" style={{ marginTop: '1rem' }}>Text Effects</p>
+
+                    <label className="toggle-label">
+                        <input
+                            type="checkbox"
+                            checked={state.heroLogo.textGlow}
+                            onChange={(e) => updateHeroLogo('textGlow', e.target.checked)}
+                        />
+                        <span>Glowing Text</span>
+                    </label>
+                    {state.heroLogo.textGlow && (
+                        <div>
+                            <label className="slider-label">
+                                Glow Intensity
+                                <span className="slider-value">{state.heroLogo.textGlowIntensity}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={0}
+                                max={100}
+                                value={state.heroLogo.textGlowIntensity}
+                                onChange={(e) => updateHeroLogo('textGlowIntensity', Number(e.target.value))}
+                            />
+                        </div>
+                    )}
+
+                    <label className="toggle-label">
+                        <input
+                            type="checkbox"
+                            checked={state.heroLogo.textShadow}
+                            onChange={(e) => updateHeroLogo('textShadow', e.target.checked)}
+                        />
+                        <span>Text Shadow</span>
+                    </label>
+                    {state.heroLogo.textShadow && (
+                        <div>
+                            <label className="slider-label">
+                                Shadow Intensity
+                                <span className="slider-value">{state.heroLogo.textShadowIntensity}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={0}
+                                max={100}
+                                value={state.heroLogo.textShadowIntensity}
+                                onChange={(e) => updateHeroLogo('textShadowIntensity', Number(e.target.value))}
+                            />
+                        </div>
+                    )}
+
+                    <label className="toggle-label">
+                        <input
+                            type="checkbox"
+                            checked={state.heroLogo.textOutline}
+                            onChange={(e) => updateHeroLogo('textOutline', e.target.checked)}
+                        />
+                        <span>Text Outline</span>
+                    </label>
+                    {state.heroLogo.textOutline && (
+                        <div>
+                            <label className="slider-label">
+                                Outline Width
+                                <span className="slider-value">{state.heroLogo.textOutlineWidth}px</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={0.5}
+                                max={5}
+                                step={0.5}
+                                value={state.heroLogo.textOutlineWidth}
+                                onChange={(e) => updateHeroLogo('textOutlineWidth', Number(e.target.value))}
+                            />
+                        </div>
+                    )}
+                </div>
             </CollapsibleSection>
 
             {/* Content Section */}
@@ -335,13 +412,6 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     placeholder="Building the future, one startup at a time"
                 />
 
-                <label>CTA Button Text:</label>
-                <input
-                    type="text"
-                    value={state.ctaText}
-                    onChange={(e) => updateState({ ctaText: e.target.value })}
-                    placeholder="Get Started"
-                />
             </CollapsibleSection>
 
             {/* Product Section */}

@@ -25,6 +25,12 @@ export interface HeroLogoConfig {
   logoY: number  // -50 to 50
   textX: number  // -50 to 50
   textY: number  // -50 to 50
+  textGlow: boolean
+  textGlowIntensity: number  // 0-100
+  textShadow: boolean
+  textShadowIntensity: number  // 0-100
+  textOutline: boolean
+  textOutlineWidth: number  // 0-5
 }
 
 export interface SocialLinks {
@@ -91,6 +97,12 @@ const DEFAULT_STATE: AppState = {
     logoY: 0,
     textX: 0,
     textY: 0,
+    textGlow: false,
+    textGlowIntensity: 50,
+    textShadow: false,
+    textShadowIntensity: 50,
+    textOutline: false,
+    textOutlineWidth: 1,
   },
   mainText: '(Placeholder-Main-Text)',
   teammates: Array.from({ length: 5 }, (_, i) => ({

@@ -199,13 +199,36 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                                             fontFamily: `'${state.heroLogo.sideTextFont}', sans-serif`,
                                                             color: state.heroLogo.sideTextColor || 'var(--text)',
                                                             fontSize: `${3 * hScale}rem`,
+                                                            textShadow: state.heroLogo.textGlow
+                                                                ? `0 0 ${20 * (state.heroLogo.textGlowIntensity / 100)}px ${state.heroLogo.sideTextColor || 'var(--primary)'}, 0 0 ${40 * (state.heroLogo.textGlowIntensity / 100)}px ${state.heroLogo.sideTextColor || 'var(--primary)'}80`
+                                                                : state.heroLogo.textShadow
+                                                                ? `0 ${4 * (state.heroLogo.textShadowIntensity / 100)}px ${8 * (state.heroLogo.textShadowIntensity / 100)}px rgba(0, 0, 0, ${0.5 * (state.heroLogo.textShadowIntensity / 100)})`
+                                                                : 'none',
+                                                            WebkitTextStroke: state.heroLogo.textOutline
+                                                                ? `${state.heroLogo.textOutlineWidth}px rgba(0, 0, 0, 0.2)`
+                                                                : 'none',
                                                         }}
                                                     >
                                                         {state.heroLogo.sideText}
                                                     </h1>
                                                 )}
                                                 {state.heroLogo.tagline && (
-                                                    <p className="hero-tagline" style={bodyStyle}>{state.heroLogo.tagline}</p>
+                                                    <p
+                                                        className="hero-tagline"
+                                                        style={{
+                                                            ...bodyStyle,
+                                                            textShadow: state.heroLogo.textGlow
+                                                                ? `0 0 ${10 * (state.heroLogo.textGlowIntensity / 100)}px ${state.heroLogo.sideTextColor || 'var(--primary)'}, 0 0 ${20 * (state.heroLogo.textGlowIntensity / 100)}px ${state.heroLogo.sideTextColor || 'var(--primary)'}80`
+                                                                : state.heroLogo.textShadow
+                                                                ? `0 ${2 * (state.heroLogo.textShadowIntensity / 100)}px ${4 * (state.heroLogo.textShadowIntensity / 100)}px rgba(0, 0, 0, ${0.3 * (state.heroLogo.textShadowIntensity / 100)})`
+                                                                : 'none',
+                                                            WebkitTextStroke: state.heroLogo.textOutline
+                                                                ? `${state.heroLogo.textOutlineWidth * 0.5}px rgba(0, 0, 0, 0.15)`
+                                                                : 'none',
+                                                        }}
+                                                    >
+                                                        {state.heroLogo.tagline}
+                                                    </p>
                                                 )}
                                             </div>
                                         )}
@@ -220,9 +243,6 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                         <p className="uvp-text" style={headingStyle}>{state.mainText}</p>
                                         {state.heroSubtext && (
                                             <p className="uvp-subtext" style={bodyStyle}>{state.heroSubtext}</p>
-                                        )}
-                                        {state.ctaText && (
-                                            <button className="cta-button" style={bodyStyle}>{state.ctaText}</button>
                                         )}
                                     </div>
                                 </section>
