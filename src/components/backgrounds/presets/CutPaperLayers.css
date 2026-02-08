@@ -1,0 +1,42 @@
+.cut-paper-shape {
+  will-change: transform;
+}
+
+.cut-paper-shape--0 {
+  animation: paper-float-0 25s ease-in-out infinite;
+}
+.cut-paper-shape--1 {
+  animation: paper-float-1 30s ease-in-out infinite;
+}
+.cut-paper-shape--2 {
+  animation: paper-float-2 28s ease-in-out infinite;
+}
+.cut-paper-shape--3 {
+  animation: paper-float-3 32s ease-in-out infinite;
+}
+
+@keyframes paper-float-0 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50%  { transform: translate(15px, -10px) rotate(1deg); }
+}
+
+@keyframes paper-float-1 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50%  { transform: translate(-12px, 8px) rotate(-0.8deg); }
+}
+
+@keyframes paper-float-2 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50%  { transform: translate(10px, 12px) rotate(0.6deg); }
+}
+
+@keyframes paper-float-3 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50%  { transform: translate(-8px, -15px) rotate(-1deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cut-paper-shape {
+    animation: none !important;
+  }
+}

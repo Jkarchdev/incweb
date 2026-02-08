@@ -4,27 +4,63 @@
   overflow: hidden;
 }
 
+.flow-line-group {
+  will-change: transform;
+}
+
+.flow-line-group--0 { animation: flow-drift-0 ease-in-out infinite; }
+.flow-line-group--1 { animation: flow-drift-1 ease-in-out infinite; }
+.flow-line-group--2 { animation: flow-drift-2 ease-in-out infinite; }
+.flow-line-group--3 { animation: flow-drift-3 ease-in-out infinite; }
+.flow-line-group--4 { animation: flow-drift-4 ease-in-out infinite; }
+
 .flow-line-path {
   stroke-linecap: round;
   stroke-linejoin: round;
-  animation: flow-drift ease-in-out infinite, flow-dash linear infinite;
+  animation: flow-dash linear infinite;
 }
 
-@keyframes flow-drift {
-  0% { transform: translateY(0) translateX(0); }
-  25% { transform: translateY(-20px) translateX(10px); }
-  50% { transform: translateY(-30px) translateX(-8px); }
-  75% { transform: translateY(-10px) translateX(12px); }
-  100% { transform: translateY(0) translateX(0); }
+@keyframes flow-drift-0 {
+  0%, 100% { transform: translate(0, 0); }
+  25%  { transform: translate(15px, -25px); }
+  50%  { transform: translate(-10px, -40px); }
+  75%  { transform: translate(20px, -15px); }
+}
+
+@keyframes flow-drift-1 {
+  0%, 100% { transform: translate(0, 0); }
+  30%  { transform: translate(-20px, -30px); }
+  60%  { transform: translate(12px, -20px); }
+}
+
+@keyframes flow-drift-2 {
+  0%, 100% { transform: translate(0, 0); }
+  20%  { transform: translate(25px, -15px); }
+  50%  { transform: translate(-15px, -35px); }
+  80%  { transform: translate(10px, -10px); }
+}
+
+@keyframes flow-drift-3 {
+  0%, 100% { transform: translate(0, 0); }
+  35%  { transform: translate(-18px, -28px); }
+  70%  { transform: translate(22px, -12px); }
+}
+
+@keyframes flow-drift-4 {
+  0%, 100% { transform: translate(0, 0); }
+  25%  { transform: translate(10px, -20px); }
+  60%  { transform: translate(-25px, -30px); }
+  85%  { transform: translate(15px, -8px); }
 }
 
 @keyframes flow-dash {
   0% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: -200; }
+  100% { stroke-dashoffset: -300; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .flow-line-group,
   .flow-line-path {
-    animation: none;
+    animation: none !important;
   }
 }

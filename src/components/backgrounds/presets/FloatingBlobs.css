@@ -8,26 +8,69 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.4;
-  transform: translate(-50%, -50%);
-  animation: blob-drift ease-in-out infinite, blob-breathe ease-in-out infinite;
+  opacity: 0.5;
+  will-change: transform;
 }
 
-@keyframes blob-drift {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  25% { transform: translate(-40%, -60%) scale(1.1); }
-  50% { transform: translate(-60%, -50%) scale(0.95); }
-  75% { transform: translate(-50%, -40%) scale(1.05); }
+/* Each blob gets a unique drift path that combines position + scale
+   in ONE keyframe to avoid the transform override bug. */
+
+.floating-blob--0 { animation: blob-path-0 ease-in-out infinite; }
+.floating-blob--1 { animation: blob-path-1 ease-in-out infinite; }
+.floating-blob--2 { animation: blob-path-2 ease-in-out infinite; }
+.floating-blob--3 { animation: blob-path-3 ease-in-out infinite; }
+.floating-blob--4 { animation: blob-path-4 ease-in-out infinite; }
+.floating-blob--5 { animation: blob-path-5 ease-in-out infinite; }
+
+@keyframes blob-path-0 {
+  0%   { transform: translate(0, 0)        scale(1);    }
+  20%  { transform: translate(80px, -50px)  scale(1.08); }
+  40%  { transform: translate(40px, 60px)   scale(0.94); }
+  60%  { transform: translate(-60px, 30px)  scale(1.12); }
+  80%  { transform: translate(-30px, -40px) scale(0.96); }
+  100% { transform: translate(0, 0)         scale(1);    }
 }
 
-@keyframes blob-breathe {
-  0%, 100% { transform: scale(0.95); }
-  50% { transform: scale(1.08); }
+@keyframes blob-path-1 {
+  0%   { transform: translate(0, 0)         scale(1);    }
+  25%  { transform: translate(-70px, 60px)  scale(1.1);  }
+  50%  { transform: translate(50px, 80px)   scale(0.92); }
+  75%  { transform: translate(90px, -30px)  scale(1.06); }
+  100% { transform: translate(0, 0)         scale(1);    }
+}
+
+@keyframes blob-path-2 {
+  0%   { transform: translate(0, 0)         scale(1);    }
+  30%  { transform: translate(60px, 70px)   scale(1.15); }
+  60%  { transform: translate(-80px, -20px) scale(0.9);  }
+  100% { transform: translate(0, 0)         scale(1);    }
+}
+
+@keyframes blob-path-3 {
+  0%   { transform: translate(0, 0)         scale(1);    }
+  20%  { transform: translate(-50px, -70px) scale(1.05); }
+  50%  { transform: translate(70px, 40px)   scale(0.95); }
+  80%  { transform: translate(-40px, 60px)  scale(1.1);  }
+  100% { transform: translate(0, 0)         scale(1);    }
+}
+
+@keyframes blob-path-4 {
+  0%   { transform: translate(0, 0)         scale(1);    }
+  35%  { transform: translate(90px, -40px)  scale(0.93); }
+  65%  { transform: translate(-60px, 50px)  scale(1.12); }
+  100% { transform: translate(0, 0)         scale(1);    }
+}
+
+@keyframes blob-path-5 {
+  0%   { transform: translate(0, 0)         scale(1);    }
+  25%  { transform: translate(-40px, 80px)  scale(1.08); }
+  50%  { transform: translate(60px, -60px)  scale(0.95); }
+  75%  { transform: translate(-80px, -30px) scale(1.05); }
+  100% { transform: translate(0, 0)         scale(1);    }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .floating-blob {
-    animation: none;
-    transform: translate(-50%, -50%);
+    animation: none !important;
   }
 }

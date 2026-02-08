@@ -1,0 +1,17 @@
+.mesh-gradient-layer {
+  animation: mesh-shift 35s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes mesh-shift {
+  0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  25%  { transform: translate(2%, -2%) scale(1.03) rotate(0.5deg); }
+  50%  { transform: translate(-1%, 2%) scale(1.01) rotate(-0.3deg); }
+  75%  { transform: translate(1%, 1%) scale(1.02) rotate(0.2deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mesh-gradient-layer {
+    animation: none;
+  }
+}

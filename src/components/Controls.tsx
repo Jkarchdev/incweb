@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { AppState, Teammate, HeroLogoConfig, SocialLinks, SectionVisibility } from '../App'
+import type { AppState, Teammate, HeroLogoConfig, SocialLinks, SectionVisibility, ProductPage, HeroLayout } from '../App'
 import { BACKGROUND_PRESETS } from './backgrounds/backgroundPresets'
 import PresetThumbnail from './backgrounds/PresetThumbnail'
 import './Controls.css'
@@ -10,14 +10,34 @@ interface ControlsProps {
 }
 
 const FONT_OPTIONS = [
+    // Clean / Modern
     'Inter',
-    'Playfair Display',
+    'DM Sans',
     'Montserrat',
-    'Roboto',
     'Poppins',
-    'Lora',
-    'Oswald',
+    'Outfit',
     'Raleway',
+    'Quicksand',
+    'Comfortaa',
+    'Space Grotesk',
+    // Bold / Display
+    'Oswald',
+    'Bebas Neue',
+    'Syne',
+    'Unbounded',
+    'Righteous',
+    // Elegant / Serif
+    'Playfair Display',
+    'Crimson Pro',
+    'Cormorant Garamond',
+    'Cinzel',
+    'Abril Fatface',
+    // Script / Handwritten
+    'Dancing Script',
+    'Great Vibes',
+    'Pacifico',
+    'Lobster',
+    'Satisfy',
 ]
 
 const PALETTE_OPTIONS = [
@@ -132,6 +152,34 @@ const Controls = ({ state, updateState }: ControlsProps) => {
         })
     }
 
+    const updateProductPage = (key: keyof ProductPage, value: string) => {
+        updateState({
+            productPage: { ...state.productPage, [key]: value }
+        })
+    }
+
+    const handleProductImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (file) {
+            const reader = new FileReader()
+            reader.onload = (event) => {
+                updateProductPage('imageUrl', event.target?.result as string)
+            }
+            reader.readAsDataURL(file)
+        }
+    }
+
+    const handleTeamGroupImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (file) {
+            const reader = new FileReader()
+            reader.onload = (event) => {
+                updateState({ teamGroupImageUrl: event.target?.result as string })
+            }
+            reader.readAsDataURL(file)
+        }
+    }
+
     const updateSectionVisibility = (key: keyof SectionVisibility, value: boolean) => {
         updateState({
             sections: { ...state.sections, [key]: value }
@@ -183,7 +231,7 @@ const Controls = ({ state, updateState }: ControlsProps) => {
 
                 <div className="option-row">
                     <div className="option-group">
-                        <label>Size:</label>
+                        <label>Logo Size:</label>
                         <select
                             value={state.heroLogo.size}
                             onChange={(e) => updateHeroLogo('size', e.target.value as HeroLogoConfig['size'])}
@@ -195,18 +243,29 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                         </select>
                     </div>
                     <div className="option-group">
-                        <label>Alignment:</label>
+                        <label>Layout:</label>
                         <select
                             value={state.heroLogo.alignment}
-                            onChange={(e) => updateHeroLogo('alignment', e.target.value as HeroLogoConfig['alignment'])}
+                            onChange={(e) => updateHeroLogo('alignment', e.target.value as HeroLayout)}
                         >
-                            <option value="center">Center</option>
-                            <option value="left">Left</option>
+                            <option value="center">Centered</option>
+                            <option value="left">Left Aligned</option>
+                            <option value="right">Right Aligned</option>
+                            <option value="side-left">Logo Left / Text Right</option>
+                            <option value="side-right">Logo Right / Text Left</option>
                         </select>
                     </div>
                 </div>
 
-                <label>Tagline (below logo):</label>
+                <label>Hero Headline:</label>
+                <input
+                    type="text"
+                    value={state.heroLogo.sideText}
+                    onChange={(e) => updateHeroLogo('sideText', e.target.value)}
+                    placeholder="Company name or headline..."
+                />
+
+                <label>Tagline:</label>
                 <input
                     type="text"
                     value={state.heroLogo.tagline}
@@ -214,41 +273,91 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     placeholder="Your company slogan..."
                 />
 
-                {state.heroLogo.alignment === 'left' && (
-                    <>
-                        <label>Side Text (right of logo):</label>
+                <div className="option-row">
+                    <div className="option-group">
+                        <label>Headline Font:</label>
+                        <select
+                            value={state.heroLogo.sideTextFont}
+                            onChange={(e) => updateHeroLogo('sideTextFont', e.target.value)}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="option-group">
+                        <label>Headline Color:</label>
                         <input
                             type="text"
-                            value={state.heroLogo.sideText}
-                            onChange={(e) => updateHeroLogo('sideText', e.target.value)}
-                            placeholder="Company name or headline..."
+                            value={state.heroLogo.sideTextColor}
+                            onChange={(e) => updateHeroLogo('sideTextColor', e.target.value)}
+                            placeholder="#000000"
+                            maxLength={7}
                         />
+                    </div>
+                </div>
 
-                        <div className="option-row">
-                            <div className="option-group">
-                                <label>Font:</label>
-                                <select
-                                    value={state.heroLogo.sideTextFont}
-                                    onChange={(e) => updateHeroLogo('sideTextFont', e.target.value)}
-                                >
-                                    {FONT_OPTIONS.map(f => (
-                                        <option key={f} value={f}>{f}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="option-group">
-                                <label>Text Color:</label>
-                                <input
-                                    type="text"
-                                    value={state.heroLogo.sideTextColor}
-                                    onChange={(e) => updateHeroLogo('sideTextColor', e.target.value)}
-                                    placeholder="#000000"
-                                    maxLength={7}
-                                />
-                            </div>
+                <div className="position-sliders">
+                    <p className="section-hint" style={{ marginTop: '1rem' }}>Logo Position</p>
+                    <div className="option-row">
+                        <div className="option-group">
+                            <label className="slider-label">
+                                X
+                                <span className="slider-value">{state.heroLogo.logoX}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-50}
+                                max={50}
+                                value={state.heroLogo.logoX}
+                                onChange={(e) => updateHeroLogo('logoX', Number(e.target.value))}
+                            />
                         </div>
-                    </>
-                )}
+                        <div className="option-group">
+                            <label className="slider-label">
+                                Y
+                                <span className="slider-value">{state.heroLogo.logoY}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-50}
+                                max={50}
+                                value={state.heroLogo.logoY}
+                                onChange={(e) => updateHeroLogo('logoY', Number(e.target.value))}
+                            />
+                        </div>
+                    </div>
+
+                    <p className="section-hint" style={{ marginTop: '0.75rem' }}>Text Position</p>
+                    <div className="option-row">
+                        <div className="option-group">
+                            <label className="slider-label">
+                                X
+                                <span className="slider-value">{state.heroLogo.textX}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-50}
+                                max={50}
+                                value={state.heroLogo.textX}
+                                onChange={(e) => updateHeroLogo('textX', Number(e.target.value))}
+                            />
+                        </div>
+                        <div className="option-group">
+                            <label className="slider-label">
+                                Y
+                                <span className="slider-value">{state.heroLogo.textY}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-50}
+                                max={50}
+                                value={state.heroLogo.textY}
+                                onChange={(e) => updateHeroLogo('textY', Number(e.target.value))}
+                            />
+                        </div>
+                    </div>
+                </div>
             </CollapsibleSection>
 
             {/* Content Section */}
@@ -278,6 +387,37 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                 />
             </CollapsibleSection>
 
+            {/* Product Section */}
+            <CollapsibleSection title="Product" defaultOpen={false}>
+                <label>Heading:</label>
+                <input
+                    type="text"
+                    value={state.productPage.heading}
+                    onChange={(e) => updateProductPage('heading', e.target.value)}
+                    placeholder="Our Product"
+                />
+
+                <label>Description:</label>
+                <textarea
+                    value={state.productPage.description}
+                    onChange={(e) => updateProductPage('description', e.target.value)}
+                    rows={4}
+                    placeholder="Describe your product..."
+                />
+
+                <div className="file-upload">
+                    <label htmlFor="product-image-upload" className="upload-button">
+                        {state.productPage.imageUrl ? '✓ Image Uploaded' : 'Upload Product Image'}
+                    </label>
+                    <input
+                        id="product-image-upload"
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                        onChange={handleProductImageUpload}
+                    />
+                </div>
+            </CollapsibleSection>
+
             {/* Team Section */}
             <CollapsibleSection title="Team">
                 <label>Section Heading:</label>
@@ -296,49 +436,76 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     placeholder="The passionate people behind our success"
                 />
 
-                <div className="teammate-count">
-                    <label>Members:</label>
-                    <select
-                        value={state.teammates.length}
-                        onChange={(e) => handleTeammateCountChange(Number(e.target.value))}
-                    >
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                        <option value={6}>6</option>
-                    </select>
-                </div>
+                <label>Display Mode:</label>
+                <select
+                    value={state.teamDisplayMode}
+                    onChange={(e) => updateState({ teamDisplayMode: e.target.value as 'individual' | 'group' })}
+                >
+                    <option value="individual">Individual Photos</option>
+                    <option value="group">Group Photo</option>
+                </select>
 
-                <div className="teammates-list">
-                    {state.teammates.map((teammate) => (
-                        <div key={teammate.id} className="teammate-control">
-                            <h4>Teammate {teammate.id + 1}</h4>
-                            <div className="file-upload">
-                                <label htmlFor={`teammate-${teammate.id}`} className="upload-button small">
-                                    {teammate.imageUrl ? '✓ Image' : 'Upload'}
-                                </label>
-                                <input
-                                    id={`teammate-${teammate.id}`}
-                                    type="file"
-                                    accept="image/png,image/jpeg,image/webp"
-                                    onChange={(e) => handleTeammateImageUpload(teammate.id, e)}
-                                />
-                            </div>
+                {state.teamDisplayMode === 'group' ? (
+                    <>
+                        <div className="file-upload" style={{ marginTop: '1rem' }}>
+                            <label htmlFor="team-group-upload" className="upload-button">
+                                {state.teamGroupImageUrl ? '✓ Group Photo Uploaded' : 'Upload Group Photo'}
+                            </label>
                             <input
-                                type="text"
-                                placeholder="Name"
-                                value={teammate.name}
-                                onChange={(e) => updateTeammate(teammate.id, 'name', e.target.value)}
-                            />
-                            <input
-                                type="text"
-                                placeholder="Role"
-                                value={teammate.role}
-                                onChange={(e) => updateTeammate(teammate.id, 'role', e.target.value)}
+                                id="team-group-upload"
+                                type="file"
+                                accept="image/png,image/jpeg,image/webp"
+                                onChange={handleTeamGroupImageUpload}
                             />
                         </div>
-                    ))}
-                </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="teammate-count">
+                            <label>Members:</label>
+                            <select
+                                value={state.teammates.length}
+                                onChange={(e) => handleTeammateCountChange(Number(e.target.value))}
+                            >
+                                <option value={3}>3</option>
+                                <option value={4}>4</option>
+                                <option value={5}>5</option>
+                                <option value={6}>6</option>
+                            </select>
+                        </div>
+
+                        <div className="teammates-list">
+                            {state.teammates.map((teammate) => (
+                                <div key={teammate.id} className="teammate-control">
+                                    <h4>Teammate {teammate.id + 1}</h4>
+                                    <div className="file-upload">
+                                        <label htmlFor={`teammate-${teammate.id}`} className="upload-button small">
+                                            {teammate.imageUrl ? '✓ Image' : 'Upload'}
+                                        </label>
+                                        <input
+                                            id={`teammate-${teammate.id}`}
+                                            type="file"
+                                            accept="image/png,image/jpeg,image/webp"
+                                            onChange={(e) => handleTeammateImageUpload(teammate.id, e)}
+                                        />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="Name"
+                                        value={teammate.name}
+                                        onChange={(e) => updateTeammate(teammate.id, 'name', e.target.value)}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Role"
+                                        value={teammate.role}
+                                        onChange={(e) => updateTeammate(teammate.id, 'role', e.target.value)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
             </CollapsibleSection>
 
             {/* Links Section */}
@@ -495,7 +662,7 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                             onChange={(e) => updateState({ headingFont: e.target.value })}
                         >
                             {FONT_OPTIONS.map(f => (
-                                <option key={f} value={f}>{f}</option>
+                                <option key={f} value={f} style={{ fontFamily: `'${f}', sans-serif` }}>{f}</option>
                             ))}
                         </select>
                     </div>
@@ -506,23 +673,49 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                             onChange={(e) => updateState({ bodyFont: e.target.value })}
                         >
                             {FONT_OPTIONS.map(f => (
-                                <option key={f} value={f}>{f}</option>
+                                <option key={f} value={f} style={{ fontFamily: `'${f}', sans-serif` }}>{f}</option>
                             ))}
                         </select>
                     </div>
                 </div>
+
+                <div className="bg-sliders">
+                    <label className="slider-label">
+                        Heading Size
+                        <span className="slider-value">{state.headingSize}%</span>
+                    </label>
+                    <input
+                        type="range"
+                        min={50}
+                        max={200}
+                        value={state.headingSize}
+                        onChange={(e) => updateState({ headingSize: Number(e.target.value) })}
+                    />
+
+                    <label className="slider-label">
+                        Body Size
+                        <span className="slider-value">{state.bodySize}%</span>
+                    </label>
+                    <input
+                        type="range"
+                        min={50}
+                        max={200}
+                        value={state.bodySize}
+                        onChange={(e) => updateState({ bodySize: Number(e.target.value) })}
+                    />
+                </div>
             </CollapsibleSection>
 
-            {/* Sections Visibility */}
+            {/* Sections & Pages */}
             <CollapsibleSection title="Sections">
-                <p className="section-hint">Toggle which sections are visible on the page.</p>
+                <p className="section-hint">Toggle which sections and pages are visible.</p>
                 <div className="visibility-toggles">
                     {([
                         ['hero', 'Hero'],
                         ['uvp', 'Value Prop'],
                         ['team', 'Team'],
                         ['footer', 'Footer'],
-                    ] as [keyof SectionVisibility, string][]).map(([key, label]) => (
+                    ] as [keyof typeof state.sections, string][]).map(([key, label]) => (
                         <label key={key} className="toggle-switch-label">
                             <span>{label}</span>
                             <div className={`toggle-switch ${state.sections[key] ? 'toggle-switch--on' : ''}`}
@@ -532,7 +725,24 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                             </div>
                         </label>
                     ))}
+                    <label className="toggle-switch-label">
+                        <span>Product Page</span>
+                        <div className={`toggle-switch ${state.productPageEnabled ? 'toggle-switch--on' : ''}`}
+                            onClick={() => updateState({ productPageEnabled: !state.productPageEnabled })}
+                        >
+                            <div className="toggle-switch-thumb" />
+                        </div>
+                    </label>
                 </div>
+
+                <label style={{ marginTop: '0.75rem' }}>Team Location:</label>
+                <select
+                    value={state.teamLocation}
+                    onChange={(e) => updateState({ teamLocation: e.target.value as 'home' | 'separate' })}
+                >
+                    <option value="home">Home Page</option>
+                    <option value="separate">Separate Page</option>
+                </select>
             </CollapsibleSection>
         </div>
     )

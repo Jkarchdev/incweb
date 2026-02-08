@@ -19,9 +19,9 @@ export interface BackgroundPreset {
 }
 
 export const DEFAULT_BACKGROUND_SETTINGS: BackgroundSettings = {
-  intensity: 30,
-  speed: 30,
-  density: 30,
+  intensity: 45,
+  speed: 35,
+  density: 40,
   blur: 0,
 }
 

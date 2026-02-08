@@ -1,6 +1,9 @@
+import { useState, useEffect } from 'react'
 import type { AppState } from '../App'
 import BackgroundRenderer from './backgrounds/BackgroundRenderer'
 import './Preview.css'
+
+type PageName = 'home' | 'product' | 'team'
 
 interface PreviewProps {
     state: AppState
@@ -45,6 +48,18 @@ const EmailIcon = () => (
 )
 
 const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
+    const [currentPage, setCurrentPage] = useState<PageName>('home')
+
+    // Reset to home if the current page gets disabled
+    useEffect(() => {
+        if (currentPage === 'product' && !state.productPageEnabled) {
+            setCurrentPage('home')
+        }
+        if (currentPage === 'team' && state.teamLocation !== 'separate') {
+            setCurrentPage('home')
+        }
+    }, [currentPage, state.productPageEnabled, state.teamLocation])
+
     const getThemeClass = () => {
         if (state.customColor) return 'custom'
         return state.palette
@@ -54,10 +69,48 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
         '--primary': state.customColor,
     } as React.CSSProperties : {}
 
-    const headingStyle = { fontFamily: `'${state.headingFont}', sans-serif` }
-    const bodyStyle = { fontFamily: `'${state.bodyFont}', sans-serif` }
+    const hScale = state.headingSize / 100
+    const bScale = state.bodySize / 100
+    const headingStyle = { fontFamily: `'${state.headingFont}', sans-serif`, fontSize: `${hScale}em` }
+    const bodyStyle = { fontFamily: `'${state.bodyFont}', sans-serif`, fontSize: `${bScale}em` }
+
+    const layout = state.heroLogo.alignment
+    const isSide = layout === 'side-left' || layout === 'side-right'
 
     const hasSocialLinks = state.socialLinks.instagram || state.socialLinks.twitter || state.socialLinks.linkedin || state.socialLinks.tiktok || state.contactEmail
+
+    const renderTeamContent = () => (
+        <section className="team-section">
+            <div className="container">
+                <h2 className="section-title" style={headingStyle}>{state.teamHeading}</h2>
+                <p className="section-subtitle" style={bodyStyle}>{state.teamSubheading}</p>
+                {state.teamDisplayMode === 'group' ? (
+                    <div className="team-group-photo">
+                        <img
+                            src={state.teamGroupImageUrl || placeholderSVG('Team Photo')}
+                            alt="Our Team"
+                        />
+                    </div>
+                ) : (
+                    <div className="team-grid">
+                        {state.teammates.map((teammate, index) => (
+                            <div key={teammate.id} className="team-card" style={{ animationDelay: `${index * 0.1}s` }}>
+                                <div className="team-headshot">
+                                    <img
+                                        src={teammate.imageUrl || placeholderSVG('Photo')}
+                                        alt={teammate.name}
+                                        loading="lazy"
+                                    />
+                                </div>
+                                <h3 className="team-name" style={headingStyle}>{teammate.name}</h3>
+                                <p className="team-role" style={bodyStyle}>{teammate.role}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </section>
+    )
 
     return (
         <div
@@ -76,6 +129,33 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                             className="landing-logo"
                         />
                     </div>
+                    <nav className="header-nav">
+                        <button
+                            className={`header-nav-link ${currentPage === 'home' ? 'header-nav-link--active' : ''}`}
+                            onClick={() => setCurrentPage('home')}
+                            type="button"
+                        >
+                            Home
+                        </button>
+                        {state.productPageEnabled && (
+                            <button
+                                className={`header-nav-link ${currentPage === 'product' ? 'header-nav-link--active' : ''}`}
+                                onClick={() => setCurrentPage('product')}
+                                type="button"
+                            >
+                                Product
+                            </button>
+                        )}
+                        {state.teamLocation === 'separate' && (
+                            <button
+                                className={`header-nav-link ${currentPage === 'team' ? 'header-nav-link--active' : ''}`}
+                                onClick={() => setCurrentPage('team')}
+                                type="button"
+                            >
+                                Team
+                            </button>
+                        )}
+                    </nav>
                     <button
                         className="mobile-settings-toggle"
                         onClick={onToggleMobileMenu}
@@ -88,76 +168,98 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
 
             <main className="website-main">
                 <div className="landing-content">
-                    {/* Hero Logo Section */}
-                    {state.sections.hero && (
-                        <section className={`hero-logo-section hero-logo-section--${state.heroLogo.alignment}`}>
+                    {/* ===== HOME PAGE ===== */}
+                    {currentPage === 'home' && (
+                        <>
+                            {/* Hero Logo Section */}
+                            {state.sections.hero && (
+                                <section className={`hero-logo-section hero-layout--${layout}`}>
+                                    <div className="container">
+                                        <div className={`hero-inner ${isSide ? 'hero-inner--side' : 'hero-inner--stacked'}`}>
+                                            {/* Logo block — rendered second in DOM for side-right, but CSS order handles it */}
+                                            <div
+                                                className={`hero-logo-block hero-logo--${state.heroLogo.size}`}
+                                                style={{ transform: `translate(${state.heroLogo.logoX}%, ${state.heroLogo.logoY}%)` }}
+                                            >
+                                                <div className="hero-logo-wrapper">
+                                                    <img
+                                                        src={state.logoUrl || placeholderSVG('Your Logo')}
+                                                        alt="Company Logo"
+                                                        className="hero-logo-img"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {/* Text block */}
+                                            {(state.heroLogo.sideText || state.heroLogo.tagline) && (
+                                                <div
+                                                    className="hero-text-block"
+                                                    style={{ transform: `translate(${state.heroLogo.textX}%, ${state.heroLogo.textY}%)` }}
+                                                >
+                                                    {state.heroLogo.sideText && (
+                                                        <h1
+                                                            className="hero-side-text"
+                                                            style={{
+                                                                fontFamily: `'${state.heroLogo.sideTextFont}', sans-serif`,
+                                                                color: state.heroLogo.sideTextColor || 'var(--text)',
+                                                                fontSize: `${3 * hScale}rem`,
+                                                            }}
+                                                        >
+                                                            {state.heroLogo.sideText}
+                                                        </h1>
+                                                    )}
+                                                    {state.heroLogo.tagline && (
+                                                        <p className="hero-tagline" style={bodyStyle}>{state.heroLogo.tagline}</p>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </section>
+                            )}
+
+                            {/* UVP Section */}
+                            {state.sections.uvp && (
+                                <section className="uvp-section">
+                                    <div className="container">
+                                        <p className="uvp-text" style={headingStyle}>{state.mainText}</p>
+                                        {state.heroSubtext && (
+                                            <p className="uvp-subtext" style={bodyStyle}>{state.heroSubtext}</p>
+                                        )}
+                                        {state.ctaText && (
+                                            <button className="cta-button" style={bodyStyle}>{state.ctaText}</button>
+                                        )}
+                                    </div>
+                                </section>
+                            )}
+
+                            {/* Team Section (on home page) */}
+                            {state.sections.team && state.teamLocation === 'home' && renderTeamContent()}
+                        </>
+                    )}
+
+                    {/* ===== PRODUCT PAGE ===== */}
+                    {currentPage === 'product' && state.productPageEnabled && (
+                        <section className="product-section">
                             <div className="container">
-                                <div className={`hero-logo-content hero-logo--${state.heroLogo.size}`}>
-                                    <div className="hero-logo-wrapper">
+                                <h2 className="section-title" style={headingStyle}>{state.productPage.heading}</h2>
+                                <div className="product-layout">
+                                    <div className="product-image-wrapper">
                                         <img
-                                            src={state.logoUrl || placeholderSVG('Your Logo')}
-                                            alt="Company Logo"
-                                            className="hero-logo-img"
+                                            src={state.productPage.imageUrl || placeholderSVG('Product')}
+                                            alt="Product"
                                         />
                                     </div>
-                                    {state.heroLogo.alignment === 'left' && state.heroLogo.sideText && (
-                                        <h1
-                                            className="hero-side-text"
-                                            style={{
-                                                fontFamily: `'${state.heroLogo.sideTextFont}', sans-serif`,
-                                                color: state.heroLogo.sideTextColor || 'var(--text)',
-                                            }}
-                                        >
-                                            {state.heroLogo.sideText}
-                                        </h1>
-                                    )}
-                                </div>
-                                {state.heroLogo.tagline && (
-                                    <p className={`hero-tagline hero-tagline--${state.heroLogo.alignment}`} style={bodyStyle}>{state.heroLogo.tagline}</p>
-                                )}
-                            </div>
-                        </section>
-                    )}
-
-                    {/* UVP Section */}
-                    {state.sections.uvp && (
-                        <section className="uvp-section">
-                            <div className="container">
-                                <p className="uvp-text" style={headingStyle}>{state.mainText}</p>
-                                {state.heroSubtext && (
-                                    <p className="uvp-subtext" style={bodyStyle}>{state.heroSubtext}</p>
-                                )}
-                                {state.ctaText && (
-                                    <button className="cta-button" style={bodyStyle}>{state.ctaText}</button>
-                                )}
-                            </div>
-                        </section>
-                    )}
-
-                    {/* Team Section */}
-                    {state.sections.team && (
-                        <section className="team-section">
-                            <div className="container">
-                                <h2 className="section-title" style={headingStyle}>{state.teamHeading}</h2>
-                                <p className="section-subtitle" style={bodyStyle}>{state.teamSubheading}</p>
-                                <div className="team-grid">
-                                    {state.teammates.map((teammate, index) => (
-                                        <div key={teammate.id} className="team-card" style={{ animationDelay: `${index * 0.1}s` }}>
-                                            <div className="team-headshot">
-                                                <img
-                                                    src={teammate.imageUrl || placeholderSVG('Photo')}
-                                                    alt={teammate.name}
-                                                    loading="lazy"
-                                                />
-                                            </div>
-                                            <h3 className="team-name" style={headingStyle}>{teammate.name}</h3>
-                                            <p className="team-role" style={bodyStyle}>{teammate.role}</p>
-                                        </div>
-                                    ))}
+                                    <div className="product-description" style={bodyStyle}>
+                                        {state.productPage.description}
+                                    </div>
                                 </div>
                             </div>
                         </section>
                     )}
+
+                    {/* ===== TEAM PAGE ===== */}
+                    {currentPage === 'team' && state.teamLocation === 'separate' && state.sections.team && renderTeamContent()}
                 </div>
             </main>
 
@@ -167,13 +269,11 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                     <div className="container">
                         <div className="footer-content">
                             <div className="footer-brand">
-                                {state.logoUrl && (
-                                    <img
-                                        src={state.logoUrl}
-                                        alt="Company Logo"
-                                        className="footer-logo-img"
-                                    />
-                                )}
+                                <img
+                                    src="/heights-logo.png"
+                                    alt="Heights Business Incubator"
+                                    className="footer-logo-img"
+                                />
                             </div>
 
                             {hasSocialLinks && (

@@ -13,6 +13,7 @@ interface Particle {
   radius: number
   color: string
   opacity: number
+  phase: number   // for sine-wave wobble
 }
 
 function parseColor(cssVar: string, el: Element): string {
@@ -20,13 +21,14 @@ function parseColor(cssVar: string, el: Element): string {
   return style.getPropertyValue(cssVar).trim() || '#888888'
 }
 
-const CONNECTION_DISTANCE = 120
+const CONNECTION_DISTANCE = 140
 
 const ParticleDrift = ({ settings }: ParticleDriftProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
   const animFrameRef = useRef<number>(0)
   const colorsRef = useRef<string[]>(['#888', '#aaa', '#999'])
+  const sizeRef = useRef({ w: 0, h: 0 })
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -42,6 +44,7 @@ const ParticleDrift = ({ settings }: ParticleDriftProps) => {
 
     const resize = () => {
       const rect = container.getBoundingClientRect()
+      sizeRef.current = { w: rect.width, h: rect.height }
       canvas.width = rect.width * dpr
       canvas.height = rect.height * dpr
       canvas.style.width = `${rect.width}px`
@@ -50,7 +53,6 @@ const ParticleDrift = ({ settings }: ParticleDriftProps) => {
     }
     resize()
 
-    // Read theme colors - re-read on each effect run (palette changes trigger re-render)
     const previewContainer = canvas.closest('.preview-container') || container
     colorsRef.current = [
       parseColor('--primary', previewContainer),
@@ -58,62 +60,82 @@ const ParticleDrift = ({ settings }: ParticleDriftProps) => {
       parseColor('--muted', previewContainer),
     ]
 
-    const count = 15 + Math.round((settings.density / 100) * 35) // 15-50
-    const speedFactor = 0.2 + (settings.speed / 100) * 0.8 // 0.2-1.0
+    const count = 20 + Math.round((settings.density / 100) * 40) // 20-60
+    const speedFactor = 0.15 + (settings.speed / 100) * 0.6 // 0.15-0.75
 
-    const rect = container.getBoundingClientRect()
+    const { w, h } = sizeRef.current
     particlesRef.current = Array.from({ length: count }, () => ({
-      x: Math.random() * rect.width,
-      y: Math.random() * rect.height,
+      x: Math.random() * w,
+      y: Math.random() * h,
       vx: (Math.random() - 0.5) * speedFactor,
       vy: (Math.random() - 0.5) * speedFactor,
-      radius: 1.5 + Math.random() * 2.5,
+      radius: 1 + Math.random() * 2,
       color: colorsRef.current[Math.floor(Math.random() * colorsRef.current.length)],
-      opacity: 0.3 + Math.random() * 0.4, // 0.3-0.7 range
+      opacity: 0.25 + Math.random() * 0.45,
+      phase: Math.random() * Math.PI * 2,
     }))
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let time = 0
 
     const animate = () => {
-      const w = rect.width
-      const h = rect.height
-      ctx.clearRect(0, 0, w, h)
+      const { w: cw, h: ch } = sizeRef.current
+      ctx.clearRect(0, 0, cw, ch)
+      time += 0.005
 
       const particles = particlesRef.current
 
-      // Draw connecting lines between nearby particles
+      // Draw connections
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x
           const dy = particles[i].y - particles[j].y
           const dist = Math.sqrt(dx * dx + dy * dy)
           if (dist < CONNECTION_DISTANCE) {
-            const lineOpacity = (1 - dist / CONNECTION_DISTANCE) * 0.15
+            const lineOpacity = (1 - dist / CONNECTION_DISTANCE) * 0.2
             ctx.beginPath()
             ctx.moveTo(particles[i].x, particles[i].y)
             ctx.lineTo(particles[j].x, particles[j].y)
             ctx.strokeStyle = particles[i].color
             ctx.globalAlpha = lineOpacity
-            ctx.lineWidth = 0.5
+            ctx.lineWidth = 0.6
             ctx.stroke()
           }
         }
       }
 
-      // Draw particles
+      // Draw particles with glow
       for (const p of particles) {
         if (!prefersReducedMotion) {
-          p.x += p.vx
-          p.y += p.vy
-          if (p.x < 0 || p.x > w) p.vx *= -1
-          if (p.y < 0 || p.y > h) p.vy *= -1
+          // Sine wobble for organic motion
+          const wobbleX = Math.sin(time * 2 + p.phase) * 0.15
+          const wobbleY = Math.cos(time * 1.5 + p.phase) * 0.15
+          p.x += p.vx + wobbleX
+          p.y += p.vy + wobbleY
+          if (p.x < -10) p.x = cw + 10
+          if (p.x > cw + 10) p.x = -10
+          if (p.y < -10) p.y = ch + 10
+          if (p.y > ch + 10) p.y = -10
         }
+
+        // Glow
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 4)
+        gradient.addColorStop(0, p.color)
+        gradient.addColorStop(1, 'transparent')
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.radius * 4, 0, Math.PI * 2)
+        ctx.fillStyle = gradient
+        ctx.globalAlpha = p.opacity * 0.3
+        ctx.fill()
+
+        // Core dot
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2)
         ctx.fillStyle = p.color
         ctx.globalAlpha = p.opacity
         ctx.fill()
       }
+
       ctx.globalAlpha = 1
       animFrameRef.current = requestAnimationFrame(animate)
     }

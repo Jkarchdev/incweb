@@ -12,13 +12,19 @@ export interface Teammate {
   imageUrl: string
 }
 
+export type HeroLayout = 'center' | 'left' | 'right' | 'side-left' | 'side-right'
+
 export interface HeroLogoConfig {
   size: 'small' | 'medium' | 'large' | 'xlarge'
-  alignment: 'center' | 'left'
+  alignment: HeroLayout
   tagline: string
   sideText: string
   sideTextFont: string
   sideTextColor: string
+  logoX: number  // -50 to 50 (percentage offset from center)
+  logoY: number  // -50 to 50
+  textX: number  // -50 to 50
+  textY: number  // -50 to 50
 }
 
 export interface SocialLinks {
@@ -26,6 +32,12 @@ export interface SocialLinks {
   twitter: string
   linkedin: string
   tiktok: string
+}
+
+export interface ProductPage {
+  heading: string
+  description: string
+  imageUrl: string
 }
 
 export interface SectionVisibility {
@@ -55,6 +67,13 @@ export interface AppState {
   teamSubheading: string
   socialLinks: SocialLinks
   sections: SectionVisibility
+  productPage: ProductPage
+  productPageEnabled: boolean
+  teamLocation: 'home' | 'separate'
+  headingSize: number
+  bodySize: number
+  teamDisplayMode: 'individual' | 'group'
+  teamGroupImageUrl: string
 }
 
 const STORAGE_KEY = 'incweb-config'
@@ -68,12 +87,16 @@ const DEFAULT_STATE: AppState = {
     sideText: '',
     sideTextFont: 'Inter',
     sideTextColor: '',
+    logoX: 0,
+    logoY: 0,
+    textX: 0,
+    textY: 0,
   },
-  mainText: 'Transform your ideas into reality with our comprehensive business incubator program. Join a community of innovative entrepreneurs and bring your vision to life.',
+  mainText: '(Placeholder-Main-Text)',
   teammates: Array.from({ length: 5 }, (_, i) => ({
     id: i,
-    name: `Team Member ${i + 1}`,
-    role: `Role ${i + 1}`,
+    name: `(Name ${i + 1})`,
+    role: `(Role ${i + 1})`,
     imageUrl: ''
   })),
   instagramUrl: 'https://instagram.com',
@@ -84,10 +107,10 @@ const DEFAULT_STATE: AppState = {
 
   headingFont: 'Inter',
   bodyFont: 'Inter',
-  heroSubtext: 'Building the future, one startup at a time',
-  ctaText: 'Get Started',
-  teamHeading: 'Meet Our Team',
-  teamSubheading: 'The passionate people behind our success',
+  heroSubtext: '(Placeholder-Subtext)',
+  ctaText: '(Placeholder-CTA)',
+  teamHeading: '(Placeholder-Team-Heading)',
+  teamSubheading: '(Placeholder-Team-Subheading)',
   socialLinks: {
     instagram: 'https://instagram.com',
     twitter: '',
@@ -100,6 +123,17 @@ const DEFAULT_STATE: AppState = {
     team: true,
     footer: true,
   },
+  productPage: {
+    heading: '(Product-Heading)',
+    description: '(Product-Description)',
+    imageUrl: '',
+  },
+  productPageEnabled: false,
+  teamLocation: 'home',
+  headingSize: 100,
+  bodySize: 100,
+  teamDisplayMode: 'individual',
+  teamGroupImageUrl: '',
 }
 
 function loadState(): AppState {
@@ -108,7 +142,18 @@ function loadState(): AppState {
     if (saved) {
       const parsed = JSON.parse(saved)
       // Merge with defaults so new fields are always present
-      return { ...DEFAULT_STATE, ...parsed, heroLogo: { ...DEFAULT_STATE.heroLogo, ...parsed.heroLogo }, socialLinks: { ...DEFAULT_STATE.socialLinks, ...parsed.socialLinks }, sections: { ...DEFAULT_STATE.sections, ...parsed.sections }, background: { ...DEFAULT_STATE.background, ...parsed.background, settings: { ...DEFAULT_STATE.background.settings, ...(parsed.background?.settings || {}) } } }
+      const mergedSections = { ...DEFAULT_STATE.sections, ...parsed.sections }
+      // Remove stale 'product' key from sections (now controlled by productPageEnabled)
+      delete (mergedSections as Record<string, unknown>).product
+      return {
+        ...DEFAULT_STATE,
+        ...parsed,
+        heroLogo: { ...DEFAULT_STATE.heroLogo, ...parsed.heroLogo },
+        socialLinks: { ...DEFAULT_STATE.socialLinks, ...parsed.socialLinks },
+        sections: mergedSections,
+        background: { ...DEFAULT_STATE.background, ...parsed.background, settings: { ...DEFAULT_STATE.background.settings, ...(parsed.background?.settings || {}) } },
+        productPage: { ...DEFAULT_STATE.productPage, ...(parsed.productPage || {}) },
+      }
     }
   } catch {
     // ignore parse errors

@@ -5,17 +5,38 @@ interface SpotlightVignetteProps {
 }
 
 const SpotlightVignette = ({ settings }: SpotlightVignetteProps) => {
-  const spread = 50 + (settings.density / 100) * 20 // 50-70% radius
+  const spread = 50 + (settings.density / 100) * 25 // 50-75%
 
   return (
-    <div
-      style={{
-        position: 'absolute',
-        inset: 0,
-        background: `radial-gradient(ellipse ${spread}% ${spread}% at 50% 40%, var(--bg) 0%, var(--border) 60%, var(--text) 100%)`,
-        opacity: 0.25,
-      }}
-    />
+    <div style={{ position: 'absolute', inset: 0 }}>
+      {/* Main spotlight */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: `radial-gradient(ellipse ${spread}% ${spread}% at 50% 38%, var(--bg) 0%, var(--border) 55%, var(--text) 100%)`,
+          opacity: 0.3,
+        }}
+      />
+      {/* Warm color wash */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: `radial-gradient(ellipse 80% 60% at 30% 50%, var(--primary) 0%, transparent 70%)`,
+          opacity: 0.06,
+        }}
+      />
+      {/* Cool accent */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: `radial-gradient(ellipse 60% 80% at 75% 60%, var(--border) 0%, transparent 65%)`,
+          opacity: 0.05,
+        }}
+      />
+    </div>
   )
 }
 
