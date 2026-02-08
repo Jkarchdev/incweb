@@ -190,7 +190,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                         {(state.heroLogo.sideText || state.heroLogo.tagline) && (
                                             <div
                                                 className="hero-text-block"
-                                                style={{ transform: `translate(${state.heroLogo.textX}%, ${state.heroLogo.textY}%)` }}
+                                                style={{ transform: `translate(${state.heroLogo.logoX}%, ${state.heroLogo.logoY}%)` }}
                                             >
                                                 {state.heroLogo.sideText && (
                                                     <h1

@@ -285,7 +285,7 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                 </div>
 
                 <div className="position-sliders">
-                    <p className="section-hint" style={{ marginTop: '1rem' }}>Logo Position</p>
+                    <p className="section-hint" style={{ marginTop: '1rem' }}>Position</p>
                     <div className="option-row">
                         <div className="option-group">
                             <label className="slider-label">
@@ -311,36 +311,6 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                                 max={200}
                                 value={state.heroLogo.logoY}
                                 onChange={(e) => updateHeroLogo('logoY', Number(e.target.value))}
-                            />
-                        </div>
-                    </div>
-
-                    <p className="section-hint" style={{ marginTop: '0.75rem' }}>Text Position</p>
-                    <div className="option-row">
-                        <div className="option-group">
-                            <label className="slider-label">
-                                X
-                                <span className="slider-value">{state.heroLogo.textX}</span>
-                            </label>
-                            <input
-                                type="range"
-                                min={-200}
-                                max={200}
-                                value={state.heroLogo.textX}
-                                onChange={(e) => updateHeroLogo('textX', Number(e.target.value))}
-                            />
-                        </div>
-                        <div className="option-group">
-                            <label className="slider-label">
-                                Y
-                                <span className="slider-value">{state.heroLogo.textY}</span>
-                            </label>
-                            <input
-                                type="range"
-                                min={-200}
-                                max={200}
-                                value={state.heroLogo.textY}
-                                onChange={(e) => updateHeroLogo('textY', Number(e.target.value))}
                             />
                         </div>
                     </div>
