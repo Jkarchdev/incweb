@@ -204,7 +204,7 @@
 
 .hero-container {
     position: relative;
-    height: 500px;
+    height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -739,7 +739,7 @@
     }
 
     .hero-container {
-        height: 400px;
+        height: 280px;
     }
 
     .hero-logo--medium .hero-logo-img {
