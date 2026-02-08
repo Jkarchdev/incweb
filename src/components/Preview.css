@@ -202,67 +202,24 @@
     position: relative;
 }
 
-/* Inner container — stacked (default) or side-by-side */
-.hero-inner--stacked {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.hero-inner--side {
+.hero-container {
+    position: relative;
+    height: 500px;
     display: flex;
     align-items: center;
-    gap: 3rem;
+    justify-content: center;
 }
 
-/* Logo block */
+/* Logo block — positioned via transform */
 .hero-logo-block {
+    position: absolute;
     flex-shrink: 0;
 }
 
-/* Text block */
+/* Text block — positioned via transform */
 .hero-text-block {
-    flex: 1;
-    min-width: 0;
-}
-
-/* ---- Layout variants ---- */
-
-/* Center: everything centered */
-.hero-layout--center {
+    position: absolute;
     text-align: center;
-}
-.hero-layout--center .hero-inner--stacked {
-    align-items: center;
-}
-
-/* Left-aligned stacked */
-.hero-layout--left {
-    text-align: left;
-}
-.hero-layout--left .hero-inner--stacked {
-    align-items: flex-start;
-}
-
-/* Right-aligned stacked */
-.hero-layout--right {
-    text-align: right;
-}
-.hero-layout--right .hero-inner--stacked {
-    align-items: flex-end;
-}
-
-/* Side-by-side: logo left, text right */
-.hero-layout--side-left .hero-text-block {
-    text-align: left;
-}
-
-/* Side-by-side reversed: text left, logo right */
-.hero-layout--side-right .hero-inner--side {
-    flex-direction: row-reverse;
-}
-.hero-layout--side-right .hero-text-block {
-    text-align: right;
 }
 
 .hero-logo-wrapper {
@@ -681,10 +638,6 @@
         padding: 4rem 0 2rem;
     }
 
-    .hero-inner--side {
-        gap: 2rem;
-    }
-
     .hero-logo--large .hero-logo-img {
         max-height: 140px;
     }
@@ -785,14 +738,8 @@
         padding: 3rem 0 1.5rem;
     }
 
-    .hero-inner--side {
-        flex-direction: column !important;
-        gap: 1.5rem;
-    }
-
-    .hero-layout--side-right .hero-text-block,
-    .hero-layout--side-left .hero-text-block {
-        text-align: center;
+    .hero-container {
+        height: 400px;
     }
 
     .hero-logo--medium .hero-logo-img {

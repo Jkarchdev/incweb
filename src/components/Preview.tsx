@@ -74,9 +74,6 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
     const headingStyle = { fontFamily: `'${state.headingFont}', sans-serif`, fontSize: `${hScale}em` }
     const bodyStyle = { fontFamily: `'${state.bodyFont}', sans-serif`, fontSize: `${bScale}em` }
 
-    const layout = state.heroLogo.alignment
-    const isSide = layout === 'side-left' || layout === 'side-right'
-
     const hasSocialLinks = state.socialLinks.instagram || state.socialLinks.twitter || state.socialLinks.linkedin || state.socialLinks.tiktok || state.contactEmail
 
     const renderTeamContent = () => (
@@ -173,47 +170,45 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                         <>
                             {/* Hero Logo Section */}
                             {state.sections.hero && (
-                                <section className={`hero-logo-section hero-layout--${layout}`}>
-                                    <div className="container">
-                                        <div className={`hero-inner ${isSide ? 'hero-inner--side' : 'hero-inner--stacked'}`}>
-                                            {/* Logo block — rendered second in DOM for side-right, but CSS order handles it */}
-                                            <div
-                                                className={`hero-logo-block hero-logo--${state.heroLogo.size}`}
-                                                style={{ transform: `translate(${state.heroLogo.logoX}%, ${state.heroLogo.logoY}%)` }}
-                                            >
-                                                <div className="hero-logo-wrapper">
-                                                    <img
-                                                        src={state.logoUrl || placeholderSVG('Your Logo')}
-                                                        alt="Company Logo"
-                                                        className="hero-logo-img"
-                                                    />
-                                                </div>
+                                <section className="hero-logo-section">
+                                    <div className="container hero-container">
+                                        {/* Logo block */}
+                                        <div
+                                            className={`hero-logo-block hero-logo--${state.heroLogo.size}`}
+                                            style={{ transform: `translate(${state.heroLogo.logoX}%, ${state.heroLogo.logoY}%)` }}
+                                        >
+                                            <div className="hero-logo-wrapper">
+                                                <img
+                                                    src={state.logoUrl || placeholderSVG('Your Logo')}
+                                                    alt="Company Logo"
+                                                    className="hero-logo-img"
+                                                />
                                             </div>
-
-                                            {/* Text block */}
-                                            {(state.heroLogo.sideText || state.heroLogo.tagline) && (
-                                                <div
-                                                    className="hero-text-block"
-                                                    style={{ transform: `translate(${state.heroLogo.textX}%, ${state.heroLogo.textY}%)` }}
-                                                >
-                                                    {state.heroLogo.sideText && (
-                                                        <h1
-                                                            className="hero-side-text"
-                                                            style={{
-                                                                fontFamily: `'${state.heroLogo.sideTextFont}', sans-serif`,
-                                                                color: state.heroLogo.sideTextColor || 'var(--text)',
-                                                                fontSize: `${3 * hScale}rem`,
-                                                            }}
-                                                        >
-                                                            {state.heroLogo.sideText}
-                                                        </h1>
-                                                    )}
-                                                    {state.heroLogo.tagline && (
-                                                        <p className="hero-tagline" style={bodyStyle}>{state.heroLogo.tagline}</p>
-                                                    )}
-                                                </div>
-                                            )}
                                         </div>
+
+                                        {/* Text block */}
+                                        {(state.heroLogo.sideText || state.heroLogo.tagline) && (
+                                            <div
+                                                className="hero-text-block"
+                                                style={{ transform: `translate(${state.heroLogo.textX}%, ${state.heroLogo.textY}%)` }}
+                                            >
+                                                {state.heroLogo.sideText && (
+                                                    <h1
+                                                        className="hero-side-text"
+                                                        style={{
+                                                            fontFamily: `'${state.heroLogo.sideTextFont}', sans-serif`,
+                                                            color: state.heroLogo.sideTextColor || 'var(--text)',
+                                                            fontSize: `${3 * hScale}rem`,
+                                                        }}
+                                                    >
+                                                        {state.heroLogo.sideText}
+                                                    </h1>
+                                                )}
+                                                {state.heroLogo.tagline && (
+                                                    <p className="hero-tagline" style={bodyStyle}>{state.heroLogo.tagline}</p>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </section>
                             )}

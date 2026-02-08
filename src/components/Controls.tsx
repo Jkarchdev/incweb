@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { AppState, Teammate, HeroLogoConfig, SocialLinks, SectionVisibility, ProductPage, HeroLayout } from '../App'
+import type { AppState, Teammate, HeroLogoConfig, SocialLinks, SectionVisibility, ProductPage } from '../App'
 import { BACKGROUND_PRESETS } from './backgrounds/backgroundPresets'
 import PresetThumbnail from './backgrounds/PresetThumbnail'
 import './Controls.css'
@@ -242,19 +242,6 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                             <option value="xlarge">Extra Large</option>
                         </select>
                     </div>
-                    <div className="option-group">
-                        <label>Layout:</label>
-                        <select
-                            value={state.heroLogo.alignment}
-                            onChange={(e) => updateHeroLogo('alignment', e.target.value as HeroLayout)}
-                        >
-                            <option value="center">Centered</option>
-                            <option value="left">Left Aligned</option>
-                            <option value="right">Right Aligned</option>
-                            <option value="side-left">Logo Left / Text Right</option>
-                            <option value="side-right">Logo Right / Text Left</option>
-                        </select>
-                    </div>
                 </div>
 
                 <label>Hero Headline:</label>
@@ -307,8 +294,8 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                             </label>
                             <input
                                 type="range"
-                                min={-50}
-                                max={50}
+                                min={-200}
+                                max={200}
                                 value={state.heroLogo.logoX}
                                 onChange={(e) => updateHeroLogo('logoX', Number(e.target.value))}
                             />
@@ -320,8 +307,8 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                             </label>
                             <input
                                 type="range"
-                                min={-50}
-                                max={50}
+                                min={-200}
+                                max={200}
                                 value={state.heroLogo.logoY}
                                 onChange={(e) => updateHeroLogo('logoY', Number(e.target.value))}
                             />
@@ -337,8 +324,8 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                             </label>
                             <input
                                 type="range"
-                                min={-50}
-                                max={50}
+                                min={-200}
+                                max={200}
                                 value={state.heroLogo.textX}
                                 onChange={(e) => updateHeroLogo('textX', Number(e.target.value))}
                             />
@@ -350,8 +337,8 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                             </label>
                             <input
                                 type="range"
-                                min={-50}
-                                max={50}
+                                min={-200}
+                                max={200}
                                 value={state.heroLogo.textY}
                                 onChange={(e) => updateHeroLogo('textY', Number(e.target.value))}
                             />
