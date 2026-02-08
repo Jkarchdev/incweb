@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { AppState, Teammate, HeroLogoConfig, SocialLinks, SectionVisibility, ProductPage } from '../App'
+import type { AppState, Teammate, HeroLogoConfig, SocialLinks, SectionVisibility, ProductPage, HeroAnimation, SectionAnimation, CardAnimation, HoverStyle, TextAnimation, CardStyle, TeamCardLayout } from '../App'
 import { BACKGROUND_PRESETS } from './backgrounds/backgroundPresets'
 import PresetThumbnail from './backgrounds/PresetThumbnail'
 import './Controls.css'
@@ -134,6 +134,12 @@ const Controls = ({ state, updateState }: ControlsProps) => {
     const handleCustomColorChange = (value: string) => {
         if (/^#[0-9A-Fa-f]{6}$/.test(value) || value === '') {
             updateState({ customColor: value })
+        }
+    }
+
+    const handleSecondaryColorChange = (value: string) => {
+        if (/^#[0-9A-Fa-f]{6}$/.test(value) || value === '') {
+            updateState({ secondaryColor: value })
         }
     }
 
@@ -274,22 +280,31 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     </div>
                     <div className="option-group">
                         <label>Headline Color:</label>
-                        <input
-                            type="text"
-                            value={state.heroLogo.sideTextColor}
-                            onChange={(e) => updateHeroLogo('sideTextColor', e.target.value)}
-                            placeholder="#000000"
-                            maxLength={7}
-                        />
+                        <div className="color-input-group">
+                            <input
+                                type="color"
+                                value={state.heroLogo.sideTextColor || '#000000'}
+                                onChange={(e) => updateHeroLogo('sideTextColor', e.target.value)}
+                                style={{ width: '50px', height: '32px', cursor: 'pointer' }}
+                            />
+                            <input
+                                type="text"
+                                value={state.heroLogo.sideTextColor}
+                                onChange={(e) => updateHeroLogo('sideTextColor', e.target.value)}
+                                placeholder="#000000"
+                                maxLength={7}
+                                style={{ flex: 1 }}
+                            />
+                        </div>
                     </div>
                 </div>
 
                 <div className="position-sliders">
-                    <p className="section-hint" style={{ marginTop: '1rem' }}>Position</p>
+                    <p className="section-hint" style={{ marginTop: '1rem' }}>Logo Position</p>
                     <div className="option-row">
                         <div className="option-group">
                             <label className="slider-label">
-                                X
+                                Logo X
                                 <span className="slider-value">{state.heroLogo.logoX}</span>
                             </label>
                             <input
@@ -302,7 +317,7 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                         </div>
                         <div className="option-group">
                             <label className="slider-label">
-                                Y
+                                Logo Y
                                 <span className="slider-value">{state.heroLogo.logoY}</span>
                             </label>
                             <input
@@ -311,6 +326,38 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                                 max={200}
                                 value={state.heroLogo.logoY}
                                 onChange={(e) => updateHeroLogo('logoY', Number(e.target.value))}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="position-sliders">
+                    <p className="section-hint" style={{ marginTop: '1rem' }}>Text Position</p>
+                    <div className="option-row">
+                        <div className="option-group">
+                            <label className="slider-label">
+                                Text X
+                                <span className="slider-value">{state.heroLogo.textX}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-200}
+                                max={200}
+                                value={state.heroLogo.textX}
+                                onChange={(e) => updateHeroLogo('textX', Number(e.target.value))}
+                            />
+                        </div>
+                        <div className="option-group">
+                            <label className="slider-label">
+                                Text Y
+                                <span className="slider-value">{state.heroLogo.textY}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-200}
+                                max={200}
+                                value={state.heroLogo.textY}
+                                onChange={(e) => updateHeroLogo('textY', Number(e.target.value))}
                             />
                         </div>
                     </div>
@@ -391,6 +438,65 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                             />
                         </div>
                     )}
+
+                    <label className="toggle-label">
+                        <input
+                            type="checkbox"
+                            checked={state.heroGradientText}
+                            onChange={(e) => updateState({ heroGradientText: e.target.checked })}
+                        />
+                        <span>Gradient Text</span>
+                    </label>
+                    {state.heroGradientText && (
+                        <>
+                            <label>Gradient From:</label>
+                            <div className="color-input-group">
+                                <input
+                                    type="color"
+                                    value={state.heroGradientFrom || '#ff0000'}
+                                    onChange={(e) => updateState({ heroGradientFrom: e.target.value })}
+                                    style={{ width: '60px', height: '38px', cursor: 'pointer' }}
+                                />
+                                <input
+                                    type="text"
+                                    value={state.heroGradientFrom}
+                                    onChange={(e) => updateState({ heroGradientFrom: e.target.value })}
+                                    placeholder="#ff0000"
+                                    maxLength={7}
+                                    style={{ flex: 1 }}
+                                />
+                            </div>
+                            <label>Gradient To:</label>
+                            <div className="color-input-group">
+                                <input
+                                    type="color"
+                                    value={state.heroGradientTo || '#0000ff'}
+                                    onChange={(e) => updateState({ heroGradientTo: e.target.value })}
+                                    style={{ width: '60px', height: '38px', cursor: 'pointer' }}
+                                />
+                                <input
+                                    type="text"
+                                    value={state.heroGradientTo}
+                                    onChange={(e) => updateState({ heroGradientTo: e.target.value })}
+                                    placeholder="#0000ff"
+                                    maxLength={7}
+                                    style={{ flex: 1 }}
+                                />
+                            </div>
+                        </>
+                    )}
+
+                    <label className="slider-label">
+                        Letter Spacing
+                        <span className="slider-value">{state.heroLetterSpacing}</span>
+                    </label>
+                    <input
+                        type="range"
+                        min={-5}
+                        max={20}
+                        value={state.heroLetterSpacing}
+                        onChange={(e) => updateState({ heroLetterSpacing: Number(e.target.value) })}
+                    />
                 </div>
             </CollapsibleSection>
 
@@ -471,6 +577,43 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     <option value="individual">Individual Photos</option>
                     <option value="group">Group Photo</option>
                 </select>
+
+                <div className="option-group">
+                    <label>Card Style:</label>
+                    <select
+                        value={state.cardStyle}
+                        onChange={(e) => updateState({ cardStyle: e.target.value as CardStyle })}
+                    >
+                        <option value="glass">Glass</option>
+                        <option value="solid">Solid</option>
+                        <option value="outline">Outline</option>
+                        <option value="shadow">Shadow</option>
+                    </select>
+                </div>
+
+                <label className="slider-label">
+                    Card Roundness
+                    <span className="slider-value">{state.cardBorderRadius}px</span>
+                </label>
+                <input
+                    type="range"
+                    min={0}
+                    max={50}
+                    value={state.cardBorderRadius}
+                    onChange={(e) => updateState({ cardBorderRadius: Number(e.target.value) })}
+                />
+
+                <div className="option-group">
+                    <label>Card Layout:</label>
+                    <select
+                        value={state.teamCardLayout}
+                        onChange={(e) => updateState({ teamCardLayout: e.target.value as TeamCardLayout })}
+                    >
+                        <option value="grid">Grid</option>
+                        <option value="carousel">Carousel</option>
+                        <option value="stacked">Stacked</option>
+                    </select>
+                </div>
 
                 {state.teamDisplayMode === 'group' ? (
                     <>
@@ -643,6 +786,76 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                 </div>
             </CollapsibleSection>
 
+            {/* Animations Section */}
+            <CollapsibleSection title="Animations" defaultOpen={false}>
+                <div className="option-group">
+                    <label>Hero Entrance:</label>
+                    <select
+                        value={state.heroAnimation}
+                        onChange={(e) => updateState({ heroAnimation: e.target.value as HeroAnimation })}
+                    >
+                        <option value="none">None</option>
+                        <option value="fade-in">Fade In</option>
+                        <option value="slide-up">Slide Up</option>
+                        <option value="scale-in">Scale In</option>
+                        <option value="typewriter">Typewriter</option>
+                    </select>
+                </div>
+
+                <div className="option-group">
+                    <label>Section Entrance:</label>
+                    <select
+                        value={state.sectionAnimation}
+                        onChange={(e) => updateState({ sectionAnimation: e.target.value as SectionAnimation })}
+                    >
+                        <option value="none">None</option>
+                        <option value="fade-in">Fade In</option>
+                        <option value="slide-up">Slide Up</option>
+                        <option value="scale-in">Scale In</option>
+                    </select>
+                </div>
+
+                <div className="option-group">
+                    <label>Card Entrance:</label>
+                    <select
+                        value={state.cardAnimation}
+                        onChange={(e) => updateState({ cardAnimation: e.target.value as CardAnimation })}
+                    >
+                        <option value="none">None</option>
+                        <option value="fade-in">Fade In</option>
+                        <option value="slide-up">Slide Up</option>
+                        <option value="flip">Flip</option>
+                        <option value="bounce">Bounce</option>
+                    </select>
+                </div>
+
+                <div className="option-group">
+                    <label>Card Hover Effect:</label>
+                    <select
+                        value={state.hoverStyle}
+                        onChange={(e) => updateState({ hoverStyle: e.target.value as HoverStyle })}
+                    >
+                        <option value="none">None</option>
+                        <option value="lift">Lift</option>
+                        <option value="grow">Grow</option>
+                        <option value="glow">Glow</option>
+                        <option value="tilt">Tilt</option>
+                    </select>
+                </div>
+
+                <div className="option-group">
+                    <label>Hero Text Animation:</label>
+                    <select
+                        value={state.heroTextAnimation}
+                        onChange={(e) => updateState({ heroTextAnimation: e.target.value as TextAnimation })}
+                    >
+                        <option value="none">None</option>
+                        <option value="color-shift">Color Shift</option>
+                        <option value="shimmer">Shimmer</option>
+                    </select>
+                </div>
+            </CollapsibleSection>
+
             {/* Theme Section */}
             <CollapsibleSection title="Theme">
                 <label>Palette:</label>
@@ -651,7 +864,7 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                         <button
                             key={p.id}
                             className={`palette-swatch ${state.palette === p.id && !state.customColor ? 'palette-swatch--selected' : ''}`}
-                            onClick={() => updateState({ palette: p.id, customColor: '' })}
+                            onClick={() => updateState({ palette: p.id, customColor: '', secondaryColor: '' })}
                             type="button"
                             title={p.label}
                         >
@@ -661,21 +874,40 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     ))}
                 </div>
 
-                <label>Custom Primary Color (hex):</label>
+                <label>Custom Primary Color:</label>
                 <div className="color-input-group">
+                    <input
+                        type="color"
+                        value={state.customColor || '#3b82f6'}
+                        onChange={(e) => updateState({ customColor: e.target.value })}
+                        style={{ width: '60px', height: '38px', cursor: 'pointer' }}
+                    />
                     <input
                         type="text"
                         value={state.customColor}
                         onChange={(e) => handleCustomColorChange(e.target.value)}
                         placeholder="#3b82f6"
                         maxLength={7}
+                        style={{ flex: 1 }}
                     />
-                    {state.customColor && (
-                        <div
-                            className="color-preview"
-                            style={{ backgroundColor: state.customColor }}
-                        />
-                    )}
+                </div>
+
+                <label>Custom Secondary Color:</label>
+                <div className="color-input-group">
+                    <input
+                        type="color"
+                        value={state.secondaryColor || '#06b6d4'}
+                        onChange={(e) => updateState({ secondaryColor: e.target.value })}
+                        style={{ width: '60px', height: '38px', cursor: 'pointer' }}
+                    />
+                    <input
+                        type="text"
+                        value={state.secondaryColor}
+                        onChange={(e) => handleSecondaryColorChange(e.target.value)}
+                        placeholder="#06b6d4"
+                        maxLength={7}
+                        style={{ flex: 1 }}
+                    />
                 </div>
             </CollapsibleSection>
 

@@ -1,6 +1,7 @@
 :root {
   /* Ocean palette - Deep blue waters */
   --ocean-primary: #0284c7;
+  --ocean-secondary: #06b6d4;
   --ocean-bg: #f0f9ff;
   --ocean-text: #0c4a6e;
   --ocean-card: #ffffff;
@@ -9,6 +10,7 @@
 
   /* Sunset palette - Warm orange glow */
   --sunset-primary: #ea580c;
+  --sunset-secondary: #f59e0b;
   --sunset-bg: #fff7ed;
   --sunset-text: #7c2d12;
   --sunset-card: #ffffff;
@@ -17,6 +19,7 @@
 
   /* Forest palette - Rich emerald green */
   --forest-primary: #059669;
+  --forest-secondary: #10b981;
   --forest-bg: #ecfdf5;
   --forest-text: #064e3b;
   --forest-card: #ffffff;
@@ -25,6 +28,7 @@
 
   /* Grape palette - Vibrant purple */
   --grape-primary: #9333ea;
+  --grape-secondary: #ec4899;
   --grape-bg: #faf5ff;
   --grape-text: #581c87;
   --grape-card: #ffffff;
@@ -33,6 +37,7 @@
 
   /* Slate palette - Modern neutral */
   --slate-primary: #475569;
+  --slate-secondary: #6366f1;
   --slate-bg: #f8fafc;
   --slate-text: #1e293b;
   --slate-card: #ffffff;
@@ -41,6 +46,7 @@
 
   /* Sand palette - Warm amber */
   --sand-primary: #b45309;
+  --sand-secondary: #d97706;
   --sand-bg: #fefce8;
   --sand-text: #78350f;
   --sand-card: #ffffff;

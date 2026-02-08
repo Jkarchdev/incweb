@@ -65,9 +65,12 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
         return state.palette
     }
 
-    const customStyle = state.customColor ? {
-        '--primary': state.customColor,
-    } as React.CSSProperties : {}
+    const customStyle = {
+        ...(state.customColor ? { '--primary': state.customColor } : {}),
+        ...(state.secondaryColor ? { '--secondary': state.secondaryColor } : {}),
+        ...(state.heroGradientFrom ? { '--gradient-from': state.heroGradientFrom } : {}),
+        ...(state.heroGradientTo ? { '--gradient-to': state.heroGradientTo } : {}),
+    } as React.CSSProperties
 
     const hScale = state.headingSize / 100
     const bScale = state.bodySize / 100
@@ -77,7 +80,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
     const hasSocialLinks = state.socialLinks.instagram || state.socialLinks.twitter || state.socialLinks.linkedin || state.socialLinks.tiktok || state.contactEmail
 
     const renderTeamContent = () => (
-        <section className="team-section">
+        <section className={`team-section section-anim-${state.sectionAnimation}`}>
             <div className="container">
                 <h2 className="section-title" style={headingStyle}>{state.teamHeading}</h2>
                 <p className="section-subtitle" style={bodyStyle}>{state.teamSubheading}</p>
@@ -89,9 +92,13 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                         />
                     </div>
                 ) : (
-                    <div className="team-grid">
+                    <div className={`team-layout-${state.teamCardLayout}`}>
                         {state.teammates.map((teammate, index) => (
-                            <div key={teammate.id} className="team-card" style={{ animationDelay: `${index * 0.1}s` }}>
+                            <div
+                                key={teammate.id}
+                                className={`team-card card-anim-${state.cardAnimation} hover-${state.hoverStyle} card-style-${state.cardStyle}`}
+                                style={{ animationDelay: `${index * 0.1}s`, borderRadius: `${state.cardBorderRadius}px` }}
+                            >
                                 <div className="team-headshot">
                                     <img
                                         src={teammate.imageUrl || placeholderSVG('Photo')}
@@ -170,7 +177,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                         <>
                             {/* Hero Logo Section */}
                             {state.sections.hero && (
-                                <section className="hero-logo-section">
+                                <section className={`hero-logo-section hero-anim-${state.heroAnimation}`}>
                                     <div className="container hero-container">
                                         {/* Logo block */}
                                         <div
@@ -190,15 +197,16 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                         {(state.heroLogo.sideText || state.heroLogo.tagline) && (
                                             <div
                                                 className="hero-text-block"
-                                                style={{ transform: `translate(${state.heroLogo.logoX}%, ${state.heroLogo.logoY}%)` }}
+                                                style={{ transform: `translate(${state.heroLogo.textX}%, ${state.heroLogo.textY}%)` }}
                                             >
                                                 {state.heroLogo.sideText && (
                                                     <h1
-                                                        className="hero-side-text"
+                                                        className={`hero-side-text${state.heroGradientText ? ' hero-gradient-text' : ''}${state.heroTextAnimation !== 'none' ? ` text-anim-${state.heroTextAnimation}` : ''}`}
                                                         style={{
                                                             fontFamily: `'${state.heroLogo.sideTextFont}', sans-serif`,
-                                                            color: state.heroLogo.sideTextColor || 'var(--text)',
+                                                            ...(!state.heroGradientText && state.heroTextAnimation !== 'shimmer' ? { color: state.heroLogo.sideTextColor || 'var(--text)' } : {}),
                                                             fontSize: `${3 * hScale}rem`,
+                                                            letterSpacing: `${state.heroLetterSpacing * 0.01}em`,
                                                             textShadow: state.heroLogo.textGlow
                                                                 ? `0 0 ${20 * (state.heroLogo.textGlowIntensity / 100)}px ${state.heroLogo.sideTextColor || 'var(--primary)'}, 0 0 ${40 * (state.heroLogo.textGlowIntensity / 100)}px ${state.heroLogo.sideTextColor || 'var(--primary)'}80`
                                                                 : state.heroLogo.textShadow
@@ -238,7 +246,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
 
                             {/* UVP Section */}
                             {state.sections.uvp && (
-                                <section className="uvp-section">
+                                <section className={`uvp-section section-anim-${state.sectionAnimation}`}>
                                     <div className="container">
                                         <p className="uvp-text" style={headingStyle}>{state.mainText}</p>
                                         {state.heroSubtext && (
@@ -255,7 +263,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
 
                     {/* ===== PRODUCT PAGE ===== */}
                     {currentPage === 'product' && state.productPageEnabled && (
-                        <section className="product-section">
+                        <section className={`product-section section-anim-${state.sectionAnimation}`}>
                             <div className="container">
                                 <h2 className="section-title" style={headingStyle}>{state.productPage.heading}</h2>
                                 <div className="product-layout">

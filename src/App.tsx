@@ -13,6 +13,13 @@ export interface Teammate {
 }
 
 export type HeroLayout = 'center' | 'left' | 'right' | 'side-left' | 'side-right'
+export type HeroAnimation = 'none' | 'fade-in' | 'slide-up' | 'scale-in' | 'typewriter'
+export type SectionAnimation = 'none' | 'fade-in' | 'slide-up' | 'scale-in'
+export type CardAnimation = 'none' | 'fade-in' | 'slide-up' | 'flip' | 'bounce'
+export type HoverStyle = 'none' | 'lift' | 'grow' | 'glow' | 'tilt'
+export type CardStyle = 'glass' | 'solid' | 'outline' | 'shadow'
+export type TeamCardLayout = 'grid' | 'carousel' | 'stacked'
+export type TextAnimation = 'none' | 'typing' | 'color-shift' | 'shimmer'
 
 export interface HeroLogoConfig {
   size: 'small' | 'medium' | 'large' | 'xlarge'
@@ -80,6 +87,19 @@ export interface AppState {
   bodySize: number
   teamDisplayMode: 'individual' | 'group'
   teamGroupImageUrl: string
+  secondaryColor: string
+  heroAnimation: HeroAnimation
+  sectionAnimation: SectionAnimation
+  cardAnimation: CardAnimation
+  hoverStyle: HoverStyle
+  heroGradientText: boolean
+  heroGradientFrom: string
+  heroGradientTo: string
+  heroLetterSpacing: number
+  heroTextAnimation: TextAnimation
+  cardStyle: CardStyle
+  cardBorderRadius: number
+  teamCardLayout: TeamCardLayout
 }
 
 const STORAGE_KEY = 'incweb-config'
@@ -146,6 +166,19 @@ const DEFAULT_STATE: AppState = {
   bodySize: 100,
   teamDisplayMode: 'individual',
   teamGroupImageUrl: '',
+  secondaryColor: '',
+  heroAnimation: 'fade-in',
+  sectionAnimation: 'fade-in',
+  cardAnimation: 'fade-in',
+  hoverStyle: 'lift',
+  heroGradientText: false,
+  heroGradientFrom: '',
+  heroGradientTo: '',
+  heroLetterSpacing: 0,
+  heroTextAnimation: 'none',
+  cardStyle: 'glass',
+  cardBorderRadius: 24,
+  teamCardLayout: 'grid',
 }
 
 function loadState(): AppState {

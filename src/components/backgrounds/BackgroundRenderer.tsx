@@ -8,6 +8,14 @@ import MeshGradient from './presets/MeshGradient'
 import SpotlightVignette from './presets/SpotlightVignette'
 import CutPaperLayers from './presets/CutPaperLayers'
 import TopoLinesStatic from './presets/TopoLinesStatic'
+import Waves from './presets/Waves'
+import Shimmer from './presets/Shimmer'
+import GradientOrbs from './presets/GradientOrbs'
+import DotGrid from './presets/DotGrid'
+import RadialBurst from './presets/RadialBurst'
+import HexagonPattern from './presets/HexagonPattern'
+import GeometricShapes from './presets/GeometricShapes'
+import Nebula from './presets/Nebula'
 import './BackgroundRenderer.css'
 
 interface BackgroundRendererProps {
@@ -23,6 +31,14 @@ const PRESET_COMPONENTS: Record<string, React.ComponentType<{ settings: Backgrou
   spotlight_vignette: SpotlightVignette,
   cut_paper: CutPaperLayers,
   topo_lines: TopoLinesStatic,
+  waves: Waves,
+  shimmer: Shimmer,
+  gradient_orbs: GradientOrbs,
+  dot_grid: DotGrid,
+  radial_burst: RadialBurst,
+  hexagon_pattern: HexagonPattern,
+  geometric_shapes: GeometricShapes,
+  nebula: Nebula,
 }
 
 const BackgroundRenderer = React.memo(({ config }: BackgroundRendererProps) => {
