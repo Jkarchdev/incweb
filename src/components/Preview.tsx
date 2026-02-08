@@ -82,8 +82,8 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
     const renderTeamContent = () => (
         <section className={`team-section section-anim-${state.sectionAnimation}`}>
             <div className="container">
-                <h2 className="section-title" style={headingStyle}>{state.teamHeading}</h2>
-                <p className="section-subtitle" style={bodyStyle}>{state.teamSubheading}</p>
+                <h2 className="section-title" style={{ fontFamily: `'${state.teamHeadingFont}', sans-serif`, fontSize: `${state.teamHeadingSize / 100}em` }}>{state.teamHeading}</h2>
+                <p className="section-subtitle" style={{ fontFamily: `'${state.teamSubheadingFont}', sans-serif`, fontSize: `${state.teamSubheadingSize / 100}em` }}>{state.teamSubheading}</p>
                 {state.teamDisplayMode === 'group' ? (
                     <div className="team-group-photo">
                         <img
@@ -194,12 +194,12 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                         </div>
 
                                         {/* Text block */}
-                                        {(state.heroLogo.sideText || state.heroLogo.tagline) && (
+                                        {((state.heroLogo.sideText && state.heroHeadlineVisible) || (state.heroLogo.tagline && state.heroTaglineVisible)) && (
                                             <div
                                                 className="hero-text-block"
                                                 style={{ transform: `translate(${state.heroLogo.textX}%, ${state.heroLogo.textY}%)` }}
                                             >
-                                                {state.heroLogo.sideText && (
+                                                {state.heroLogo.sideText && state.heroHeadlineVisible && (
                                                     <h1
                                                         className={`hero-side-text${state.heroGradientText ? ' hero-gradient-text' : ''}${state.heroTextAnimation !== 'none' ? ` text-anim-${state.heroTextAnimation}` : ''}`}
                                                         style={{
@@ -220,7 +220,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                                         {state.heroLogo.sideText}
                                                     </h1>
                                                 )}
-                                                {state.heroLogo.tagline && (
+                                                {state.heroLogo.tagline && state.heroTaglineVisible && (
                                                     <p
                                                         className="hero-tagline"
                                                         style={{
@@ -248,9 +248,9 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                             {state.sections.uvp && (
                                 <section className={`uvp-section section-anim-${state.sectionAnimation}`}>
                                     <div className="container">
-                                        <p className="uvp-text" style={headingStyle}>{state.mainText}</p>
-                                        {state.heroSubtext && (
-                                            <p className="uvp-subtext" style={bodyStyle}>{state.heroSubtext}</p>
+                                        <p className="uvp-text" style={{ fontFamily: `'${state.mainTextFont}', sans-serif`, fontSize: `${state.mainTextSize / 100}em` }}>{state.mainText}</p>
+                                        {state.heroSubtext && state.subtextVisible && (
+                                            <p className="uvp-subtext" style={{ fontFamily: `'${state.subtextFont}', sans-serif`, fontSize: `${state.subtextSize / 100}em` }}>{state.heroSubtext}</p>
                                         )}
                                     </div>
                                 </section>

@@ -1,0 +1,80 @@
+.aurora-waves-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.aurora-wave {
+  position: absolute;
+  inset: -50%;
+  filter: blur(80px);
+}
+
+.aurora-wave-1 {
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--secondary) 30%,
+    transparent 50%,
+    var(--primary) 70%,
+    var(--secondary) 100%
+  );
+  animation: aurora-flow-1 linear infinite;
+}
+
+.aurora-wave-2 {
+  background: linear-gradient(
+    -45deg,
+    transparent 0%,
+    var(--secondary) 20%,
+    var(--primary) 50%,
+    var(--secondary) 80%,
+    transparent 100%
+  );
+  animation: aurora-flow-2 linear infinite;
+}
+
+.aurora-wave-3 {
+  background: linear-gradient(
+    90deg,
+    var(--primary) 0%,
+    transparent 30%,
+    var(--secondary) 50%,
+    transparent 70%,
+    var(--primary) 100%
+  );
+  animation: aurora-flow-3 linear infinite;
+}
+
+@keyframes aurora-flow-1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(10%, -5%) scale(1.1);
+  }
+  66% {
+    transform: translate(-5%, 10%) scale(0.9);
+  }
+}
+
+@keyframes aurora-flow-2 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(-10%, 5%) rotate(15deg);
+  }
+}
+
+@keyframes aurora-flow-3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  25% {
+    transform: translate(5%, 10%) scale(1.05) rotate(-5deg);
+  }
+  75% {
+    transform: translate(-10%, -5%) scale(0.95) rotate(5deg);
+  }
+}

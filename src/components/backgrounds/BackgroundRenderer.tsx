@@ -16,6 +16,14 @@ import RadialBurst from './presets/RadialBurst'
 import HexagonPattern from './presets/HexagonPattern'
 import GeometricShapes from './presets/GeometricShapes'
 import Nebula from './presets/Nebula'
+import Ripples from './presets/Ripples'
+import Constellation from './presets/Constellation'
+import AuroraWaves from './presets/AuroraWaves'
+import Plasma from './presets/Plasma'
+import MatrixRain from './presets/MatrixRain'
+import PulseRings from './presets/PulseRings'
+import Fireflies from './presets/Fireflies'
+import Spiral from './presets/Spiral'
 import './BackgroundRenderer.css'
 
 interface BackgroundRendererProps {
@@ -39,6 +47,14 @@ const PRESET_COMPONENTS: Record<string, React.ComponentType<{ settings: Backgrou
   hexagon_pattern: HexagonPattern,
   geometric_shapes: GeometricShapes,
   nebula: Nebula,
+  ripples: Ripples,
+  constellation: Constellation,
+  aurora_waves: AuroraWaves,
+  plasma: Plasma,
+  matrix_rain: MatrixRain,
+  pulse_rings: PulseRings,
+  fireflies: Fireflies,
+  spiral: Spiral,
 }
 
 const BackgroundRenderer = React.memo(({ config }: BackgroundRendererProps) => {

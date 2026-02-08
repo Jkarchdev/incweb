@@ -1,0 +1,33 @@
+.ripples-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ripple-ring {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: ripple-expand linear infinite;
+}
+
+@keyframes ripple-expand {
+  0% {
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    width: 1200px;
+    height: 1200px;
+    opacity: 0;
+  }
+}

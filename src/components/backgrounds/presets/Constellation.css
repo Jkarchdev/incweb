@@ -1,0 +1,24 @@
+.constellation-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.constellation-svg {
+  width: 100%;
+  height: 100%;
+  animation: constellation-drift linear infinite;
+}
+
+.constellation-star {
+  filter: drop-shadow(0 0 2px var(--primary));
+}
+
+@keyframes constellation-drift {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate(2%, -2%) rotate(5deg);
+  }
+}

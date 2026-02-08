@@ -1,0 +1,39 @@
+.matrix-rain-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.matrix-column {
+  position: absolute;
+  top: -100%;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--primary) 10%,
+    var(--secondary) 50%,
+    var(--primary) 90%,
+    transparent 100%
+  );
+  animation: matrix-fall linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes matrix-fall {
+  0% {
+    top: -100%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}

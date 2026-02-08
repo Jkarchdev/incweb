@@ -1,0 +1,47 @@
+.fireflies-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.firefly {
+  position: absolute;
+  border-radius: 50%;
+  animation: firefly-float ease-in-out infinite;
+  will-change: transform;
+}
+
+.firefly-glow {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  box-shadow: 0 0 10px var(--primary), 0 0 20px var(--secondary);
+  animation: firefly-pulse ease-in-out infinite;
+}
+
+@keyframes firefly-float {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(50px, -30px);
+  }
+  50% {
+    transform: translate(-20px, 40px);
+  }
+  75% {
+    transform: translate(30px, -20px);
+  }
+}
+
+@keyframes firefly-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}

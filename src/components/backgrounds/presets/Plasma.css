@@ -1,0 +1,63 @@
+.plasma-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, var(--border) 0%, transparent 50%);
+}
+
+.plasma-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  mix-blend-mode: screen;
+}
+
+.plasma-blob-1 {
+  width: 40%;
+  height: 40%;
+  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  animation: plasma-move-1 ease-in-out infinite;
+}
+
+.plasma-blob-2 {
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+  animation: plasma-move-2 ease-in-out infinite;
+}
+
+.plasma-blob-3 {
+  width: 35%;
+  height: 35%;
+  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  animation: plasma-move-3 ease-in-out infinite;
+}
+
+.plasma-blob-4 {
+  width: 45%;
+  height: 45%;
+  background: radial-gradient(circle, var(--border) 0%, transparent 70%);
+  animation: plasma-move-4 ease-in-out infinite;
+}
+
+@keyframes plasma-move-1 {
+  0%, 100% { top: 10%; left: 10%; transform: scale(1); }
+  33% { top: 20%; left: 70%; transform: scale(1.2); }
+  66% { top: 60%; left: 30%; transform: scale(0.9); }
+}
+
+@keyframes plasma-move-2 {
+  0%, 100% { top: 60%; left: 70%; transform: scale(1); }
+  33% { top: 10%; left: 50%; transform: scale(1.1); }
+  66% { top: 70%; left: 10%; transform: scale(0.95); }
+}
+
+@keyframes plasma-move-3 {
+  0%, 100% { top: 80%; left: 50%; transform: scale(1); }
+  50% { top: 30%; left: 20%; transform: scale(1.15); }
+}
+
+@keyframes plasma-move-4 {
+  0%, 100% { top: 30%; left: 80%; transform: scale(1); }
+  50% { top: 70%; left: 60%; transform: scale(0.85); }
+}

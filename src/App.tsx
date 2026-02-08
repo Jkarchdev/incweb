@@ -100,6 +100,19 @@ export interface AppState {
   cardStyle: CardStyle
   cardBorderRadius: number
   teamCardLayout: TeamCardLayout
+  // Visibility toggles
+  heroHeadlineVisible: boolean
+  heroTaglineVisible: boolean
+  subtextVisible: boolean
+  // Per-element fonts and sizes
+  mainTextFont: string
+  mainTextSize: number
+  subtextFont: string
+  subtextSize: number
+  teamHeadingFont: string
+  teamHeadingSize: number
+  teamSubheadingFont: string
+  teamSubheadingSize: number
 }
 
 const STORAGE_KEY = 'incweb-config'
@@ -179,6 +192,19 @@ const DEFAULT_STATE: AppState = {
   cardStyle: 'glass',
   cardBorderRadius: 24,
   teamCardLayout: 'grid',
+  // Visibility toggles
+  heroHeadlineVisible: true,
+  heroTaglineVisible: true,
+  subtextVisible: true,
+  // Per-element fonts and sizes
+  mainTextFont: 'Inter',
+  mainTextSize: 100,
+  subtextFont: 'Inter',
+  subtextSize: 100,
+  teamHeadingFont: 'Inter',
+  teamHeadingSize: 100,
+  teamSubheadingFont: 'Inter',
+  teamSubheadingSize: 100,
 }
 
 function loadState(): AppState {

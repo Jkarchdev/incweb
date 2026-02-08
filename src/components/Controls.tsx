@@ -221,8 +221,171 @@ const Controls = ({ state, updateState }: ControlsProps) => {
 
     return (
         <div className="controls-content">
-            {/* Hero Section */}
-            <CollapsibleSection title="Hero">
+            {/* Sections & Pages - Control what appears */}
+            <CollapsibleSection title="Sections & Pages">
+                <p className="section-hint">Toggle which sections and pages are visible.</p>
+                <div className="visibility-toggles">
+                    {([
+                        ['hero', 'Hero'],
+                        ['uvp', 'Value Prop'],
+                        ['team', 'Team'],
+                        ['footer', 'Footer'],
+                    ] as [keyof typeof state.sections, string][]).map(([key, label]) => (
+                        <label key={key} className="toggle-switch-label">
+                            <span>{label}</span>
+                            <div className={`toggle-switch ${state.sections[key] ? 'toggle-switch--on' : ''}`}
+                                onClick={() => updateSectionVisibility(key, !state.sections[key])}
+                            >
+                                <div className="toggle-switch-thumb" />
+                            </div>
+                        </label>
+                    ))}
+                    <label className="toggle-switch-label">
+                        <span>Product Page</span>
+                        <div className={`toggle-switch ${state.productPageEnabled ? 'toggle-switch--on' : ''}`}
+                            onClick={() => updateState({ productPageEnabled: !state.productPageEnabled })}
+                        >
+                            <div className="toggle-switch-thumb" />
+                        </div>
+                    </label>
+                </div>
+
+                <label style={{ marginTop: '0.75rem' }}>Team Location:</label>
+                <select
+                    value={state.teamLocation}
+                    onChange={(e) => updateState({ teamLocation: e.target.value as 'home' | 'separate' })}
+                >
+                    <option value="home">Home Page</option>
+                    <option value="separate">Separate Page</option>
+                </select>
+            </CollapsibleSection>
+
+            {/* Theme & Colors Section */}
+            <CollapsibleSection title="Theme & Colors">
+                <label>Palette:</label>
+                <div className="palette-swatches">
+                    {PALETTE_OPTIONS.map(p => (
+                        <button
+                            key={p.id}
+                            className={`palette-swatch ${state.palette === p.id && !state.customColor ? 'palette-swatch--selected' : ''}`}
+                            onClick={() => updateState({ palette: p.id, customColor: '', secondaryColor: '' })}
+                            type="button"
+                            title={p.label}
+                        >
+                            <span className="swatch-circle" style={{ backgroundColor: p.color }} />
+                            <span className="swatch-label">{p.label}</span>
+                        </button>
+                    ))}
+                </div>
+
+                <label>Custom Primary Color:</label>
+                <div className="color-input-group">
+                    <input
+                        type="color"
+                        value={state.customColor || '#3b82f6'}
+                        onChange={(e) => updateState({ customColor: e.target.value })}
+                        style={{ width: '60px', height: '38px', cursor: 'pointer' }}
+                    />
+                    <input
+                        type="text"
+                        value={state.customColor}
+                        onChange={(e) => handleCustomColorChange(e.target.value)}
+                        placeholder="#3b82f6"
+                        maxLength={7}
+                        style={{ flex: 1 }}
+                    />
+                </div>
+
+                <label>Custom Secondary Color:</label>
+                <div className="color-input-group">
+                    <input
+                        type="color"
+                        value={state.secondaryColor || '#06b6d4'}
+                        onChange={(e) => updateState({ secondaryColor: e.target.value })}
+                        style={{ width: '60px', height: '38px', cursor: 'pointer' }}
+                    />
+                    <input
+                        type="text"
+                        value={state.secondaryColor}
+                        onChange={(e) => handleSecondaryColorChange(e.target.value)}
+                        placeholder="#06b6d4"
+                        maxLength={7}
+                        style={{ flex: 1 }}
+                    />
+                </div>
+            </CollapsibleSection>
+
+            {/* Background Section */}
+            <CollapsibleSection title="Background" defaultOpen={false}>
+                <div className="preset-grid">
+                    {BACKGROUND_PRESETS.map((preset) => (
+                        <PresetThumbnail
+                            key={preset.id}
+                            presetId={preset.id}
+                            name={preset.name}
+                            selected={state.background.presetId === preset.id}
+                            onClick={() => handlePresetSelect(preset.id)}
+                        />
+                    ))}
+                </div>
+
+                <div className="bg-sliders">
+                    <label className="slider-label">
+                        Intensity
+                        <span className="slider-value">{state.background.settings.intensity}</span>
+                    </label>
+                    <input
+                        type="range"
+                        min={0}
+                        max={100}
+                        value={state.background.settings.intensity}
+                        onChange={(e) => handleSettingChange('intensity', Number(e.target.value))}
+                    />
+
+                    <label className="slider-label">
+                        Blur
+                        <span className="slider-value">{state.background.settings.blur}</span>
+                    </label>
+                    <input
+                        type="range"
+                        min={0}
+                        max={20}
+                        value={state.background.settings.blur}
+                        onChange={(e) => handleSettingChange('blur', Number(e.target.value))}
+                    />
+
+                    {isAnimated && (
+                        <>
+                            <label className="slider-label">
+                                Speed
+                                <span className="slider-value">{state.background.settings.speed}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={0}
+                                max={100}
+                                value={state.background.settings.speed}
+                                onChange={(e) => handleSettingChange('speed', Number(e.target.value))}
+                            />
+
+                            <label className="slider-label">
+                                Density
+                                <span className="slider-value">{state.background.settings.density}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={0}
+                                max={100}
+                                value={state.background.settings.density}
+                                onChange={(e) => handleSettingChange('density', Number(e.target.value))}
+                            />
+                        </>
+                    )}
+                </div>
+            </CollapsibleSection>
+
+            {/* Hero Logo Section */}
+            <CollapsibleSection title="Hero Logo" defaultOpen={false}>
                 <div className="file-upload">
                     <label htmlFor="logo-upload" className="upload-button">
                         {state.logoUrl ? '✓ Logo Uploaded' : 'Upload Logo'}
@@ -247,55 +410,6 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                             <option value="large">Large</option>
                             <option value="xlarge">Extra Large</option>
                         </select>
-                    </div>
-                </div>
-
-                <label>Hero Headline:</label>
-                <input
-                    type="text"
-                    value={state.heroLogo.sideText}
-                    onChange={(e) => updateHeroLogo('sideText', e.target.value)}
-                    placeholder="Company name or headline..."
-                />
-
-                <label>Tagline:</label>
-                <input
-                    type="text"
-                    value={state.heroLogo.tagline}
-                    onChange={(e) => updateHeroLogo('tagline', e.target.value)}
-                    placeholder="Your company slogan..."
-                />
-
-                <div className="option-row">
-                    <div className="option-group">
-                        <label>Headline Font:</label>
-                        <select
-                            value={state.heroLogo.sideTextFont}
-                            onChange={(e) => updateHeroLogo('sideTextFont', e.target.value)}
-                        >
-                            {FONT_OPTIONS.map(f => (
-                                <option key={f} value={f}>{f}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="option-group">
-                        <label>Headline Color:</label>
-                        <div className="color-input-group">
-                            <input
-                                type="color"
-                                value={state.heroLogo.sideTextColor || '#000000'}
-                                onChange={(e) => updateHeroLogo('sideTextColor', e.target.value)}
-                                style={{ width: '50px', height: '32px', cursor: 'pointer' }}
-                            />
-                            <input
-                                type="text"
-                                value={state.heroLogo.sideTextColor}
-                                onChange={(e) => updateHeroLogo('sideTextColor', e.target.value)}
-                                placeholder="#000000"
-                                maxLength={7}
-                                style={{ flex: 1 }}
-                            />
-                        </div>
                     </div>
                 </div>
 
@@ -326,6 +440,59 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                                 max={200}
                                 value={state.heroLogo.logoY}
                                 onChange={(e) => updateHeroLogo('logoY', Number(e.target.value))}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </CollapsibleSection>
+
+            {/* Hero Headline Section */}
+            <CollapsibleSection title="Hero Headline" defaultOpen={false}>
+                <label className="toggle-switch-label">
+                    <span>Show Headline</span>
+                    <div className={`toggle-switch ${state.heroHeadlineVisible ? 'toggle-switch--on' : ''}`}
+                        onClick={() => updateState({ heroHeadlineVisible: !state.heroHeadlineVisible })}
+                    >
+                        <div className="toggle-switch-thumb" />
+                    </div>
+                </label>
+
+                <label>Headline Text:</label>
+                <input
+                    type="text"
+                    value={state.heroLogo.sideText}
+                    onChange={(e) => updateHeroLogo('sideText', e.target.value)}
+                    placeholder="Company name or headline..."
+                />
+
+                <div className="option-row">
+                    <div className="option-group">
+                        <label>Font:</label>
+                        <select
+                            value={state.heroLogo.sideTextFont}
+                            onChange={(e) => updateHeroLogo('sideTextFont', e.target.value)}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="option-group">
+                        <label>Color:</label>
+                        <div className="color-input-group">
+                            <input
+                                type="color"
+                                value={state.heroLogo.sideTextColor || '#000000'}
+                                onChange={(e) => updateHeroLogo('sideTextColor', e.target.value)}
+                                style={{ width: '50px', height: '32px', cursor: 'pointer' }}
+                            />
+                            <input
+                                type="text"
+                                value={state.heroLogo.sideTextColor}
+                                onChange={(e) => updateHeroLogo('sideTextColor', e.target.value)}
+                                placeholder="#000000"
+                                maxLength={7}
+                                style={{ flex: 1 }}
                             />
                         </div>
                     </div>
@@ -500,9 +667,29 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                 </div>
             </CollapsibleSection>
 
-            {/* Content Section */}
-            <CollapsibleSection title="Content">
-                <label>Main Text:</label>
+            {/* Hero Tagline Section */}
+            <CollapsibleSection title="Hero Tagline" defaultOpen={false}>
+                <label className="toggle-switch-label">
+                    <span>Show Tagline</span>
+                    <div className={`toggle-switch ${state.heroTaglineVisible ? 'toggle-switch--on' : ''}`}
+                        onClick={() => updateState({ heroTaglineVisible: !state.heroTaglineVisible })}
+                    >
+                        <div className="toggle-switch-thumb" />
+                    </div>
+                </label>
+
+                <label>Tagline Text:</label>
+                <input
+                    type="text"
+                    value={state.heroLogo.tagline}
+                    onChange={(e) => updateHeroLogo('tagline', e.target.value)}
+                    placeholder="Your company slogan..."
+                />
+            </CollapsibleSection>
+
+            {/* Main Text / UVP Section */}
+            <CollapsibleSection title="Main Text / UVP" defaultOpen={false}>
+                <label>Text:</label>
                 <textarea
                     value={state.mainText}
                     onChange={(e) => updateState({ mainText: e.target.value })}
@@ -510,7 +697,45 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     placeholder="Enter your value proposition..."
                 />
 
-                <label>Subtext:</label>
+                <div className="option-row">
+                    <div className="option-group">
+                        <label>Font:</label>
+                        <select
+                            value={state.mainTextFont}
+                            onChange={(e) => updateState({ mainTextFont: e.target.value })}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <label className="slider-label">
+                    Size
+                    <span className="slider-value">{state.mainTextSize}%</span>
+                </label>
+                <input
+                    type="range"
+                    min={50}
+                    max={200}
+                    value={state.mainTextSize}
+                    onChange={(e) => updateState({ mainTextSize: Number(e.target.value) })}
+                />
+            </CollapsibleSection>
+
+            {/* Subtext Section */}
+            <CollapsibleSection title="Subtext" defaultOpen={false}>
+                <label className="toggle-switch-label">
+                    <span>Show Subtext</span>
+                    <div className={`toggle-switch ${state.subtextVisible ? 'toggle-switch--on' : ''}`}
+                        onClick={() => updateState({ subtextVisible: !state.subtextVisible })}
+                    >
+                        <div className="toggle-switch-thumb" />
+                    </div>
+                </label>
+
+                <label>Text:</label>
                 <input
                     type="text"
                     value={state.heroSubtext}
@@ -518,6 +743,31 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     placeholder="Building the future, one startup at a time"
                 />
 
+                <div className="option-row">
+                    <div className="option-group">
+                        <label>Font:</label>
+                        <select
+                            value={state.subtextFont}
+                            onChange={(e) => updateState({ subtextFont: e.target.value })}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <label className="slider-label">
+                    Size
+                    <span className="slider-value">{state.subtextSize}%</span>
+                </label>
+                <input
+                    type="range"
+                    min={50}
+                    max={200}
+                    value={state.subtextSize}
+                    onChange={(e) => updateState({ subtextSize: Number(e.target.value) })}
+                />
             </CollapsibleSection>
 
             {/* Product Section */}
@@ -551,9 +801,9 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                 </div>
             </CollapsibleSection>
 
-            {/* Team Section */}
-            <CollapsibleSection title="Team">
-                <label>Section Heading:</label>
+            {/* Team Heading Section */}
+            <CollapsibleSection title="Team Heading" defaultOpen={false}>
+                <label>Text:</label>
                 <input
                     type="text"
                     value={state.teamHeading}
@@ -561,7 +811,36 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     placeholder="Meet Our Team"
                 />
 
-                <label>Section Subheading:</label>
+                <div className="option-row">
+                    <div className="option-group">
+                        <label>Font:</label>
+                        <select
+                            value={state.teamHeadingFont}
+                            onChange={(e) => updateState({ teamHeadingFont: e.target.value })}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <label className="slider-label">
+                    Size
+                    <span className="slider-value">{state.teamHeadingSize}%</span>
+                </label>
+                <input
+                    type="range"
+                    min={50}
+                    max={200}
+                    value={state.teamHeadingSize}
+                    onChange={(e) => updateState({ teamHeadingSize: Number(e.target.value) })}
+                />
+            </CollapsibleSection>
+
+            {/* Team Subheading Section */}
+            <CollapsibleSection title="Team Subheading" defaultOpen={false}>
+                <label>Text:</label>
                 <input
                     type="text"
                     value={state.teamSubheading}
@@ -569,6 +848,35 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     placeholder="The passionate people behind our success"
                 />
 
+                <div className="option-row">
+                    <div className="option-group">
+                        <label>Font:</label>
+                        <select
+                            value={state.teamSubheadingFont}
+                            onChange={(e) => updateState({ teamSubheadingFont: e.target.value })}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <label className="slider-label">
+                    Size
+                    <span className="slider-value">{state.teamSubheadingSize}%</span>
+                </label>
+                <input
+                    type="range"
+                    min={50}
+                    max={200}
+                    value={state.teamSubheadingSize}
+                    onChange={(e) => updateState({ teamSubheadingSize: Number(e.target.value) })}
+                />
+            </CollapsibleSection>
+
+            {/* Team Section */}
+            <CollapsibleSection title="Team Section" defaultOpen={false}>
                 <label>Display Mode:</label>
                 <select
                     value={state.teamDisplayMode}
@@ -678,111 +986,57 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                 )}
             </CollapsibleSection>
 
-            {/* Links Section */}
-            <CollapsibleSection title="Links">
-                <label>Instagram URL:</label>
-                <input
-                    type="url"
-                    value={state.socialLinks.instagram}
-                    onChange={(e) => updateSocialLink('instagram', e.target.value)}
-                    placeholder="https://instagram.com/yourpage"
-                />
-                <label>Twitter / X URL:</label>
-                <input
-                    type="url"
-                    value={state.socialLinks.twitter}
-                    onChange={(e) => updateSocialLink('twitter', e.target.value)}
-                    placeholder="https://x.com/yourpage"
-                />
-                <label>LinkedIn URL:</label>
-                <input
-                    type="url"
-                    value={state.socialLinks.linkedin}
-                    onChange={(e) => updateSocialLink('linkedin', e.target.value)}
-                    placeholder="https://linkedin.com/company/yourpage"
-                />
-                <label>TikTok URL:</label>
-                <input
-                    type="url"
-                    value={state.socialLinks.tiktok}
-                    onChange={(e) => updateSocialLink('tiktok', e.target.value)}
-                    placeholder="https://tiktok.com/@yourpage"
-                />
-                <label>Contact Email:</label>
-                <input
-                    type="email"
-                    value={state.contactEmail}
-                    onChange={(e) => updateState({ contactEmail: e.target.value })}
-                    placeholder="hello@incubator.com"
-                />
-            </CollapsibleSection>
-
-            {/* Background Section */}
-            <CollapsibleSection title="Background">
-                <div className="preset-grid">
-                    {BACKGROUND_PRESETS.map((preset) => (
-                        <PresetThumbnail
-                            key={preset.id}
-                            presetId={preset.id}
-                            name={preset.name}
-                            selected={state.background.presetId === preset.id}
-                            onClick={() => handlePresetSelect(preset.id)}
-                        />
-                    ))}
+            {/* Typography Section */}
+            <CollapsibleSection title="Typography" defaultOpen={false}>
+                <div className="option-row">
+                    <div className="option-group">
+                        <label>Heading Font:</label>
+                        <select
+                            value={state.headingFont}
+                            onChange={(e) => updateState({ headingFont: e.target.value })}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f} style={{ fontFamily: `'${f}', sans-serif` }}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="option-group">
+                        <label>Body Font:</label>
+                        <select
+                            value={state.bodyFont}
+                            onChange={(e) => updateState({ bodyFont: e.target.value })}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f} style={{ fontFamily: `'${f}', sans-serif` }}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
 
                 <div className="bg-sliders">
                     <label className="slider-label">
-                        Intensity
-                        <span className="slider-value">{state.background.settings.intensity}</span>
+                        Heading Size
+                        <span className="slider-value">{state.headingSize}%</span>
                     </label>
                     <input
                         type="range"
-                        min={0}
-                        max={100}
-                        value={state.background.settings.intensity}
-                        onChange={(e) => handleSettingChange('intensity', Number(e.target.value))}
+                        min={50}
+                        max={200}
+                        value={state.headingSize}
+                        onChange={(e) => updateState({ headingSize: Number(e.target.value) })}
                     />
 
                     <label className="slider-label">
-                        Blur
-                        <span className="slider-value">{state.background.settings.blur}</span>
+                        Body Size
+                        <span className="slider-value">{state.bodySize}%</span>
                     </label>
                     <input
                         type="range"
-                        min={0}
-                        max={20}
-                        value={state.background.settings.blur}
-                        onChange={(e) => handleSettingChange('blur', Number(e.target.value))}
+                        min={50}
+                        max={200}
+                        value={state.bodySize}
+                        onChange={(e) => updateState({ bodySize: Number(e.target.value) })}
                     />
-
-                    {isAnimated && (
-                        <>
-                            <label className="slider-label">
-                                Speed
-                                <span className="slider-value">{state.background.settings.speed}</span>
-                            </label>
-                            <input
-                                type="range"
-                                min={0}
-                                max={100}
-                                value={state.background.settings.speed}
-                                onChange={(e) => handleSettingChange('speed', Number(e.target.value))}
-                            />
-
-                            <label className="slider-label">
-                                Density
-                                <span className="slider-value">{state.background.settings.density}</span>
-                            </label>
-                            <input
-                                type="range"
-                                min={0}
-                                max={100}
-                                value={state.background.settings.density}
-                                onChange={(e) => handleSettingChange('density', Number(e.target.value))}
-                            />
-                        </>
-                    )}
                 </div>
             </CollapsibleSection>
 
@@ -856,152 +1110,43 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                 </div>
             </CollapsibleSection>
 
-            {/* Theme Section */}
-            <CollapsibleSection title="Theme">
-                <label>Palette:</label>
-                <div className="palette-swatches">
-                    {PALETTE_OPTIONS.map(p => (
-                        <button
-                            key={p.id}
-                            className={`palette-swatch ${state.palette === p.id && !state.customColor ? 'palette-swatch--selected' : ''}`}
-                            onClick={() => updateState({ palette: p.id, customColor: '', secondaryColor: '' })}
-                            type="button"
-                            title={p.label}
-                        >
-                            <span className="swatch-circle" style={{ backgroundColor: p.color }} />
-                            <span className="swatch-label">{p.label}</span>
-                        </button>
-                    ))}
-                </div>
-
-                <label>Custom Primary Color:</label>
-                <div className="color-input-group">
-                    <input
-                        type="color"
-                        value={state.customColor || '#3b82f6'}
-                        onChange={(e) => updateState({ customColor: e.target.value })}
-                        style={{ width: '60px', height: '38px', cursor: 'pointer' }}
-                    />
-                    <input
-                        type="text"
-                        value={state.customColor}
-                        onChange={(e) => handleCustomColorChange(e.target.value)}
-                        placeholder="#3b82f6"
-                        maxLength={7}
-                        style={{ flex: 1 }}
-                    />
-                </div>
-
-                <label>Custom Secondary Color:</label>
-                <div className="color-input-group">
-                    <input
-                        type="color"
-                        value={state.secondaryColor || '#06b6d4'}
-                        onChange={(e) => updateState({ secondaryColor: e.target.value })}
-                        style={{ width: '60px', height: '38px', cursor: 'pointer' }}
-                    />
-                    <input
-                        type="text"
-                        value={state.secondaryColor}
-                        onChange={(e) => handleSecondaryColorChange(e.target.value)}
-                        placeholder="#06b6d4"
-                        maxLength={7}
-                        style={{ flex: 1 }}
-                    />
-                </div>
-            </CollapsibleSection>
-
-            {/* Typography Section */}
-            <CollapsibleSection title="Typography">
-                <div className="option-row">
-                    <div className="option-group">
-                        <label>Heading Font:</label>
-                        <select
-                            value={state.headingFont}
-                            onChange={(e) => updateState({ headingFont: e.target.value })}
-                        >
-                            {FONT_OPTIONS.map(f => (
-                                <option key={f} value={f} style={{ fontFamily: `'${f}', sans-serif` }}>{f}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="option-group">
-                        <label>Body Font:</label>
-                        <select
-                            value={state.bodyFont}
-                            onChange={(e) => updateState({ bodyFont: e.target.value })}
-                        >
-                            {FONT_OPTIONS.map(f => (
-                                <option key={f} value={f} style={{ fontFamily: `'${f}', sans-serif` }}>{f}</option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-
-                <div className="bg-sliders">
-                    <label className="slider-label">
-                        Heading Size
-                        <span className="slider-value">{state.headingSize}%</span>
-                    </label>
-                    <input
-                        type="range"
-                        min={50}
-                        max={200}
-                        value={state.headingSize}
-                        onChange={(e) => updateState({ headingSize: Number(e.target.value) })}
-                    />
-
-                    <label className="slider-label">
-                        Body Size
-                        <span className="slider-value">{state.bodySize}%</span>
-                    </label>
-                    <input
-                        type="range"
-                        min={50}
-                        max={200}
-                        value={state.bodySize}
-                        onChange={(e) => updateState({ bodySize: Number(e.target.value) })}
-                    />
-                </div>
-            </CollapsibleSection>
-
-            {/* Sections & Pages */}
-            <CollapsibleSection title="Sections">
-                <p className="section-hint">Toggle which sections and pages are visible.</p>
-                <div className="visibility-toggles">
-                    {([
-                        ['hero', 'Hero'],
-                        ['uvp', 'Value Prop'],
-                        ['team', 'Team'],
-                        ['footer', 'Footer'],
-                    ] as [keyof typeof state.sections, string][]).map(([key, label]) => (
-                        <label key={key} className="toggle-switch-label">
-                            <span>{label}</span>
-                            <div className={`toggle-switch ${state.sections[key] ? 'toggle-switch--on' : ''}`}
-                                onClick={() => updateSectionVisibility(key, !state.sections[key])}
-                            >
-                                <div className="toggle-switch-thumb" />
-                            </div>
-                        </label>
-                    ))}
-                    <label className="toggle-switch-label">
-                        <span>Product Page</span>
-                        <div className={`toggle-switch ${state.productPageEnabled ? 'toggle-switch--on' : ''}`}
-                            onClick={() => updateState({ productPageEnabled: !state.productPageEnabled })}
-                        >
-                            <div className="toggle-switch-thumb" />
-                        </div>
-                    </label>
-                </div>
-
-                <label style={{ marginTop: '0.75rem' }}>Team Location:</label>
-                <select
-                    value={state.teamLocation}
-                    onChange={(e) => updateState({ teamLocation: e.target.value as 'home' | 'separate' })}
-                >
-                    <option value="home">Home Page</option>
-                    <option value="separate">Separate Page</option>
-                </select>
+            {/* Links Section */}
+            <CollapsibleSection title="Links" defaultOpen={false}>
+                <label>Instagram URL:</label>
+                <input
+                    type="url"
+                    value={state.socialLinks.instagram}
+                    onChange={(e) => updateSocialLink('instagram', e.target.value)}
+                    placeholder="https://instagram.com/yourpage"
+                />
+                <label>Twitter / X URL:</label>
+                <input
+                    type="url"
+                    value={state.socialLinks.twitter}
+                    onChange={(e) => updateSocialLink('twitter', e.target.value)}
+                    placeholder="https://x.com/yourpage"
+                />
+                <label>LinkedIn URL:</label>
+                <input
+                    type="url"
+                    value={state.socialLinks.linkedin}
+                    onChange={(e) => updateSocialLink('linkedin', e.target.value)}
+                    placeholder="https://linkedin.com/company/yourpage"
+                />
+                <label>TikTok URL:</label>
+                <input
+                    type="url"
+                    value={state.socialLinks.tiktok}
+                    onChange={(e) => updateSocialLink('tiktok', e.target.value)}
+                    placeholder="https://tiktok.com/@yourpage"
+                />
+                <label>Contact Email:</label>
+                <input
+                    type="email"
+                    value={state.contactEmail}
+                    onChange={(e) => updateState({ contactEmail: e.target.value })}
+                    placeholder="hello@incubator.com"
+                />
             </CollapsibleSection>
         </div>
     )
