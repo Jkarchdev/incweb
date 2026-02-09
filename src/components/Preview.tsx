@@ -197,7 +197,11 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
             {/* Website Header */}
             <header className="website-header" style={{
                 fontFamily: `'${state.headerFont}', sans-serif`,
-                backgroundColor: state.headerBackgroundColor
+                backgroundColor: state.headerTransparent ? 'transparent' : state.headerBackgroundColor,
+                position: state.headerSticky ? 'sticky' : 'relative',
+                width: '100%',
+                top: 0,
+                zIndex: 50
             }}>
                 <div className="header-content">
                     <div className="header-logo">
@@ -207,12 +211,12 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                             className="landing-logo"
                         />
                     </div>
-                    <nav className="header-nav">
+                    <nav className="header-nav" style={{ fontFamily: `'${state.headerFont}', sans-serif` }}>
                         <button
                             className={`header-nav-link ${currentPage === 'home' ? 'header-nav-link--active' : ''}`}
                             onClick={() => setCurrentPage('home')}
                             type="button"
-                            style={{ color: state.headerTextColor }}
+                            style={{ color: state.headerTextColor, fontFamily: 'inherit' }}
                         >
                             Home
                         </button>
@@ -221,7 +225,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                 className={`header-nav-link ${currentPage === 'product' ? 'header-nav-link--active' : ''}`}
                                 onClick={() => setCurrentPage('product')}
                                 type="button"
-                                style={{ color: state.headerTextColor }}
+                                style={{ color: state.headerTextColor, fontFamily: 'inherit' }}
                             >
                                 Product
                             </button>
@@ -231,7 +235,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                 className={`header-nav-link ${currentPage === 'team' ? 'header-nav-link--active' : ''}`}
                                 onClick={() => setCurrentPage('team')}
                                 type="button"
-                                style={{ color: state.headerTextColor }}
+                                style={{ color: state.headerTextColor, fontFamily: 'inherit' }}
                             >
                                 Team
                             </button>
@@ -304,8 +308,18 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                                     <p
                                                         className="hero-tagline"
                                                         style={{
-                                                            fontFamily: `'${state.subtextFont}', sans-serif`,
-                                                            fontSize: `${1.375 * (state.subtextSize / 100)}rem`,
+                                                            fontFamily: `'${state.heroLogo.taglineFont}', sans-serif`,
+                                                            fontSize: `${1.375 * (state.heroLogo.taglineSize / 100)}rem`,
+                                                            color: state.heroLogo.taglineColor || undefined,
+                                                            // Override the CSS gradient text effect if a custom color is set
+                                                            ...(state.heroLogo.taglineColor ? {
+                                                                background: 'none',
+                                                                WebkitTextFillColor: 'initial',
+                                                                backgroundClip: 'border-box',
+                                                                WebkitBackgroundClip: 'border-box'
+                                                            } : {}),
+                                                            transform: `translate(${state.heroLogo.taglineX}%, ${state.heroLogo.taglineY}%)`,
+                                                            position: 'relative', // Ensure transform applies correctly
                                                             textShadow: state.heroLogo.textGlow
                                                                 ? `0 0 ${10 * (state.heroLogo.textGlowIntensity / 100)}px ${state.heroLogo.sideTextColor || 'var(--primary)'}, 0 0 ${20 * (state.heroLogo.textGlowIntensity / 100)}px ${state.heroLogo.sideTextColor || 'var(--primary)'}80`
                                                                 : state.heroLogo.textShadow
@@ -383,59 +397,68 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
 
                     {/* ===== PRODUCT PAGE ===== */}
                     {currentPage === 'product' && state.productPageEnabled && (
-                        <section className={`product-section section-anim-${state.sectionAnimation}`}>
-                            {(() => {
-                                const layout = state.productPage.layout || 'right'
-                                const isColumn = layout === 'top' || layout === 'bottom'
-                                const isReverse = layout === 'left' || layout === 'top' // Top means Image first (so reverse column)
+                        <section className={`product-section section-anim-${state.sectionAnimation}`} style={{ position: 'relative', minHeight: '80vh', overflow: 'hidden' }}>
+                            <div className="container" style={{ position: 'relative', height: '100%', minHeight: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                {/* Product Text Block */}
+                                <div className="product-text" style={{
+                                    position: 'absolute',
+                                    transform: `translate(${state.productPage.textX}%, ${state.productPage.textY}%)`,
+                                    textAlign: 'center',
+                                    zIndex: 2,
+                                    maxWidth: '600px',
+                                    width: '100%'
+                                }}>
+                                    <h1 style={{
+                                        fontFamily: `'${state.productPage.headingFont || 'Inter'}', sans-serif`,
+                                        fontSize: `${2.5 * (state.productPage.headingSize / 100)}rem`,
+                                        color: state.productPage.headingColor || 'var(--text)',
+                                        ...getTextStyle(state.productPage.headingStyle)
+                                    }}>
+                                        {state.productPage.heading}
+                                    </h1>
+                                    <p style={{
+                                        marginTop: '1.5rem',
+                                        fontFamily: `'${state.productPage.descriptionFont || 'Inter'}', sans-serif`,
+                                        fontSize: `${1.25 * (state.productPage.descriptionSize / 100)}rem`,
+                                        color: state.productPage.descriptionColor || 'var(--muted)',
+                                        ...getTextStyle(state.productPage.descriptionStyle)
+                                    }}>
+                                        {state.productPage.description}
+                                    </p>
+                                </div>
 
-                                const contentStyle: React.CSSProperties = {
+                                {/* Product Image Block */}
+                                <div className="product-image-container" style={{
+                                    position: 'absolute',
+                                    transform: `translate(${state.productPage.imageX}%, ${state.productPage.imageY}%)`,
+                                    width: `${state.productPage.imageSize}%`,
                                     display: 'flex',
-                                    flexDirection: isColumn ? (isReverse ? 'column-reverse' : 'column') : (isReverse ? 'row-reverse' : 'row'),
-                                    alignItems: 'center',
-                                    gap: '4rem',
-                                    padding: '4rem 0',
-                                }
-
-                                const imageSizePercent = state.productPage.imageSize || 50
-                                const textWidth = isColumn ? '100%' : `${100 - imageSizePercent}%`
-                                const imageWidth = isColumn ? '100%' : `${imageSizePercent}%`
-
-                                return (
-                                    <div className={`product-page section-anim-${state.sectionAnimation}`}>
-                                        <div className="container" style={contentStyle}>
-                                            <div className="product-text" style={{ width: textWidth }}>
-                                                <h1 style={{ ...getTextStyle(state.mainTextStyle) }}>{state.productPage.heading}</h1>
-                                                <p style={{ ...getTextStyle(state.subtextStyle) }}>{state.productPage.description}</p>
-                                                <button className="cta-button" style={{ marginTop: '2rem', ...getTextStyle(state.ctaStyle) }}>Learn More</button>
-                                            </div>
-                                            <div className="product-image-container" style={{ width: imageWidth, display: 'flex', justifyContent: 'center' }}>
-                                                {state.productPage.imageUrl ? (
-                                                    <img
-                                                        src={state.productPage.imageUrl}
-                                                        alt="Product"
-                                                        className={`product-image hover-${state.hoverStyle}`}
-                                                        style={{
-                                                            maxWidth: '100%',
-                                                            borderRadius: '24px',
-                                                            boxShadow: '0 20px 40px -10px rgba(0,0,0,0.2)'
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <div className={`product-image-placeholder hover-${state.hoverStyle}`}>
-                                                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                                                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                                                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                                                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                                                        </svg>
-                                                        <span>Product Image</span>
-                                                    </div>
-                                                )}
-                                            </div>
+                                    justifyContent: 'center',
+                                    zIndex: 1
+                                }}>
+                                    {state.productPage.imageUrl ? (
+                                        <img
+                                            src={state.productPage.imageUrl}
+                                            alt="Product"
+                                            className={`product-image hover-${state.hoverStyle}`}
+                                            style={{
+                                                maxWidth: '100%',
+                                                borderRadius: '24px',
+                                                boxShadow: '0 20px 40px -10px rgba(0,0,0,0.2)'
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className={`product-image-placeholder hover-${state.hoverStyle}`}>
+                                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                                            </svg>
+                                            <span>Product Image</span>
                                         </div>
-                                    </div>
-                                )
-                            })()}
+                                    )}
+                                </div>
+                            </div>
                         </section>
                     )}
 

@@ -37,10 +37,15 @@ export interface HeroLogoConfig {
   sideText: string
   sideTextFont: string
   sideTextColor: string
+  taglineFont: string
+  taglineColor: string
+  taglineSize: number // 50-200
   logoX: number  // -50 to 50 (percentage offset from center)
   logoY: number  // -50 to 50
   textX: number  // -50 to 50
   textY: number  // -50 to 50
+  taglineX: number // -50 to 50
+  taglineY: number // -50 to 50
   textGlow: boolean
   textGlowIntensity: number  // 0-100
   textShadow: boolean
@@ -80,6 +85,18 @@ export interface ProductPage {
   imageUrl: string
   layout: 'left' | 'right' | 'top' | 'bottom'
   imageSize: number // 20-80 percentage
+  imageX: number
+  imageY: number
+  textX: number
+  textY: number
+  headingStyle: TextStyle
+  headingSize: number
+  headingFont: string
+  headingColor: string
+  descriptionStyle: TextStyle
+  descriptionSize: number
+  descriptionFont: string
+  descriptionColor: string
 }
 
 export interface SectionVisibility {
@@ -164,6 +181,8 @@ export interface AppState {
   headerFont: string
   headerTextColor: string
   headerBackgroundColor: string
+  headerSticky: boolean
+  headerTransparent: boolean
   footerBackgroundColor: string
   footerTextColor: string
 }
@@ -179,10 +198,15 @@ const DEFAULT_STATE: AppState = {
     sideText: '',
     sideTextFont: 'Inter',
     sideTextColor: '',
+    taglineFont: 'Inter',
+    taglineColor: '',
+    taglineSize: 100,
     logoX: 0,
     logoY: 0,
     textX: 0,
     textY: 0,
+    taglineX: 0,
+    taglineY: 0,
     textGlow: false,
     textGlowIntensity: 50,
     textShadow: false,
@@ -234,8 +258,20 @@ const DEFAULT_STATE: AppState = {
     heading: '(Product-Heading)',
     description: '(Product-Description)',
     imageUrl: '',
-    layout: 'right',
+    layout: 'right', // DEPRECATED: Keep for migration, but UI will use X/Y
     imageSize: 50,
+    imageX: 0,
+    imageY: 0,
+    textX: 0,
+    textY: 0,
+    headingStyle: { weight: 700, color: '', effect: 'none' },
+    headingSize: 100,
+    headingFont: 'Inter',
+    headingColor: '',
+    descriptionStyle: { weight: 400, color: '', effect: 'none' },
+    descriptionSize: 100,
+    descriptionFont: 'Inter',
+    descriptionColor: '',
   },
   productPageEnabled: false,
   teamLocation: 'home',
@@ -287,7 +323,9 @@ const DEFAULT_STATE: AppState = {
   headerFont: 'Inter',
   headerTextColor: '#000000',
   headerBackgroundColor: 'transparent',
-  footerBackgroundColor: 'transparent',
+  headerSticky: false,
+  headerTransparent: false,
+  footerBackgroundColor: '#1e293b',
   footerTextColor: '#000000',
 }
 

@@ -249,7 +249,7 @@ const Controls = ({ state, updateState }: ControlsProps) => {
         })
     }
 
-    const updateProductPage = (key: keyof ProductPage, value: string) => {
+    const updateProductPage = <K extends keyof ProductPage>(key: K, value: ProductPage[K]) => {
         updateState({
             productPage: { ...state.productPage, [key]: value }
         })
@@ -670,6 +670,25 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                         maxLength={20}
                         style={{ flex: 1 }}
                     />
+                </div>
+
+                <div className="option-row" style={{ marginTop: '1rem' }}>
+                    <label className="toggle-label">
+                        <input
+                            type="checkbox"
+                            checked={state.headerSticky}
+                            onChange={(e) => updateState({ headerSticky: e.target.checked })}
+                        />
+                        <span>Sticky Header</span>
+                    </label>
+                    <label className="toggle-label">
+                        <input
+                            type="checkbox"
+                            checked={state.headerTransparent}
+                            onChange={(e) => updateState({ headerTransparent: e.target.checked })}
+                        />
+                        <span>Transparent Background</span>
+                    </label>
                 </div>
             </CollapsibleSection>
 
@@ -1215,6 +1234,83 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     onChange={(e) => updateHeroLogo('tagline', e.target.value)}
                     placeholder="Your company slogan..."
                 />
+
+                <div className="option-row">
+                    <div className="option-group">
+                        <label>Font:</label>
+                        <select
+                            value={state.heroLogo.taglineFont}
+                            onChange={(e) => updateHeroLogo('taglineFont', e.target.value)}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="option-group">
+                        <label>Color:</label>
+                        <div className="color-input-group">
+                            <input
+                                type="color"
+                                value={state.heroLogo.taglineColor || '#000000'}
+                                onChange={(e) => updateHeroLogo('taglineColor', e.target.value)}
+                                style={{ width: '50px', height: '32px', cursor: 'pointer' }}
+                            />
+                            <input
+                                type="text"
+                                value={state.heroLogo.taglineColor}
+                                onChange={(e) => updateHeroLogo('taglineColor', e.target.value)}
+                                placeholder="Inherit"
+                                maxLength={7}
+                                style={{ flex: 1 }}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <label className="slider-label">
+                    Tagline Size
+                    <span className="slider-value">{state.heroLogo.taglineSize}%</span>
+                </label>
+                <input
+                    type="range"
+                    min={50}
+                    max={200}
+                    value={state.heroLogo.taglineSize}
+                    onChange={(e) => updateHeroLogo('taglineSize', Number(e.target.value))}
+                />
+
+                <div className="position-sliders">
+                    <p className="section-hint" style={{ marginTop: '1rem' }}>Tagline Position</p>
+                    <div className="option-row">
+                        <div className="option-group">
+                            <label className="slider-label">
+                                X Position
+                                <span className="slider-value">{state.heroLogo.taglineX}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-200}
+                                max={200}
+                                value={state.heroLogo.taglineX}
+                                onChange={(e) => updateHeroLogo('taglineX', Number(e.target.value))}
+                            />
+                        </div>
+                        <div className="option-group">
+                            <label className="slider-label">
+                                Y Position
+                                <span className="slider-value">{state.heroLogo.taglineY}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-200}
+                                max={200}
+                                value={state.heroLogo.taglineY}
+                                onChange={(e) => updateHeroLogo('taglineY', Number(e.target.value))}
+                            />
+                        </div>
+                    </div>
+                </div>
             </CollapsibleSection >
 
             {/* Main Text / UVP Section */}
@@ -1336,50 +1432,7 @@ const Controls = ({ state, updateState }: ControlsProps) => {
             </CollapsibleSection >
 
             {/* Product Section */}
-            < CollapsibleSection title="Product" defaultOpen={false} >
-                <div className="option-row" style={{ marginTop: '1rem' }}>
-                    <div className="option-group">
-                        <label>Layout</label>
-                        <select
-                            value={state.productPage.layout || 'right'}
-                            onChange={(e) => updateProductPage('layout', e.target.value)}
-                        >
-                            <option value="right">Image Right</option>
-                            <option value="left">Image Left</option>
-                            <option value="top">Image Top</option>
-                            <option value="bottom">Image Bottom</option>
-                        </select>
-                    </div>
-                </div>
-
-                <label className="slider-label">
-                    Image Size
-                    <span className="slider-value">{state.productPage.imageSize || 50}%</span>
-                </label>
-                <input
-                    type="range"
-                    min={20}
-                    max={80}
-                    value={state.productPage.imageSize || 50}
-                    onChange={(e) => updateProductPage('imageSize', Number(e.target.value))}
-                />
-
-                <label>Heading:</label>
-                <input
-                    type="text"
-                    value={state.productPage.heading}
-                    onChange={(e) => updateProductPage('heading', e.target.value)}
-                    placeholder="Our Product"
-                />
-
-                <label>Description:</label>
-                <textarea
-                    value={state.productPage.description}
-                    onChange={(e) => updateProductPage('description', e.target.value)}
-                    rows={4}
-                    placeholder="Describe your product..."
-                />
-
+            <CollapsibleSection title="Product" defaultOpen={false}>
                 <div className="file-upload">
                     <label htmlFor="product-image-upload" className="upload-button">
                         {state.productPage.imageUrl ? '✓ Image Uploaded' : 'Upload Product Image'}
@@ -1391,7 +1444,156 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                         onChange={handleProductImageUpload}
                     />
                 </div>
-            </CollapsibleSection >
+
+                <div className="position-sliders">
+                    <p className="section-hint" style={{ marginTop: '1rem' }}>Image Position & Size</p>
+                    <div className="option-row">
+                        <div className="option-group">
+                            <label className="slider-label">
+                                Image X
+                                <span className="slider-value">{state.productPage.imageX}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-200}
+                                max={200}
+                                value={state.productPage.imageX}
+                                onChange={(e) => updateProductPage('imageX', Number(e.target.value))}
+                            />
+                        </div>
+                        <div className="option-group">
+                            <label className="slider-label">
+                                Image Y
+                                <span className="slider-value">{state.productPage.imageY}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-200}
+                                max={200}
+                                value={state.productPage.imageY}
+                                onChange={(e) => updateProductPage('imageY', Number(e.target.value))}
+                            />
+                        </div>
+                    </div>
+                    <label className="slider-label">
+                        Image Size
+                        <span className="slider-value">{state.productPage.imageSize || 50}%</span>
+                    </label>
+                    <input
+                        type="range"
+                        min={20}
+                        max={100}
+                        value={state.productPage.imageSize || 50}
+                        onChange={(e) => updateProductPage('imageSize', Number(e.target.value))}
+                    />
+                </div>
+
+                <div className="position-sliders">
+                    <p className="section-hint" style={{ marginTop: '1rem' }}>Text Position</p>
+                    <div className="option-row">
+                        <div className="option-group">
+                            <label className="slider-label">
+                                Text X
+                                <span className="slider-value">{state.productPage.textX}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-200}
+                                max={200}
+                                value={state.productPage.textX}
+                                onChange={(e) => updateProductPage('textX', Number(e.target.value))}
+                            />
+                        </div>
+                        <div className="option-group">
+                            <label className="slider-label">
+                                Text Y
+                                <span className="slider-value">{state.productPage.textY}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-200}
+                                max={200}
+                                value={state.productPage.textY}
+                                onChange={(e) => updateProductPage('textY', Number(e.target.value))}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <p className="section-hint" style={{ marginTop: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>Product Heading</p>
+                <input
+                    type="text"
+                    value={state.productPage.heading}
+                    onChange={(e) => updateProductPage('heading', e.target.value)}
+                    placeholder="Our Product"
+                />
+                <div className="option-row">
+                    <div className="option-group">
+                        <label>Font:</label>
+                        <select
+                            value={state.productPage.headingFont}
+                            onChange={(e) => updateProductPage('headingFont', e.target.value)}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+                <label className="slider-label">
+                    Size
+                    <span className="slider-value">{state.productPage.headingSize}%</span>
+                </label>
+                <TextControl
+                    label="Heading"
+                    style={state.productPage.headingStyle}
+                    onChange={(newStyle) => updateProductPage('headingStyle', newStyle)}
+                />
+                <input
+                    type="range"
+                    min={50}
+                    max={200}
+                    value={state.productPage.headingSize}
+                    onChange={(e) => updateProductPage('headingSize', Number(e.target.value))}
+                />
+
+                <p className="section-hint" style={{ marginTop: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>Product Description</p>
+                <textarea
+                    value={state.productPage.description}
+                    onChange={(e) => updateProductPage('description', e.target.value)}
+                    rows={4}
+                    placeholder="Describe your product..."
+                />
+                <div className="option-row">
+                    <div className="option-group">
+                        <label>Font:</label>
+                        <select
+                            value={state.productPage.descriptionFont}
+                            onChange={(e) => updateProductPage('descriptionFont', e.target.value)}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+                <label className="slider-label">
+                    Size
+                    <span className="slider-value">{state.productPage.descriptionSize}%</span>
+                </label>
+                <TextControl
+                    label="Description"
+                    style={state.productPage.descriptionStyle}
+                    onChange={(newStyle) => updateProductPage('descriptionStyle', newStyle)}
+                />
+                <input
+                    type="range"
+                    min={50}
+                    max={200}
+                    value={state.productPage.descriptionSize}
+                    onChange={(e) => updateProductPage('descriptionSize', Number(e.target.value))}
+                />
+            </CollapsibleSection>
 
             {/* Team Heading Section */}
             < CollapsibleSection title="Team Heading" defaultOpen={false} >
