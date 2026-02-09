@@ -7,7 +7,6 @@ import AdminDashboard from './components/AdminDashboard.tsx'
 // Simple routing based on URL path
 const path = window.location.pathname
 const isAdminRoute = path === '/admin'
-const isDesignRoute = path.startsWith('/design/')
 
 // For /design/team-name routes, show the main App (it will load the design)
 createRoot(document.getElementById('root')!).render(

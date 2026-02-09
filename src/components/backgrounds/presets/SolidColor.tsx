@@ -4,7 +4,7 @@ interface SolidColorProps {
   settings: BackgroundSettings
 }
 
-const SolidColor = ({ settings }: SolidColorProps) => {
+const SolidColor = ({ settings: _settings }: SolidColorProps) => {
   return (
     <div style={{
       position: 'absolute',

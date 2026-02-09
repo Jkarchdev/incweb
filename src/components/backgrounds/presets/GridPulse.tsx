@@ -28,9 +28,6 @@ const GridPulse = ({ settings }: GridPulseProps) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cols, rows])
 
-  const cellW = 100 / cols
-  const cellH = 100 / rows
-
   return (
     <div className="grid-pulse">
       <svg
