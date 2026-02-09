@@ -31,6 +31,7 @@ import LightRays from './presets/LightRays'
 import ColorBands from './presets/ColorBands'
 import GridPulse from './presets/GridPulse'
 import SolidColor from './presets/SolidColor'
+import CitrusBurst from './presets/CitrusBurst'
 import './BackgroundRenderer.css'
 
 interface BackgroundRendererProps {
@@ -69,6 +70,7 @@ const PRESET_COMPONENTS: Record<string, React.ComponentType<{ settings: Backgrou
   color_bands: ColorBands,
   grid_pulse: GridPulse,
   solid_color: SolidColor,
+  citrus_burst: CitrusBurst,
 }
 
 const BackgroundRenderer = React.memo(({ config }: BackgroundRendererProps) => {

@@ -1,0 +1,21 @@
+.citrus-burst-bg {
+    position: absolute;
+    inset: 0;
+    /* Vibrant Citrus Gradients: Strong Orange -> Yellow -> Green-Teal */
+    background: linear-gradient(-45deg, #FF6B6B, #FF9F1C, #FFD93D, #4D96FF, #6BCB77);
+    background-size: 400% 400%;
+    animation: citrusGradient var(--speed) ease infinite;
+    opacity: var(--opacity);
+}
+
+@keyframes citrusGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}

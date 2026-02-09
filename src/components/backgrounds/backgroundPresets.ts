@@ -57,6 +57,7 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   { id: 'light_rays', name: 'Light Rays', type: 'animated', description: 'Dramatic light beams from corner' },
   { id: 'color_bands', name: 'Color Bands', type: 'animated', description: 'Bold diagonal scrolling stripes' },
   { id: 'grid_pulse', name: 'Grid Pulse', type: 'animated', description: 'Pulsing grid wave pattern' },
+  { id: 'citrus_burst', name: 'Citrus Burst', type: 'animated', description: 'Vibrant shifting citrus colors' },
   // Static presets
   { id: 'solid_color', name: 'Solid Color', type: 'static', description: 'Flat solid color background' },
   { id: 'mesh_gradient', name: 'Mesh Gradient', type: 'static', description: 'Layered radial gradients with noise' },

@@ -20,7 +20,15 @@ export type CardAnimation = 'none' | 'fade-in' | 'slide-up' | 'flip' | 'bounce'
 export type HoverStyle = 'none' | 'lift' | 'grow' | 'glow' | 'tilt'
 export type CardStyle = 'glass' | 'solid' | 'outline' | 'shadow'
 export type TeamCardLayout = 'grid' | 'carousel' | 'stacked'
-export type TextAnimation = 'none' | 'typing' | 'color-shift' | 'shimmer'
+export type TextAnimation = 'none' | 'typing' | 'color-shift' | 'shimmer' | 'bounce' | 'pulse'
+
+export interface TextStyle {
+  weight: number // 100-900
+  color: string
+  effect: 'none' | 'shadow' | 'glow' | 'outline'
+  effectColor?: string
+  effectIntensity?: number // 0-100
+}
 
 export interface HeroLogoConfig {
   size: 'small' | 'medium' | 'large' | 'xlarge'
@@ -70,6 +78,8 @@ export interface ProductPage {
   heading: string
   description: string
   imageUrl: string
+  layout: 'left' | 'right' | 'top' | 'bottom'
+  imageSize: number // 20-80 percentage
 }
 
 export interface SectionVisibility {
@@ -118,10 +128,13 @@ export interface AppState {
   heroGradientFrom: string
   heroGradientTo: string
   heroLetterSpacing: number
+  heroFontWeight: number
   heroTextAnimation: TextAnimation
   cardStyle: CardStyle
   cardBorderRadius: number
   teamCardLayout: TeamCardLayout
+  teamNameSize: number
+  teamRoleSize: number
   // Visibility toggles
   heroHeadlineVisible: boolean
   heroTaglineVisible: boolean
@@ -135,7 +148,24 @@ export interface AppState {
   teamHeadingSize: number
   teamSubheadingFont: string
   teamSubheadingSize: number
+  heroHeadlineSize: number
+  ctaTextSize: number
+  footerTextSize: number
   heroHeight: number
+  // Advanced Styles
+  heroHeadlineStyle: TextStyle
+  mainTextStyle: TextStyle
+  subtextStyle: TextStyle
+  teamHeadingStyle: TextStyle
+  teamRoleStyle: TextStyle
+  footerTextStyle: TextStyle
+  ctaStyle: TextStyle
+  // Header & Footer Styling
+  headerFont: string
+  headerTextColor: string
+  headerBackgroundColor: string
+  footerBackgroundColor: string
+  footerTextColor: string
 }
 
 const STORAGE_KEY = 'incweb-config'
@@ -185,7 +215,7 @@ const DEFAULT_STATE: AppState = {
   teamRoleFont: 'Inter',
   footerFont: 'Inter',
   heroSubtext: '(Placeholder-Subtext)',
-  ctaText: '(Placeholder-CTA)',
+  ctaText: 'Our Product',
   teamHeading: '(Placeholder-Team-Heading)',
   teamSubheading: '(Placeholder-Team-Subheading)',
   socialLinks: {
@@ -204,9 +234,13 @@ const DEFAULT_STATE: AppState = {
     heading: '(Product-Heading)',
     description: '(Product-Description)',
     imageUrl: '',
+    layout: 'right',
+    imageSize: 50,
   },
   productPageEnabled: false,
   teamLocation: 'home',
+  headingSize: 100,
+  bodySize: 100,
   teamNameSize: 100,
   teamRoleSize: 100,
   teamDisplayMode: 'individual',
@@ -220,6 +254,7 @@ const DEFAULT_STATE: AppState = {
   heroGradientFrom: '',
   heroGradientTo: '',
   heroLetterSpacing: 2,
+  heroFontWeight: 400,
   heroTextAnimation: 'none',
   cardStyle: 'glass',
   cardBorderRadius: 24,
@@ -237,7 +272,23 @@ const DEFAULT_STATE: AppState = {
   teamHeadingSize: 100,
   teamSubheadingFont: 'Inter',
   teamSubheadingSize: 100,
+  heroHeadlineSize: 100,
+  ctaTextSize: 100,
+  footerTextSize: 100,
   heroHeight: 400,
+  heroHeadlineStyle: { weight: 700, color: '', effect: 'none' },
+  mainTextStyle: { weight: 400, color: '', effect: 'none' },
+  subtextStyle: { weight: 400, color: '', effect: 'none' },
+  teamHeadingStyle: { weight: 600, color: '', effect: 'none' },
+  teamRoleStyle: { weight: 400, color: '', effect: 'none' },
+  footerTextStyle: { weight: 400, color: '', effect: 'none' },
+  ctaStyle: { weight: 600, color: '#ffffff', effect: 'none' },
+  // Header & Footer Styling
+  headerFont: 'Inter',
+  headerTextColor: '#000000',
+  headerBackgroundColor: 'transparent',
+  footerBackgroundColor: 'transparent',
+  footerTextColor: '#000000',
 }
 
 function loadState(): AppState {

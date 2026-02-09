@@ -48,6 +48,18 @@ const FONT_OPTIONS = [
     'Pacifico',
     'Lobster',
     'Satisfy',
+    'Chewy',
+    'Spicy Rice',
+    'Titan One',
+    'Fredoka',
+    'Modak',
+    'Chaeoi',
+    'Shrikhand',
+    'Coiny',
+    'Dela Gothic One',
+    'Baloo 2',
+    'Chicle',
+    'Bungee',
 ]
 
 const PALETTE_OPTIONS = [
@@ -65,6 +77,75 @@ interface CollapsibleSectionProps {
     children: React.ReactNode
 }
 
+const TextControl = ({
+    label,
+    style,
+    onChange
+}: {
+    label: string,
+    style: any, // Using any for simplicity here, ideally matches TextStyle
+    onChange: (newStyle: any) => void
+}) => {
+    // Helper to ensure style object has defaults if undefined
+    const s = { weight: 400, color: '', effect: 'none', ...style }
+
+    return (
+        <div className="option-group" style={{ marginBottom: '1.5rem', padding: '1rem', background: 'rgba(0,0,0,0.03)', borderRadius: '8px' }}>
+            <label style={{ fontWeight: 600, marginBottom: '0.5rem', display: 'block' }}>{label} Style</label>
+
+            <div className="option-row">
+                <div className="option-group">
+                    <label className="slider-label">
+                        Weight
+                        <span className="slider-value">{s.weight}</span>
+                    </label>
+                    <input
+                        type="range"
+                        min={100}
+                        max={900}
+                        step={100}
+                        value={s.weight}
+                        onChange={(e) => onChange({ ...s, weight: Number(e.target.value) })}
+                    />
+                </div>
+                <div className="option-group">
+                    <label>Color</label>
+                    <div className="color-input-group">
+                        <input
+                            type="color"
+                            value={s.color || '#000000'}
+                            onChange={(e) => onChange({ ...s, color: e.target.value })}
+                            style={{ width: '40px', height: '32px', cursor: 'pointer' }}
+                        />
+                        <button
+                            type="button"
+                            className="clear-color-btn"
+                            onClick={() => onChange({ ...s, color: '' })}
+                            title="Reset to default"
+                            style={{ padding: '0 6px', fontSize: '12px' }}
+                        >
+                            &times;
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div className="option-group">
+                <label>Effect</label>
+                <select
+                    value={s.effect}
+                    onChange={(e) => onChange({ ...s, effect: e.target.value })}
+                >
+                    <option value="none">None</option>
+                    <option value="shadow">Shadow</option>
+                    <option value="glow">Glow</option>
+                    <option value="outline">Outline</option>
+                </select>
+            </div>
+        </div>
+    )
+}
+
 const CollapsibleSection = ({ title, defaultOpen = true, children }: CollapsibleSectionProps) => {
     const [open, setOpen] = useState(defaultOpen)
     return (
@@ -77,7 +158,7 @@ const CollapsibleSection = ({ title, defaultOpen = true, children }: Collapsible
                 <h3>{title}</h3>
                 <span className={`section-chevron ${open ? 'section-chevron--open' : ''}`}>
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </span>
             </button>
@@ -527,8 +608,8 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                 </div>
             </CollapsibleSection>
 
-            {/* Hero Logo Section */}
-            <CollapsibleSection title="Hero Logo" defaultOpen={false}>
+            {/* Header Section */}
+            <CollapsibleSection title="Header" defaultOpen={false}>
                 <div className="file-upload">
                     <label htmlFor="logo-upload" className="upload-button">
                         {state.logoUrl ? '✓ Logo Uploaded' : 'Upload Logo'}
@@ -541,6 +622,59 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     />
                 </div>
 
+                <div className="option-row" style={{ marginTop: '1rem' }}>
+                    <div className="option-group">
+                        <label>Font:</label>
+                        <select
+                            value={state.headerFont}
+                            onChange={(e) => updateState({ headerFont: e.target.value })}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <label>Text Color:</label>
+                <div className="color-input-group">
+                    <input
+                        type="color"
+                        value={state.headerTextColor || '#000000'}
+                        onChange={(e) => updateState({ headerTextColor: e.target.value })}
+                        style={{ width: '60px', height: '38px', cursor: 'pointer' }}
+                    />
+                    <input
+                        type="text"
+                        value={state.headerTextColor}
+                        onChange={(e) => updateState({ headerTextColor: e.target.value })}
+                        placeholder="#000000"
+                        maxLength={7}
+                        style={{ flex: 1 }}
+                    />
+                </div>
+
+                <label>Background Color:</label>
+                <div className="color-input-group">
+                    <input
+                        type="color"
+                        value={state.headerBackgroundColor === 'transparent' ? '#ffffff' : state.headerBackgroundColor}
+                        onChange={(e) => updateState({ headerBackgroundColor: e.target.value })}
+                        style={{ width: '60px', height: '38px', cursor: 'pointer' }}
+                    />
+                    <input
+                        type="text"
+                        value={state.headerBackgroundColor}
+                        onChange={(e) => updateState({ headerBackgroundColor: e.target.value })}
+                        placeholder="transparent"
+                        maxLength={20}
+                        style={{ flex: 1 }}
+                    />
+                </div>
+            </CollapsibleSection>
+
+            {/* Hero Layout Section */}
+            <CollapsibleSection title="Hero Layout" defaultOpen={false}>
                 <div className="option-row">
                     <div className="option-group">
                         <label>Logo Size:</label>
@@ -847,6 +981,24 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     </div>
                 </div>
 
+
+                <label className="slider-label">
+                    Headline Size
+                    <span className="slider-value">{state.heroHeadlineSize}%</span>
+                </label>
+                <TextControl
+                    label="Headline"
+                    style={state.heroHeadlineStyle}
+                    onChange={(newStyle) => updateState({ heroHeadlineStyle: newStyle })}
+                />
+                <input
+                    type="range"
+                    min={50}
+                    max={200}
+                    value={state.heroHeadlineSize}
+                    onChange={(e) => updateState({ heroHeadlineSize: Number(e.target.value) })}
+                />
+
                 <div className="position-sliders">
                     <p className="section-hint" style={{ marginTop: '1rem' }}>Text Position</p>
                     <div className="option-row">
@@ -1014,10 +1166,39 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                         onChange={(e) => updateState({ heroLetterSpacing: Number(e.target.value) })}
                     />
                 </div>
-            </CollapsibleSection>
+
+                <div className="option-row">
+                    <div className="option-group">
+                        <label className="slider-label">
+                            Font Weight
+                            <span className="slider-value">{state.heroFontWeight}</span>
+                        </label>
+                        <input
+                            type="range"
+                            min={100}
+                            max={900}
+                            step={100}
+                            value={state.heroFontWeight}
+                            onChange={(e) => updateState({ heroFontWeight: Number(e.target.value) })}
+                        />
+                    </div>
+                    <div className="option-group">
+                        <label>Text Animation:</label>
+                        <select
+                            value={state.heroTextAnimation}
+                            onChange={(e) => updateState({ heroTextAnimation: e.target.value as TextAnimation })}
+                        >
+                            <option value="none">None</option>
+                            <option value="typing">Typewriter</option>
+                            <option value="color-shift">Color Shift (Rainbow)</option>
+                            <option value="shimmer">Shimmer</option>
+                        </select>
+                    </div>
+                </div>
+            </CollapsibleSection >
 
             {/* Hero Tagline Section */}
-            <CollapsibleSection title="Hero Tagline" defaultOpen={false}>
+            < CollapsibleSection title="Hero Tagline" defaultOpen={false} >
                 <label className="toggle-switch-label">
                     <span>Show Tagline</span>
                     <div className={`toggle-switch ${state.heroTaglineVisible ? 'toggle-switch--on' : ''}`}
@@ -1034,10 +1215,10 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     onChange={(e) => updateHeroLogo('tagline', e.target.value)}
                     placeholder="Your company slogan..."
                 />
-            </CollapsibleSection>
+            </CollapsibleSection >
 
             {/* Main Text / UVP Section */}
-            <CollapsibleSection title="Main Text / UVP" defaultOpen={false}>
+            < CollapsibleSection title="Main Text / UVP" defaultOpen={false} >
                 <label>Text:</label>
                 <textarea
                     value={state.mainText}
@@ -1064,6 +1245,11 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     Size
                     <span className="slider-value">{state.mainTextSize}%</span>
                 </label>
+                <TextControl
+                    label="Main Text"
+                    style={state.mainTextStyle}
+                    onChange={(newStyle) => updateState({ mainTextStyle: newStyle })}
+                />
                 <input
                     type="range"
                     min={50}
@@ -1071,10 +1257,35 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     value={state.mainTextSize}
                     onChange={(e) => updateState({ mainTextSize: Number(e.target.value) })}
                 />
-            </CollapsibleSection>
+
+                <label style={{ marginTop: '1rem' }}>CTA Button Text:</label>
+                <input
+                    type="text"
+                    value={state.ctaText}
+                    onChange={(e) => updateState({ ctaText: e.target.value })}
+                    placeholder="Get Started"
+                />
+
+                <label className="slider-label">
+                    CTA Text Size
+                    <span className="slider-value">{state.ctaTextSize}%</span>
+                </label>
+                <TextControl
+                    label="CTA Button"
+                    style={state.ctaStyle}
+                    onChange={(newStyle) => updateState({ ctaStyle: newStyle })}
+                />
+                <input
+                    type="range"
+                    min={50}
+                    max={200}
+                    value={state.ctaTextSize}
+                    onChange={(e) => updateState({ ctaTextSize: Number(e.target.value) })}
+                />
+            </CollapsibleSection >
 
             {/* Subtext Section */}
-            <CollapsibleSection title="Subtext" defaultOpen={false}>
+            < CollapsibleSection title="Subtext" defaultOpen={false} >
                 <label className="toggle-switch-label">
                     <span>Show Subtext</span>
                     <div className={`toggle-switch ${state.subtextVisible ? 'toggle-switch--on' : ''}`}
@@ -1110,6 +1321,11 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     Size
                     <span className="slider-value">{state.subtextSize}%</span>
                 </label>
+                <TextControl
+                    label="Subtext"
+                    style={state.subtextStyle}
+                    onChange={(newStyle) => updateState({ subtextStyle: newStyle })}
+                />
                 <input
                     type="range"
                     min={50}
@@ -1117,10 +1333,37 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     value={state.subtextSize}
                     onChange={(e) => updateState({ subtextSize: Number(e.target.value) })}
                 />
-            </CollapsibleSection>
+            </CollapsibleSection >
 
             {/* Product Section */}
-            <CollapsibleSection title="Product" defaultOpen={false}>
+            < CollapsibleSection title="Product" defaultOpen={false} >
+                <div className="option-row" style={{ marginTop: '1rem' }}>
+                    <div className="option-group">
+                        <label>Layout</label>
+                        <select
+                            value={state.productPage.layout || 'right'}
+                            onChange={(e) => updateProductPage('layout', e.target.value)}
+                        >
+                            <option value="right">Image Right</option>
+                            <option value="left">Image Left</option>
+                            <option value="top">Image Top</option>
+                            <option value="bottom">Image Bottom</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label className="slider-label">
+                    Image Size
+                    <span className="slider-value">{state.productPage.imageSize || 50}%</span>
+                </label>
+                <input
+                    type="range"
+                    min={20}
+                    max={80}
+                    value={state.productPage.imageSize || 50}
+                    onChange={(e) => updateProductPage('imageSize', Number(e.target.value))}
+                />
+
                 <label>Heading:</label>
                 <input
                     type="text"
@@ -1148,10 +1391,10 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                         onChange={handleProductImageUpload}
                     />
                 </div>
-            </CollapsibleSection>
+            </CollapsibleSection >
 
             {/* Team Heading Section */}
-            <CollapsibleSection title="Team Heading" defaultOpen={false}>
+            < CollapsibleSection title="Team Heading" defaultOpen={false} >
                 <label>Text:</label>
                 <input
                     type="text"
@@ -1178,6 +1421,11 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     Size
                     <span className="slider-value">{state.teamHeadingSize}%</span>
                 </label>
+                <TextControl
+                    label="Team Heading"
+                    style={state.teamHeadingStyle}
+                    onChange={(newStyle) => updateState({ teamHeadingStyle: newStyle })}
+                />
                 <input
                     type="range"
                     min={50}
@@ -1185,10 +1433,10 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     value={state.teamHeadingSize}
                     onChange={(e) => updateState({ teamHeadingSize: Number(e.target.value) })}
                 />
-            </CollapsibleSection>
+            </CollapsibleSection >
 
             {/* Team Subheading Section */}
-            <CollapsibleSection title="Team Subheading" defaultOpen={false}>
+            < CollapsibleSection title="Team Subheading" defaultOpen={false} >
                 <label>Text:</label>
                 <input
                     type="text"
@@ -1215,6 +1463,11 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     Size
                     <span className="slider-value">{state.teamSubheadingSize}%</span>
                 </label>
+                <TextControl
+                    label="Team Subheading"
+                    style={state.teamRoleStyle} // Using role style as general text style for now or add specific
+                    onChange={(newStyle) => updateState({ teamRoleStyle: newStyle })}
+                />
                 <input
                     type="range"
                     min={50}
@@ -1222,10 +1475,10 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     value={state.teamSubheadingSize}
                     onChange={(e) => updateState({ teamSubheadingSize: Number(e.target.value) })}
                 />
-            </CollapsibleSection>
+            </CollapsibleSection >
 
             {/* Team Section */}
-            <CollapsibleSection title="Team Section" defaultOpen={false}>
+            < CollapsibleSection title="Team Section" defaultOpen={false} >
                 <label>Display Mode:</label>
                 <select
                     value={state.teamDisplayMode}
@@ -1272,72 +1525,71 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     </select>
                 </div>
 
-                {state.teamDisplayMode === 'group' ? (
-                    <>
-                        <div className="file-upload" style={{ marginTop: '1rem' }}>
-                            <label htmlFor="team-group-upload" className="upload-button">
-                                {state.teamGroupImageUrl ? '✓ Group Photo Uploaded' : 'Upload Group Photo'}
-                            </label>
-                            <input
-                                id="team-group-upload"
-                                type="file"
-                                accept="image/png,image/jpeg,image/webp"
-                                onChange={handleTeamGroupImageUpload}
-                            />
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <div className="teammate-count">
-                            <label>Members:</label>
-                            <select
-                                value={state.teammates.length}
-                                onChange={(e) => handleTeammateCountChange(Number(e.target.value))}
-                            >
-                                <option value={3}>3</option>
-                                <option value={4}>4</option>
-                                <option value={5}>5</option>
-                                <option value={6}>6</option>
-                            </select>
-                        </div>
+                {
+                    state.teamDisplayMode === 'group' ? (
+                        <>
+                            <div className="file-upload" style={{ marginTop: '1rem' }}>
+                                <label htmlFor="team-group-upload" className="upload-button">
+                                    {state.teamGroupImageUrl ? '✓ Group Photo Uploaded' : 'Upload Group Photo'}
+                                </label>
+                                <input
+                                    id="team-group-upload"
+                                    type="file"
+                                    accept="image/png,image/jpeg,image/webp"
+                                    onChange={handleTeamGroupImageUpload}
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="teammate-count">
+                                <label>Members:</label>
+                                <select
+                                    value={state.teammates.length}
+                                    onChange={(e) => handleTeammateCountChange(Number(e.target.value))}
+                                >
+                                    <option value={3}>3</option>
+                                    <option value={4}>4</option>
+                                    <option value={5}>5</option>
+                                    <option value={6}>6</option>
+                                </select>
+                            </div>
 
-                        <div className="teammates-list">
-                            {state.teammates.map((teammate) => (
-                                <div key={teammate.id} className="teammate-control">
-                                    <h4>Teammate {teammate.id + 1}</h4>
-                                    <div className="file-upload">
-                                        <label htmlFor={`teammate-${teammate.id}`} className="upload-button small">
-                                            {teammate.imageUrl ? '✓ Image' : 'Upload'}
-                                        </label>
+                            <div className="teammates-list">
+                                {state.teammates.map((teammate) => (
+                                    <div key={teammate.id} className="teammate-control">
+                                        <h4>Teammate {teammate.id + 1}</h4>
+                                        <div className="file-upload">
+                                            <label htmlFor={`teammate-${teammate.id}`} className="upload-button small">
+                                                {teammate.imageUrl ? '✓ Image' : 'Upload'}
+                                            </label>
+                                            <input
+                                                id={`teammate-${teammate.id}`}
+                                                type="file"
+                                                accept="image/png,image/jpeg,image/webp"
+                                                onChange={(e) => handleTeammateImageUpload(teammate.id, e)}
+                                            />
+                                        </div>
                                         <input
-                                            id={`teammate-${teammate.id}`}
-                                            type="file"
-                                            accept="image/png,image/jpeg,image/webp"
-                                            onChange={(e) => handleTeammateImageUpload(teammate.id, e)}
+                                            type="text"
+                                            placeholder="Name"
+                                            value={teammate.name}
+                                            onChange={(e) => updateTeammate(teammate.id, 'name', e.target.value)}
+                                        />
+                                        <input
+                                            type="text"
+                                            placeholder="Role"
+                                            value={teammate.role}
+                                            onChange={(e) => updateTeammate(teammate.id, 'role', e.target.value)}
                                         />
                                     </div>
-                                    <input
-                                        type="text"
-                                        placeholder="Name"
-                                        value={teammate.name}
-                                        onChange={(e) => updateTeammate(teammate.id, 'name', e.target.value)}
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="Role"
-                                        value={teammate.role}
-                                        onChange={(e) => updateTeammate(teammate.id, 'role', e.target.value)}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </>
-                )}
-            </CollapsibleSection>
+                                ))}
+                            </div>
+                        </>
+                    )
+                }
 
-            {/* Typography Section */}
-            <CollapsibleSection title="Typography" defaultOpen={false}>
-                <p className="section-hint">Control fonts for team cards and footer links</p>
+                <p className="section-hint" style={{ marginTop: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>Typography</p>
 
                 <label>Team Member Names Font:</label>
                 <select
@@ -1375,6 +1627,11 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     Team Role Size
                     <span className="slider-value">{state.teamRoleSize}%</span>
                 </label>
+                <TextControl
+                    label="Team Names"
+                    style={state.teamRoleStyle}
+                    onChange={(newStyle) => updateState({ teamRoleStyle: newStyle })}
+                />
                 <input
                     type="range"
                     min={50}
@@ -1382,20 +1639,115 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     value={state.teamRoleSize}
                     onChange={(e) => updateState({ teamRoleSize: Number(e.target.value) })}
                 />
+            </CollapsibleSection >
 
-                <label style={{ marginTop: '1rem' }}>Footer Links Font:</label>
-                <select
-                    value={state.footerFont}
-                    onChange={(e) => updateState({ footerFont: e.target.value })}
-                >
-                    {FONT_OPTIONS.map(f => (
-                        <option key={f} value={f}>{f}</option>
-                    ))}
-                </select>
-            </CollapsibleSection>
+            {/* Footer Section */}
+            <CollapsibleSection title="Footer" defaultOpen={false}>
+                <div className="option-row" style={{ marginBottom: '1rem' }}>
+                    <div className="option-group">
+                        <label>Font:</label>
+                        <select
+                            value={state.footerFont}
+                            onChange={(e) => updateState({ footerFont: e.target.value })}
+                        >
+                            {FONT_OPTIONS.map(f => (
+                                <option key={f} value={f}>{f}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <label className="slider-label">
+                    Text Size
+                    <span className="slider-value">{state.footerTextSize}%</span>
+                </label>
+                <input
+                    type="range"
+                    min={50}
+                    max={200}
+                    value={state.footerTextSize}
+                    onChange={(e) => updateState({ footerTextSize: Number(e.target.value) })}
+                />
+
+                <label style={{ marginTop: '1rem' }}>Background Color:</label>
+                <div className="color-input-group">
+                    <input
+                        type="color"
+                        value={state.footerBackgroundColor === 'transparent' ? '#ffffff' : state.footerBackgroundColor}
+                        onChange={(e) => updateState({ footerBackgroundColor: e.target.value })}
+                        style={{ width: '60px', height: '38px', cursor: 'pointer' }}
+                    />
+                    <input
+                        type="text"
+                        value={state.footerBackgroundColor}
+                        onChange={(e) => updateState({ footerBackgroundColor: e.target.value })}
+                        placeholder="transparent"
+                        maxLength={20}
+                        style={{ flex: 1 }}
+                    />
+                </div>
+
+                <label>Text Color:</label>
+                <div className="color-input-group">
+                    <input
+                        type="color"
+                        value={state.footerTextColor || '#000000'}
+                        onChange={(e) => updateState({ footerTextColor: e.target.value })}
+                        style={{ width: '60px', height: '38px', cursor: 'pointer' }}
+                    />
+                    <input
+                        type="text"
+                        value={state.footerTextColor}
+                        onChange={(e) => updateState({ footerTextColor: e.target.value })}
+                        placeholder="#000000"
+                        maxLength={7}
+                        style={{ flex: 1 }}
+                    />
+                </div>
+
+                <p className="section-hint" style={{ marginTop: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>Social Links</p>
+
+                <label>Instagram URL:</label>
+                <input
+                    type="url"
+                    value={state.socialLinks.instagram}
+                    onChange={(e) => updateSocialLink('instagram', e.target.value)}
+                    placeholder="https://instagram.com/yourpage"
+                />
+                <label>Twitter / X URL:</label>
+                <input
+                    type="url"
+                    value={state.socialLinks.twitter}
+                    onChange={(e) => updateSocialLink('twitter', e.target.value)}
+                    placeholder="https://x.com/yourpage"
+                />
+                <label>LinkedIn URL:</label>
+                <input
+                    type="url"
+                    value={state.socialLinks.linkedin}
+                    onChange={(e) => updateSocialLink('linkedin', e.target.value)}
+                    placeholder="https://linkedin.com/company/yourpage"
+                />
+                <label>TikTok URL:</label>
+                <input
+                    type="url"
+                    value={state.socialLinks.tiktok}
+                    onChange={(e) => updateSocialLink('tiktok', e.target.value)}
+                    placeholder="https://tiktok.com/@yourpage"
+                />
+                <label>Contact Email:</label>
+                <input
+                    type="email"
+                    value={state.contactEmail}
+                    onChange={(e) => updateState({ contactEmail: e.target.value })}
+                    placeholder="hello@incubator.com"
+                />
+            </CollapsibleSection >
+
+
 
             {/* Animations Section */}
-            <CollapsibleSection title="Animations" defaultOpen={false}>
+            < CollapsibleSection title="Animations" defaultOpen={false} >
                 <div className="option-group">
                     <label>Hero Entrance:</label>
                     <select
@@ -1462,47 +1814,10 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                         <option value="shimmer">Shimmer</option>
                     </select>
                 </div>
-            </CollapsibleSection>
+            </CollapsibleSection >
 
-            {/* Links Section */}
-            <CollapsibleSection title="Links" defaultOpen={false}>
-                <label>Instagram URL:</label>
-                <input
-                    type="url"
-                    value={state.socialLinks.instagram}
-                    onChange={(e) => updateSocialLink('instagram', e.target.value)}
-                    placeholder="https://instagram.com/yourpage"
-                />
-                <label>Twitter / X URL:</label>
-                <input
-                    type="url"
-                    value={state.socialLinks.twitter}
-                    onChange={(e) => updateSocialLink('twitter', e.target.value)}
-                    placeholder="https://x.com/yourpage"
-                />
-                <label>LinkedIn URL:</label>
-                <input
-                    type="url"
-                    value={state.socialLinks.linkedin}
-                    onChange={(e) => updateSocialLink('linkedin', e.target.value)}
-                    placeholder="https://linkedin.com/company/yourpage"
-                />
-                <label>TikTok URL:</label>
-                <input
-                    type="url"
-                    value={state.socialLinks.tiktok}
-                    onChange={(e) => updateSocialLink('tiktok', e.target.value)}
-                    placeholder="https://tiktok.com/@yourpage"
-                />
-                <label>Contact Email:</label>
-                <input
-                    type="email"
-                    value={state.contactEmail}
-                    onChange={(e) => updateState({ contactEmail: e.target.value })}
-                    placeholder="hello@incubator.com"
-                />
-            </CollapsibleSection>
-        </div>
+
+        </div >
     )
 }
 
