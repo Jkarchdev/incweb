@@ -672,7 +672,7 @@ function App() {
                   type="text"
                   value={teamName}
                   onChange={(e) => setTeamName(e.target.value)}
-                  placeholder="Team Name (e.g., Team Alpha)"
+                  placeholder="Team Name"
                   className="modal-input"
                   autoFocus
                   disabled={isSubmitting}
