@@ -7,7 +7,7 @@ interface WavesProps {
 
 const Waves = ({ settings }: WavesProps) => {
   const animationDuration = 20 - (settings.speed / 100) * 15 // 5-20s
-  const waveOpacity = 0.15 + (settings.density / 100) * 0.25
+  const waveOpacity = 0.3 + (settings.density / 100) * 0.25
 
   return (
     <div className="waves-container">

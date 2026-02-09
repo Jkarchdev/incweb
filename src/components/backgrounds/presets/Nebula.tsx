@@ -5,7 +5,7 @@ interface NebulaProps {
 }
 
 const Nebula = ({ settings }: NebulaProps) => {
-  const cloudOpacity = 0.15 + (settings.density / 100) * 0.25
+  const cloudOpacity = 0.3 + (settings.density / 100) * 0.25
   const cloudSpread = 50 + (settings.density / 100) * 30 // 50-80%
   const noiseOpacity = 0.05 + (settings.density / 100) * 0.1
 

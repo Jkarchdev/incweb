@@ -2,7 +2,7 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: radial-gradient(circle at 50% 50%, var(--border) 0%, transparent 50%);
+  background: radial-gradient(circle at 50% 50%, var(--border) 0%, transparent 60%);
 }
 
 .plasma-blob {

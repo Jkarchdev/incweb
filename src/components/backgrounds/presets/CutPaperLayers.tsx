@@ -14,10 +14,10 @@ interface LayerConfig {
 }
 
 const LAYERS: LayerConfig[] = [
-  { color: 'var(--primary)', borderRadius: '62% 38% 72% 28% / 48% 62% 38% 52%', style: { top: '5%', left: '-8%', width: '65%', height: '55%' }, opacity: 0.1 },
-  { color: 'var(--border)',  borderRadius: '38% 62% 28% 72% / 58% 38% 62% 42%', style: { top: '25%', right: '-12%', width: '60%', height: '50%' }, opacity: 0.12 },
-  { color: 'var(--muted)',   borderRadius: '52% 48% 58% 42% / 42% 68% 32% 58%', style: { bottom: '0%', left: '8%', width: '55%', height: '45%' }, opacity: 0.08 },
-  { color: 'var(--primary)', borderRadius: '68% 32% 48% 52% / 52% 48% 62% 38%', style: { bottom: '15%', right: '2%', width: '45%', height: '40%' }, opacity: 0.1 },
+  { color: 'var(--primary)', borderRadius: '62% 38% 72% 28% / 48% 62% 38% 52%', style: { top: '5%', left: '-8%', width: '65%', height: '55%' }, opacity: 0.25 },
+  { color: 'var(--border)',  borderRadius: '38% 62% 28% 72% / 58% 38% 62% 42%', style: { top: '25%', right: '-12%', width: '60%', height: '50%' }, opacity: 0.3 },
+  { color: 'var(--muted)',   borderRadius: '52% 48% 58% 42% / 42% 68% 32% 58%', style: { bottom: '0%', left: '8%', width: '55%', height: '45%' }, opacity: 0.2 },
+  { color: 'var(--primary)', borderRadius: '68% 32% 48% 52% / 52% 48% 62% 38%', style: { bottom: '15%', right: '2%', width: '45%', height: '40%' }, opacity: 0.25 },
 ]
 
 const CutPaperLayers = ({ settings }: CutPaperLayersProps) => {

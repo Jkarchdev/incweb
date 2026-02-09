@@ -1,0 +1,39 @@
+.light-rays {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.light-ray {
+  position: absolute;
+  inset: 0;
+  will-change: opacity, transform;
+}
+
+.light-ray--0 { animation: ray-pulse-0 ease-in-out infinite; }
+.light-ray--1 { animation: ray-pulse-1 ease-in-out infinite; }
+.light-ray--2 { animation: ray-pulse-2 ease-in-out infinite; }
+
+@keyframes ray-pulse-0 {
+  0%   { opacity: 0.5; transform: rotate(0deg); }
+  50%  { opacity: 0.8; transform: rotate(3deg); }
+  100% { opacity: 0.5; transform: rotate(0deg); }
+}
+
+@keyframes ray-pulse-1 {
+  0%   { opacity: 0.4; transform: rotate(0deg); }
+  50%  { opacity: 0.7; transform: rotate(-2deg); }
+  100% { opacity: 0.4; transform: rotate(0deg); }
+}
+
+@keyframes ray-pulse-2 {
+  0%   { opacity: 0.6; transform: rotate(0deg); }
+  50%  { opacity: 0.9; transform: rotate(2deg); }
+  100% { opacity: 0.6; transform: rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .light-ray {
+    animation: none !important;
+  }
+}

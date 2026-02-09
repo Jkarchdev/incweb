@@ -24,6 +24,13 @@ import MatrixRain from './presets/MatrixRain'
 import PulseRings from './presets/PulseRings'
 import Fireflies from './presets/Fireflies'
 import Spiral from './presets/Spiral'
+import BokehLights from './presets/BokehLights'
+import GradientWash from './presets/GradientWash'
+import NeonGlow from './presets/NeonGlow'
+import LightRays from './presets/LightRays'
+import ColorBands from './presets/ColorBands'
+import GridPulse from './presets/GridPulse'
+import SolidColor from './presets/SolidColor'
 import './BackgroundRenderer.css'
 
 interface BackgroundRendererProps {
@@ -55,6 +62,13 @@ const PRESET_COMPONENTS: Record<string, React.ComponentType<{ settings: Backgrou
   pulse_rings: PulseRings,
   fireflies: Fireflies,
   spiral: Spiral,
+  bokeh_lights: BokehLights,
+  gradient_wash: GradientWash,
+  neon_glow: NeonGlow,
+  light_rays: LightRays,
+  color_bands: ColorBands,
+  grid_pulse: GridPulse,
+  solid_color: SolidColor,
 }
 
 const BackgroundRenderer = React.memo(({ config }: BackgroundRendererProps) => {
@@ -64,6 +78,14 @@ const BackgroundRenderer = React.memo(({ config }: BackgroundRendererProps) => {
   const opacity = config.settings.intensity / 100
   const blur = config.settings.blur
 
+  const colorOverrides: React.CSSProperties = {}
+  if (config.color1) {
+    (colorOverrides as Record<string, string>)['--primary'] = config.color1;
+    (colorOverrides as Record<string, string>)['--secondary'] = config.color2 || config.color1;
+    (colorOverrides as Record<string, string>)['--border'] = `color-mix(in srgb, ${config.color1} 70%, ${config.color2 || config.color1})`;
+    (colorOverrides as Record<string, string>)['--muted'] = `color-mix(in srgb, ${config.color2 || config.color1} 60%, ${config.color1})`;
+  }
+
   return (
     <div
       className="background-renderer"
@@ -71,6 +93,7 @@ const BackgroundRenderer = React.memo(({ config }: BackgroundRendererProps) => {
         opacity,
         filter: blur > 0 ? `blur(${blur}px)` : undefined,
         willChange: 'opacity, filter',
+        ...colorOverrides,
       }}
     >
       <PresetComponent settings={config.settings} />

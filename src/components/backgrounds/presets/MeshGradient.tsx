@@ -23,7 +23,7 @@ const MeshGradient = ({ settings }: MeshGradientProps) => {
             `radial-gradient(ellipse at 25% 65%, var(--primary) 0%, transparent ${spread - 10}%)`,
             `radial-gradient(ellipse at 75% 70%, var(--border) 0%, transparent ${spread - 15}%)`,
           ].join(', '),
-          opacity: 0.4,
+          opacity: 0.65,
         }}
       />
       <svg

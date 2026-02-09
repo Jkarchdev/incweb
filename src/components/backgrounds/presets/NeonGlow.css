@@ -1,0 +1,61 @@
+.neon-glow {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.neon-shape {
+  position: absolute;
+  opacity: 0.7;
+  will-change: transform;
+}
+
+.neon-shape--circle {
+  border-radius: 50%;
+  border: 2px solid;
+  background: transparent;
+}
+
+.neon-shape--line {
+  border-radius: 2px;
+  border: none;
+  background: currentColor;
+  border-color: inherit;
+  background-color: var(--primary);
+}
+
+.neon-shape--arc {
+  border-radius: 50%;
+  border: 2px solid;
+  background: transparent;
+  clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+}
+
+.neon-shape--drift-0 { animation: neon-drift-0 ease-in-out infinite; }
+.neon-shape--drift-1 { animation: neon-drift-1 ease-in-out infinite; }
+.neon-shape--drift-2 { animation: neon-drift-2 ease-in-out infinite; }
+
+@keyframes neon-drift-0 {
+  0%   { transform: translate(-50%, -50%) rotate(0deg); }
+  50%  { transform: translate(-50%, -50%) rotate(15deg) translateX(20px); }
+  100% { transform: translate(-50%, -50%) rotate(0deg); }
+}
+
+@keyframes neon-drift-1 {
+  0%   { transform: translate(-50%, -50%) rotate(0deg); }
+  33%  { transform: translate(-50%, -50%) rotate(-10deg) translateY(15px); }
+  66%  { transform: translate(-50%, -50%) rotate(10deg) translateY(-15px); }
+  100% { transform: translate(-50%, -50%) rotate(0deg); }
+}
+
+@keyframes neon-drift-2 {
+  0%   { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  50%  { transform: translate(-50%, -50%) rotate(20deg) scale(1.1); }
+  100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neon-shape {
+    animation: none !important;
+  }
+}

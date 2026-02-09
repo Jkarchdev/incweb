@@ -8,7 +8,7 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.5;
+  opacity: 0.8;
   will-change: transform;
 }
 

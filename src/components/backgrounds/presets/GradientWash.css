@@ -1,0 +1,36 @@
+.gradient-wash {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.gradient-wash-layer {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    0deg,
+    var(--primary) 0%,
+    var(--secondary) 25%,
+    var(--border) 50%,
+    var(--muted) 75%,
+    var(--primary) 100%
+  );
+  opacity: 0.7;
+  animation: gradient-wash-rotate linear infinite;
+  will-change: transform;
+}
+
+@keyframes gradient-wash-rotate {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-wash-layer {
+    animation: none !important;
+    transform: rotate(30deg);
+  }
+}

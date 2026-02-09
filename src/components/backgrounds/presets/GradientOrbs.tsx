@@ -5,7 +5,7 @@ interface GradientOrbsProps {
 }
 
 const GradientOrbs = ({ settings }: GradientOrbsProps) => {
-  const orbOpacity = 0.2 + (settings.density / 100) * 0.3
+  const orbOpacity = 0.35 + (settings.density / 100) * 0.3
   const orbSize = 40 + (settings.density / 100) * 35 // 40-75%
 
   return (

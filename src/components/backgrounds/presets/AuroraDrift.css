@@ -32,47 +32,47 @@
 }
 
 @keyframes aurora-drift-0 {
-  0%   { transform: translateX(-25%) skewY(-4deg) scaleY(1);    opacity: 0.45; }
-  20%  { transform: translateX(-10%) skewY(-1deg) scaleY(1.1);  opacity: 0.6;  }
-  40%  { transform: translateX(15%)  skewY(3deg)  scaleY(0.9);  opacity: 0.5;  }
-  60%  { transform: translateX(25%)  skewY(2deg)  scaleY(1.05); opacity: 0.65; }
-  80%  { transform: translateX(5%)   skewY(-2deg) scaleY(1.08); opacity: 0.55; }
-  100% { transform: translateX(-25%) skewY(-4deg) scaleY(1);    opacity: 0.45; }
+  0%   { transform: translateX(-25%) skewY(-4deg) scaleY(1);    opacity: 0.65; }
+  20%  { transform: translateX(-10%) skewY(-1deg) scaleY(1.1);  opacity: 0.8;  }
+  40%  { transform: translateX(15%)  skewY(3deg)  scaleY(0.9);  opacity: 0.7;  }
+  60%  { transform: translateX(25%)  skewY(2deg)  scaleY(1.05); opacity: 0.85; }
+  80%  { transform: translateX(5%)   skewY(-2deg) scaleY(1.08); opacity: 0.75; }
+  100% { transform: translateX(-25%) skewY(-4deg) scaleY(1);    opacity: 0.65; }
 }
 
 @keyframes aurora-drift-1 {
-  0%   { transform: translateX(20%)  skewY(3deg)  scaleY(1);    opacity: 0.4;  }
-  25%  { transform: translateX(-5%)  skewY(0deg)  scaleY(1.12); opacity: 0.55; }
-  50%  { transform: translateX(-20%) skewY(-3deg) scaleY(0.92); opacity: 0.6;  }
-  75%  { transform: translateX(10%)  skewY(2deg)  scaleY(1.06); opacity: 0.45; }
-  100% { transform: translateX(20%)  skewY(3deg)  scaleY(1);    opacity: 0.4;  }
+  0%   { transform: translateX(20%)  skewY(3deg)  scaleY(1);    opacity: 0.6;  }
+  25%  { transform: translateX(-5%)  skewY(0deg)  scaleY(1.12); opacity: 0.75; }
+  50%  { transform: translateX(-20%) skewY(-3deg) scaleY(0.92); opacity: 0.8;  }
+  75%  { transform: translateX(10%)  skewY(2deg)  scaleY(1.06); opacity: 0.65; }
+  100% { transform: translateX(20%)  skewY(3deg)  scaleY(1);    opacity: 0.6;  }
 }
 
 @keyframes aurora-drift-2 {
-  0%   { transform: translateX(-15%) skewY(2deg)  scaleY(1.05); opacity: 0.5;  }
-  30%  { transform: translateX(20%)  skewY(-2deg) scaleY(0.95); opacity: 0.6;  }
-  60%  { transform: translateX(5%)   skewY(4deg)  scaleY(1.1);  opacity: 0.4;  }
-  100% { transform: translateX(-15%) skewY(2deg)  scaleY(1.05); opacity: 0.5;  }
+  0%   { transform: translateX(-15%) skewY(2deg)  scaleY(1.05); opacity: 0.7;  }
+  30%  { transform: translateX(20%)  skewY(-2deg) scaleY(0.95); opacity: 0.8;  }
+  60%  { transform: translateX(5%)   skewY(4deg)  scaleY(1.1);  opacity: 0.6;  }
+  100% { transform: translateX(-15%) skewY(2deg)  scaleY(1.05); opacity: 0.7;  }
 }
 
 @keyframes aurora-drift-3 {
-  0%   { transform: translateX(10%)  skewY(-3deg) scaleY(0.95); opacity: 0.55; }
-  35%  { transform: translateX(-20%) skewY(1deg)  scaleY(1.08); opacity: 0.4;  }
-  70%  { transform: translateX(15%)  skewY(3deg)  scaleY(1);    opacity: 0.65; }
-  100% { transform: translateX(10%)  skewY(-3deg) scaleY(0.95); opacity: 0.55; }
+  0%   { transform: translateX(10%)  skewY(-3deg) scaleY(0.95); opacity: 0.75; }
+  35%  { transform: translateX(-20%) skewY(1deg)  scaleY(1.08); opacity: 0.6;  }
+  70%  { transform: translateX(15%)  skewY(3deg)  scaleY(1);    opacity: 0.85; }
+  100% { transform: translateX(10%)  skewY(-3deg) scaleY(0.95); opacity: 0.75; }
 }
 
 @keyframes aurora-drift-4 {
-  0%   { transform: translateX(-10%) skewY(1deg)  scaleY(1.02); opacity: 0.5;  }
-  40%  { transform: translateX(25%)  skewY(-4deg) scaleY(0.9);  opacity: 0.6;  }
-  80%  { transform: translateX(-5%)  skewY(2deg)  scaleY(1.1);  opacity: 0.45; }
-  100% { transform: translateX(-10%) skewY(1deg)  scaleY(1.02); opacity: 0.5;  }
+  0%   { transform: translateX(-10%) skewY(1deg)  scaleY(1.02); opacity: 0.7;  }
+  40%  { transform: translateX(25%)  skewY(-4deg) scaleY(0.9);  opacity: 0.8;  }
+  80%  { transform: translateX(-5%)  skewY(2deg)  scaleY(1.1);  opacity: 0.65; }
+  100% { transform: translateX(-10%) skewY(1deg)  scaleY(1.02); opacity: 0.7;  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .aurora-ribbon {
     animation: none !important;
     transform: translateX(0) skewY(0deg);
-    opacity: 0.5;
+    opacity: 0.7;
   }
 }

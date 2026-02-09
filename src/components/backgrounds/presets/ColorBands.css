@@ -1,0 +1,24 @@
+.color-bands {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.color-bands-layer {
+  position: absolute;
+  inset: -100%;
+  opacity: 0.6;
+  animation: color-bands-scroll linear infinite;
+  will-change: background-position;
+}
+
+@keyframes color-bands-scroll {
+  0%   { background-position: 0 0; }
+  100% { background-position: 500px 500px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .color-bands-layer {
+    animation: none !important;
+  }
+}

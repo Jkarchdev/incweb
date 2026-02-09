@@ -9,6 +9,8 @@ export interface BackgroundConfig {
   presetId: string
   type: 'static' | 'animated'
   settings: BackgroundSettings
+  color1: string
+  color2: string
 }
 
 export interface BackgroundPreset {
@@ -19,9 +21,9 @@ export interface BackgroundPreset {
 }
 
 export const DEFAULT_BACKGROUND_SETTINGS: BackgroundSettings = {
-  intensity: 45,
-  speed: 35,
-  density: 40,
+  intensity: 65,
+  speed: 50,
+  density: 55,
   blur: 0,
 }
 
@@ -29,6 +31,8 @@ export const DEFAULT_BACKGROUND: BackgroundConfig = {
   presetId: 'mesh_gradient',
   type: 'static',
   settings: { ...DEFAULT_BACKGROUND_SETTINGS },
+  color1: '',
+  color2: '',
 }
 
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
@@ -47,7 +51,14 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   { id: 'pulse_rings', name: 'Pulse Rings', type: 'animated', description: 'Pulsing concentric rings' },
   { id: 'fireflies', name: 'Fireflies', type: 'animated', description: 'Floating glowing particles' },
   { id: 'spiral', name: 'Spiral', type: 'animated', description: 'Rotating spiral arms' },
+  { id: 'bokeh_lights', name: 'Bokeh Lights', type: 'animated', description: 'Large soft glowing circles' },
+  { id: 'gradient_wash', name: 'Gradient Wash', type: 'animated', description: 'Full-screen rotating gradient' },
+  { id: 'neon_glow', name: 'Neon Glow', type: 'animated', description: 'Glowing geometric shapes' },
+  { id: 'light_rays', name: 'Light Rays', type: 'animated', description: 'Dramatic light beams from corner' },
+  { id: 'color_bands', name: 'Color Bands', type: 'animated', description: 'Bold diagonal scrolling stripes' },
+  { id: 'grid_pulse', name: 'Grid Pulse', type: 'animated', description: 'Pulsing grid wave pattern' },
   // Static presets
+  { id: 'solid_color', name: 'Solid Color', type: 'static', description: 'Flat solid color background' },
   { id: 'mesh_gradient', name: 'Mesh Gradient', type: 'static', description: 'Layered radial gradients with noise' },
   { id: 'spotlight_vignette', name: 'Spotlight', type: 'static', description: 'Centered spotlight with vignette edges' },
   { id: 'cut_paper', name: 'Cut Paper', type: 'static', description: 'Layered paper shapes with depth' },

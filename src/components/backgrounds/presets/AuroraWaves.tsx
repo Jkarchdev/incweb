@@ -7,7 +7,7 @@ interface AuroraWavesProps {
 
 const AuroraWaves = ({ settings }: AuroraWavesProps) => {
   const animationDuration = 12 - (settings.speed / 100) * 8 // 4-12s
-  const waveOpacity = 0.15 + (settings.density / 100) * 0.25
+  const waveOpacity = 0.3 + (settings.density / 100) * 0.25
 
   return (
     <div className="aurora-waves-container">

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { AppState, Teammate, HeroLogoConfig, SocialLinks, SectionVisibility, ProductPage, HeroAnimation, SectionAnimation, CardAnimation, HoverStyle, TextAnimation, CardStyle, TeamCardLayout } from '../App'
+import type { AppState, Teammate, HeroLogoConfig, HeroProductImage, DecorativeImage, SocialLinks, SectionVisibility, ProductPage, HeroAnimation, SectionAnimation, CardAnimation, HoverStyle, TextAnimation, CardStyle, TeamCardLayout } from '../App'
 import { BACKGROUND_PRESETS } from './backgrounds/backgroundPresets'
 import PresetThumbnail from './backgrounds/PresetThumbnail'
 import './Controls.css'
@@ -26,6 +26,16 @@ const FONT_OPTIONS = [
     'Syne',
     'Unbounded',
     'Righteous',
+    'Black Ops One',
+    'Anton',
+    'Archivo Black',
+    'Kanit',
+    'Russo One',
+    'Bowlby One SC',
+    'Bungee',
+    'Exo 2',
+    'Fjalla One',
+    'Permanent Marker',
     // Elegant / Serif
     'Playfair Display',
     'Crimson Pro',
@@ -162,6 +172,71 @@ const Controls = ({ state, updateState }: ControlsProps) => {
         updateState({
             productPage: { ...state.productPage, [key]: value }
         })
+    }
+
+    const updateHeroProductImage = <K extends keyof HeroProductImage>(key: K, value: HeroProductImage[K]) => {
+        updateState({
+            heroProductImage: {
+                ...state.heroProductImage,
+                [key]: value,
+            }
+        })
+    }
+
+    const handleHeroProductUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (file) {
+            const reader = new FileReader()
+            reader.onload = (event) => {
+                updateState({
+                    heroProductImage: {
+                        ...state.heroProductImage,
+                        url: event.target?.result as string
+                    }
+                })
+            }
+            reader.readAsDataURL(file)
+        }
+    }
+
+    const handleDecorativeImageUpload = (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (file) {
+            const reader = new FileReader()
+            reader.onload = (event) => {
+                const newImages = state.decorativeImages.map(img =>
+                    img.id === id ? { ...img, url: event.target?.result as string } : img
+                )
+                updateState({ decorativeImages: newImages })
+            }
+            reader.readAsDataURL(file)
+        }
+    }
+
+    const addDecorativeImage = () => {
+        const newImage: DecorativeImage = {
+            id: Date.now().toString(),
+            url: '',
+            x: 0,
+            y: 50,
+            scale: 100,
+            rotation: 0,
+            zIndex: 5,
+        }
+        updateState({ decorativeImages: [...state.decorativeImages, newImage] })
+    }
+
+    const removeDecorativeImage = (id: string) => {
+        updateState({
+            decorativeImages: state.decorativeImages.filter(img => img.id !== id)
+        })
+    }
+
+    const updateDecorativeImage = (id: string, key: keyof DecorativeImage, value: string | number) => {
+        const newImages = state.decorativeImages.map(img =>
+            img.id === id ? { ...img, [key]: value } : img
+        )
+        updateState({ decorativeImages: newImages })
     }
 
     const handleProductImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -329,6 +404,74 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     ))}
                 </div>
 
+                <label>Background Color 1:</label>
+                <div className="color-input-group">
+                    <input
+                        type="color"
+                        value={state.background.color1 || '#3b82f6'}
+                        onChange={(e) => updateState({ background: { ...state.background, color1: e.target.value } })}
+                        style={{ width: '60px', height: '38px', cursor: 'pointer' }}
+                    />
+                    <input
+                        type="text"
+                        value={state.background.color1}
+                        onChange={(e) => {
+                            const v = e.target.value
+                            if (/^#[0-9A-Fa-f]{0,6}$/.test(v) || v === '') {
+                                updateState({ background: { ...state.background, color1: v } })
+                            }
+                        }}
+                        placeholder="Theme default"
+                        maxLength={7}
+                        style={{ flex: 1 }}
+                    />
+                    {state.background.color1 && (
+                        <button
+                            type="button"
+                            className="clear-color-btn"
+                            onClick={() => updateState({ background: { ...state.background, color1: '' } })}
+                            title="Reset to theme color"
+                            style={{ padding: '0 8px', cursor: 'pointer', fontSize: '14px', background: 'none', border: '1px solid var(--border)', borderRadius: '4px' }}
+                        >
+                            &times;
+                        </button>
+                    )}
+                </div>
+
+                <label>Background Color 2:</label>
+                <div className="color-input-group">
+                    <input
+                        type="color"
+                        value={state.background.color2 || '#06b6d4'}
+                        onChange={(e) => updateState({ background: { ...state.background, color2: e.target.value } })}
+                        style={{ width: '60px', height: '38px', cursor: 'pointer' }}
+                    />
+                    <input
+                        type="text"
+                        value={state.background.color2}
+                        onChange={(e) => {
+                            const v = e.target.value
+                            if (/^#[0-9A-Fa-f]{0,6}$/.test(v) || v === '') {
+                                updateState({ background: { ...state.background, color2: v } })
+                            }
+                        }}
+                        placeholder="Theme default"
+                        maxLength={7}
+                        style={{ flex: 1 }}
+                    />
+                    {state.background.color2 && (
+                        <button
+                            type="button"
+                            className="clear-color-btn"
+                            onClick={() => updateState({ background: { ...state.background, color2: '' } })}
+                            title="Reset to theme color"
+                            style={{ padding: '0 8px', cursor: 'pointer', fontSize: '14px', background: 'none', border: '1px solid var(--border)', borderRadius: '4px' }}
+                        >
+                            &times;
+                        </button>
+                    )}
+                </div>
+
                 <div className="bg-sliders">
                     <label className="slider-label">
                         Intensity
@@ -413,6 +556,20 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                     </div>
                 </div>
 
+                <div className="option-group">
+                    <label className="slider-label">
+                        Hero Height
+                        <span className="slider-value">{state.heroHeight}px</span>
+                    </label>
+                    <input
+                        type="range"
+                        min={300}
+                        max={700}
+                        value={state.heroHeight}
+                        onChange={(e) => updateState({ heroHeight: Number(e.target.value) })}
+                    />
+                </div>
+
                 <div className="position-sliders">
                     <p className="section-hint" style={{ marginTop: '1rem' }}>Logo Position</p>
                     <div className="option-row">
@@ -444,6 +601,198 @@ const Controls = ({ state, updateState }: ControlsProps) => {
                         </div>
                     </div>
                 </div>
+            </CollapsibleSection>
+
+            {/* Hero Product Image Section */}
+            <CollapsibleSection title="Hero Product Image" defaultOpen={false}>
+                <label className="toggle-switch-label">
+                    <span>Show Product Image</span>
+                    <div className={`toggle-switch ${state.heroProductImage.visible ? 'toggle-switch--on' : ''}`}
+                        onClick={() => updateHeroProductImage('visible', !state.heroProductImage.visible)}
+                    >
+                        <div className="toggle-switch-thumb" />
+                    </div>
+                </label>
+
+                <div className="file-upload">
+                    <label htmlFor="hero-product-upload" className="upload-button">
+                        {state.heroProductImage.url ? '✓ Product Image Uploaded' : 'Upload Product Image'}
+                    </label>
+                    <input
+                        id="hero-product-upload"
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp"
+                        onChange={handleHeroProductUpload}
+                    />
+                </div>
+
+                <div className="position-sliders">
+                    <p className="section-hint" style={{ marginTop: '1rem' }}>Position</p>
+                    <div className="option-row">
+                        <div className="option-group">
+                            <label className="slider-label">
+                                X Position
+                                <span className="slider-value">{state.heroProductImage.x}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-200}
+                                max={200}
+                                value={state.heroProductImage.x}
+                                onChange={(e) => updateHeroProductImage('x', Number(e.target.value))}
+                            />
+                        </div>
+                        <div className="option-group">
+                            <label className="slider-label">
+                                Y Position
+                                <span className="slider-value">{state.heroProductImage.y}</span>
+                            </label>
+                            <input
+                                type="range"
+                                min={-200}
+                                max={200}
+                                value={state.heroProductImage.y}
+                                onChange={(e) => updateHeroProductImage('y', Number(e.target.value))}
+                            />
+                        </div>
+                    </div>
+
+                    <label className="slider-label">
+                        Scale
+                        <span className="slider-value">{state.heroProductImage.scale}%</span>
+                    </label>
+                    <input
+                        type="range"
+                        min={50}
+                        max={200}
+                        value={state.heroProductImage.scale}
+                        onChange={(e) => updateHeroProductImage('scale', Number(e.target.value))}
+                    />
+                </div>
+            </CollapsibleSection>
+
+            {/* Decorative Floating Images Section */}
+            <CollapsibleSection title="Decorative Floating Images" defaultOpen={false}>
+                <p className="section-hint">Add decorative images that float around your page (like oranges, splashes, etc.)</p>
+
+                <button
+                    className="upload-button"
+                    onClick={addDecorativeImage}
+                    type="button"
+                    style={{ width: '100%', marginBottom: '1rem' }}
+                >
+                    + Add Decorative Image
+                </button>
+
+                {state.decorativeImages.length === 0 && (
+                    <p style={{ color: 'var(--muted-text)', fontSize: '0.875rem', textAlign: 'center', margin: '1rem 0' }}>
+                        No decorative images added yet
+                    </p>
+                )}
+
+                {state.decorativeImages.map((img, index) => (
+                    <div key={img.id} className="decorative-image-control" style={{
+                        border: '1px solid var(--border)',
+                        borderRadius: '8px',
+                        padding: '1rem',
+                        marginBottom: '1rem',
+                        background: 'var(--card-bg)'
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                            <h4 style={{ margin: 0 }}>Decorative Image {index + 1}</h4>
+                            <button
+                                onClick={() => removeDecorativeImage(img.id)}
+                                className="upload-button"
+                                style={{ padding: '0.25rem 0.75rem', fontSize: '0.875rem', background: '#ef4444' }}
+                                type="button"
+                            >
+                                Remove
+                            </button>
+                        </div>
+
+                        <div className="file-upload">
+                            <label htmlFor={`decorative-${img.id}`} className="upload-button small">
+                                {img.url ? '✓ Image Uploaded' : 'Upload Image'}
+                            </label>
+                            <input
+                                id={`decorative-${img.id}`}
+                                type="file"
+                                accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                                onChange={(e) => handleDecorativeImageUpload(img.id, e)}
+                            />
+                        </div>
+
+                        <div className="option-row">
+                            <div className="option-group">
+                                <label className="slider-label">
+                                    X Position
+                                    <span className="slider-value">{img.x}%</span>
+                                </label>
+                                <input
+                                    type="range"
+                                    min={-100}
+                                    max={100}
+                                    value={img.x}
+                                    onChange={(e) => updateDecorativeImage(img.id, 'x', Number(e.target.value))}
+                                />
+                            </div>
+                            <div className="option-group">
+                                <label className="slider-label">
+                                    Y Position
+                                    <span className="slider-value">{img.y}%</span>
+                                </label>
+                                <input
+                                    type="range"
+                                    min={0}
+                                    max={100}
+                                    value={img.y}
+                                    onChange={(e) => updateDecorativeImage(img.id, 'y', Number(e.target.value))}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="option-row">
+                            <div className="option-group">
+                                <label className="slider-label">
+                                    Scale
+                                    <span className="slider-value">{img.scale}%</span>
+                                </label>
+                                <input
+                                    type="range"
+                                    min={20}
+                                    max={150}
+                                    value={img.scale}
+                                    onChange={(e) => updateDecorativeImage(img.id, 'scale', Number(e.target.value))}
+                                />
+                            </div>
+                            <div className="option-group">
+                                <label className="slider-label">
+                                    Rotation
+                                    <span className="slider-value">{img.rotation}°</span>
+                                </label>
+                                <input
+                                    type="range"
+                                    min={-180}
+                                    max={180}
+                                    value={img.rotation}
+                                    onChange={(e) => updateDecorativeImage(img.id, 'rotation', Number(e.target.value))}
+                                />
+                            </div>
+                        </div>
+
+                        <label className="slider-label">
+                            Layer (Z-Index)
+                            <span className="slider-value">{img.zIndex}</span>
+                        </label>
+                        <input
+                            type="range"
+                            min={1}
+                            max={10}
+                            value={img.zIndex}
+                            onChange={(e) => updateDecorativeImage(img.id, 'zIndex', Number(e.target.value))}
+                        />
+                    </div>
+                ))}
             </CollapsibleSection>
 
             {/* Hero Headline Section */}
@@ -988,56 +1337,61 @@ const Controls = ({ state, updateState }: ControlsProps) => {
 
             {/* Typography Section */}
             <CollapsibleSection title="Typography" defaultOpen={false}>
-                <div className="option-row">
-                    <div className="option-group">
-                        <label>Heading Font:</label>
-                        <select
-                            value={state.headingFont}
-                            onChange={(e) => updateState({ headingFont: e.target.value })}
-                        >
-                            {FONT_OPTIONS.map(f => (
-                                <option key={f} value={f} style={{ fontFamily: `'${f}', sans-serif` }}>{f}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="option-group">
-                        <label>Body Font:</label>
-                        <select
-                            value={state.bodyFont}
-                            onChange={(e) => updateState({ bodyFont: e.target.value })}
-                        >
-                            {FONT_OPTIONS.map(f => (
-                                <option key={f} value={f} style={{ fontFamily: `'${f}', sans-serif` }}>{f}</option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
+                <p className="section-hint">Control fonts for team cards and footer links</p>
 
-                <div className="bg-sliders">
-                    <label className="slider-label">
-                        Heading Size
-                        <span className="slider-value">{state.headingSize}%</span>
-                    </label>
-                    <input
-                        type="range"
-                        min={50}
-                        max={200}
-                        value={state.headingSize}
-                        onChange={(e) => updateState({ headingSize: Number(e.target.value) })}
-                    />
+                <label>Team Member Names Font:</label>
+                <select
+                    value={state.teamNameFont}
+                    onChange={(e) => updateState({ teamNameFont: e.target.value })}
+                >
+                    {FONT_OPTIONS.map(f => (
+                        <option key={f} value={f}>{f}</option>
+                    ))}
+                </select>
 
-                    <label className="slider-label">
-                        Body Size
-                        <span className="slider-value">{state.bodySize}%</span>
-                    </label>
-                    <input
-                        type="range"
-                        min={50}
-                        max={200}
-                        value={state.bodySize}
-                        onChange={(e) => updateState({ bodySize: Number(e.target.value) })}
-                    />
-                </div>
+                <label className="slider-label">
+                    Team Name Size
+                    <span className="slider-value">{state.teamNameSize}%</span>
+                </label>
+                <input
+                    type="range"
+                    min={50}
+                    max={200}
+                    value={state.teamNameSize}
+                    onChange={(e) => updateState({ teamNameSize: Number(e.target.value) })}
+                />
+
+                <label style={{ marginTop: '1rem' }}>Team Member Roles Font:</label>
+                <select
+                    value={state.teamRoleFont}
+                    onChange={(e) => updateState({ teamRoleFont: e.target.value })}
+                >
+                    {FONT_OPTIONS.map(f => (
+                        <option key={f} value={f}>{f}</option>
+                    ))}
+                </select>
+
+                <label className="slider-label">
+                    Team Role Size
+                    <span className="slider-value">{state.teamRoleSize}%</span>
+                </label>
+                <input
+                    type="range"
+                    min={50}
+                    max={200}
+                    value={state.teamRoleSize}
+                    onChange={(e) => updateState({ teamRoleSize: Number(e.target.value) })}
+                />
+
+                <label style={{ marginTop: '1rem' }}>Footer Links Font:</label>
+                <select
+                    value={state.footerFont}
+                    onChange={(e) => updateState({ footerFont: e.target.value })}
+                >
+                    {FONT_OPTIONS.map(f => (
+                        <option key={f} value={f}>{f}</option>
+                    ))}
+                </select>
             </CollapsibleSection>
 
             {/* Animations Section */}

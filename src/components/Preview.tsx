@@ -72,18 +72,19 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
         ...(state.heroGradientTo ? { '--gradient-to': state.heroGradientTo } : {}),
     } as React.CSSProperties
 
-    const hScale = state.headingSize / 100
-    const bScale = state.bodySize / 100
-    const headingStyle = { fontFamily: `'${state.headingFont}', sans-serif`, fontSize: `${hScale}em` }
-    const bodyStyle = { fontFamily: `'${state.bodyFont}', sans-serif`, fontSize: `${bScale}em` }
+    const teamNameScale = state.teamNameSize / 100
+    const teamRoleScale = state.teamRoleSize / 100
+    const teamNameStyle = { fontFamily: `'${state.teamNameFont}', sans-serif`, fontSize: `${1.5 * teamNameScale}rem` }
+    const teamRoleStyle = { fontFamily: `'${state.teamRoleFont}', sans-serif`, fontSize: `${1.125 * teamRoleScale}rem` }
+    const footerStyle = { fontFamily: `'${state.footerFont}', sans-serif` }
 
     const hasSocialLinks = state.socialLinks.instagram || state.socialLinks.twitter || state.socialLinks.linkedin || state.socialLinks.tiktok || state.contactEmail
 
     const renderTeamContent = () => (
         <section className={`team-section section-anim-${state.sectionAnimation}`}>
             <div className="container">
-                <h2 className="section-title" style={{ fontFamily: `'${state.teamHeadingFont}', sans-serif`, fontSize: `${state.teamHeadingSize / 100}em` }}>{state.teamHeading}</h2>
-                <p className="section-subtitle" style={{ fontFamily: `'${state.teamSubheadingFont}', sans-serif`, fontSize: `${state.teamSubheadingSize / 100}em` }}>{state.teamSubheading}</p>
+                <h2 className="section-title" style={{ fontFamily: `'${state.teamHeadingFont}', sans-serif`, fontSize: `${2.75 * (state.teamHeadingSize / 100)}rem` }}>{state.teamHeading}</h2>
+                <p className="section-subtitle" style={{ fontFamily: `'${state.teamSubheadingFont}', sans-serif`, fontSize: `${1.25 * (state.teamSubheadingSize / 100)}rem` }}>{state.teamSubheading}</p>
                 {state.teamDisplayMode === 'group' ? (
                     <div className="team-group-photo">
                         <img
@@ -106,8 +107,8 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                         loading="lazy"
                                     />
                                 </div>
-                                <h3 className="team-name" style={headingStyle}>{teammate.name}</h3>
-                                <p className="team-role" style={bodyStyle}>{teammate.role}</p>
+                                <h3 className="team-name" style={teamNameStyle}>{teammate.name}</h3>
+                                <p className="team-role" style={teamRoleStyle}>{teammate.role}</p>
                             </div>
                         ))}
                     </div>
@@ -122,6 +123,37 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
             style={customStyle}
         >
             <BackgroundRenderer config={state.background} />
+
+            {/* Decorative Floating Images */}
+            {state.decorativeImages.map((img) => (
+                img.url && (
+                    <div
+                        key={img.id}
+                        className="decorative-floating-image"
+                        style={{
+                            position: 'absolute',
+                            left: `${img.x}%`,
+                            top: `${img.y}%`,
+                            transform: `translate(-50%, -50%) scale(${img.scale / 100}) rotate(${img.rotation}deg)`,
+                            zIndex: img.zIndex,
+                            pointerEvents: 'none',
+                            maxWidth: '300px',
+                            width: '20vw',
+                        }}
+                    >
+                        <img
+                            src={img.url}
+                            alt="Decorative element"
+                            style={{
+                                width: '100%',
+                                height: 'auto',
+                                display: 'block',
+                                objectFit: 'contain',
+                            }}
+                        />
+                    </div>
+                )
+            ))}
 
             {/* Website Header */}
             <header className="website-header">
@@ -178,7 +210,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                             {/* Hero Logo Section */}
                             {state.sections.hero && (
                                 <section className={`hero-logo-section hero-anim-${state.heroAnimation}`}>
-                                    <div className="container hero-container">
+                                    <div className="container hero-container" style={{ minHeight: `${state.heroHeight}px` }}>
                                         {/* Logo block */}
                                         <div
                                             className={`hero-logo-block hero-logo--${state.heroLogo.size}`}
@@ -205,7 +237,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                                         style={{
                                                             fontFamily: `'${state.heroLogo.sideTextFont}', sans-serif`,
                                                             ...(!state.heroGradientText && state.heroTextAnimation !== 'shimmer' ? { color: state.heroLogo.sideTextColor || 'var(--text)' } : {}),
-                                                            fontSize: `${3 * hScale}rem`,
+                                                            fontSize: '3.5rem',
                                                             letterSpacing: `${state.heroLetterSpacing * 0.01}em`,
                                                             textShadow: state.heroLogo.textGlow
                                                                 ? `0 0 ${20 * (state.heroLogo.textGlowIntensity / 100)}px ${state.heroLogo.sideTextColor || 'var(--primary)'}, 0 0 ${40 * (state.heroLogo.textGlowIntensity / 100)}px ${state.heroLogo.sideTextColor || 'var(--primary)'}80`
@@ -224,7 +256,8 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                                     <p
                                                         className="hero-tagline"
                                                         style={{
-                                                            ...bodyStyle,
+                                                            fontFamily: `'${state.subtextFont}', sans-serif`,
+                                                            fontSize: `${1.375 * (state.subtextSize / 100)}rem`,
                                                             textShadow: state.heroLogo.textGlow
                                                                 ? `0 0 ${10 * (state.heroLogo.textGlowIntensity / 100)}px ${state.heroLogo.sideTextColor || 'var(--primary)'}, 0 0 ${20 * (state.heroLogo.textGlowIntensity / 100)}px ${state.heroLogo.sideTextColor || 'var(--primary)'}80`
                                                                 : state.heroLogo.textShadow
@@ -240,6 +273,22 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                                 )}
                                             </div>
                                         )}
+
+                                        {/* Hero Product Image */}
+                                        {state.heroProductImage.visible && state.heroProductImage.url && (
+                                            <div
+                                                className="hero-product-image-block"
+                                                style={{
+                                                    transform: `translate(${state.heroProductImage.x}%, ${state.heroProductImage.y}%) scale(${state.heroProductImage.scale / 100})`,
+                                                }}
+                                            >
+                                                <img
+                                                    src={state.heroProductImage.url}
+                                                    alt="Hero Product"
+                                                    className="hero-product-img"
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 </section>
                             )}
@@ -248,9 +297,9 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                             {state.sections.uvp && (
                                 <section className={`uvp-section section-anim-${state.sectionAnimation}`}>
                                     <div className="container">
-                                        <p className="uvp-text" style={{ fontFamily: `'${state.mainTextFont}', sans-serif`, fontSize: `${state.mainTextSize / 100}em` }}>{state.mainText}</p>
+                                        <p className="uvp-text" style={{ fontFamily: `'${state.mainTextFont}', sans-serif`, fontSize: `${3 * (state.mainTextSize / 100)}rem` }}>{state.mainText}</p>
                                         {state.heroSubtext && state.subtextVisible && (
-                                            <p className="uvp-subtext" style={{ fontFamily: `'${state.subtextFont}', sans-serif`, fontSize: `${state.subtextSize / 100}em` }}>{state.heroSubtext}</p>
+                                            <p className="uvp-subtext" style={{ fontFamily: `'${state.subtextFont}', sans-serif`, fontSize: `${1.375 * (state.subtextSize / 100)}rem` }}>{state.heroSubtext}</p>
                                         )}
                                     </div>
                                 </section>
@@ -265,7 +314,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                     {currentPage === 'product' && state.productPageEnabled && (
                         <section className={`product-section section-anim-${state.sectionAnimation}`}>
                             <div className="container">
-                                <h2 className="section-title" style={headingStyle}>{state.productPage.heading}</h2>
+                                <h2 className="section-title" style={teamNameStyle}>{state.productPage.heading}</h2>
                                 <div className="product-layout">
                                     <div className="product-image-wrapper">
                                         <img
@@ -273,7 +322,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                                             alt="Product"
                                         />
                                     </div>
-                                    <div className="product-description" style={bodyStyle}>
+                                    <div className="product-description" style={teamRoleStyle}>
                                         {state.productPage.description}
                                     </div>
                                 </div>
@@ -300,7 +349,7 @@ const Preview = ({ state, onToggleMobileMenu }: PreviewProps) => {
                             </div>
 
                             {hasSocialLinks && (
-                                <div className="footer-links" style={bodyStyle}>
+                                <div className="footer-links" style={footerStyle}>
                                     {state.socialLinks.instagram && (
                                         <a href={state.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="footer-link">
                                             <InstagramIcon />
