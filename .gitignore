@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Team site deployment artifacts
+dist-site/
+team-site-data.json
